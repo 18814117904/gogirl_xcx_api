@@ -1,0 +1,48 @@
+spring:
+   profiles:
+      active: test
+   jackson:
+      date-format: "yyyy-MM-dd HH:mm:ss"
+      time-zone: "GMT+8" 
+   servlet:
+      multipart:
+         max-file-size: 20MB
+         max-request-size: 200MB
+server: 
+   port: 8092
+   servlet: 
+      context-path: /gogirl_xcx
+   tomcat:
+      max-threads: 2000
+      max-connections: 20000
+logging: 
+   config: classpath:logback-boot.xml
+   level:
+      com.bailun.gogirl_user.dao : debug
+mybatis:
+   mapper-locations: 
+      - classpath:gogirl_order/mapper/*.xml
+      - classpath:gogirl_service/mapper/*.xml
+      - classpath:gogirl_store/mapper/*.xml
+      - classpath:gogirl_user/mapper/*.xml
+      - classpath:gogirl_technician/mapper/*.xml
+      - classpath:gogirl_xcx/mapper/*.xml
+#   classpath:gogirl-order/mapper/*.xml,classpath:gogirl-service/mapper/*.xml,classpath:gogirl-store/mapper/*.xml,classpath:gogirl-user/mapper/*.xml
+#      ['classpath:gogirl-order/mapper/*.xml','classpath:gogirl-service/mapper/*.xml','classpath:gogirl-store/mapper/*.xml','classpath:gogirl-user/mapper/*.xml']
+#      classpath:gogirl_order/mapper/*.xml
+#      ['classpath:com/gogirl/gogirl-order/mapper/*.xml','classpath:com/gogirl/gogirl-service/mapper/*.xml','classpath:com/gogirl/gogirl-store/mapper/*.xml','classpath:com/gogirl/gogirl-user/mapper/*.xml']
+#      - classpath:com/gogirl/gogirl-order/mapper/*.xml
+#      - classpath:com/gogirl/gogirl-store/mapper/*.xml
+#      - classpath:com/gogirl/gogirl-user/mapper/*.xml
+#      classpath:com/gogirl/gogirl-order/mapper/*.xml,classpath:com/gogirl/gogirl-service/mapper/*.xml,classpath:com/gogirl/gogirl-store/mapper/*.xml,classpath:com/gogirl/gogirl-user/mapper/*.xml
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+start-time: "10:00:00"
+end-time: "22:30:00"
+schedule:
+  corePoolSize:  10
+  maxPoolSize: 200
+  queueCapacity: 10

@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.order_manage.dao.OrderServeMapper">
+    <resultMap id="OrderServeResultBaseMap" type="com.gogirl.gogirl_order.order_commons.dto.OrderServe">
+        <result column="orser_id" property="id"/>
+        <result column="orser_order_id" property="orderId"/>
+        <result column="orser_serve_id" property="serveId"/>
+        <result column="orser_produce_id" property="produceId"/>
+        <result column="orser_create_time" property="createTime"/>
+        <result column="orser_scheduled_time" property="scheduledTime"/>
+        <result column="orser_produce_name" property="produceName"/>
+        <result column="orser_serve_type" property="serveType"/>
+        <result column="orser_technician_id" property="technicianId"/>
+        <result column="orser_serve_name" property="serveName"/>
+        <result column="orser_serve_number" property="serveNumber"/>
+        <result column="orser_serve_price" property="servePrice"/>
+        <result column="orser_serve_change_price" property="serveChangePrice"/>
+        <result column="orser_end_time" property="endTime"/>
+        <result column="orser_start_date" property="startDate"/>
+        <result column="orser_start_time" property="startTime"/>
+        <result column="orser_execution_status" property="executionStatus"/>
+        <result column="orser_comment_score" property="commentScore"/>
+        <association property="produce" javaType="com.gogirl.gogirl_service.entity.Produce">
+	        <result column="produce_id" property="id"/>
+	        <result column="produce_name" property="name"/>
+	        <result column="produce_picture_path" property="picturePath"/>
+	        <result column="produce_type" property="type"/>
+	        <result column="produce_label" property="label"/>
+	        <result column="produce_shop_sort" property="shopSort"/>
+	        <result column="reqduce_grade" property="reqGrade"/>
+	        <result column="produce_status" property="status"/>
+	        <result column="produce_remark" property="remark"/>
+	        <result column="produce_praise_sum" property="praiseSum"/>
+	        <result column="produce_current_price" property="currentPrice"/>
+	        <result column="produce_bargain_price" property="bargainPrice"/>
+	        <result column="produce_service_duration" property="serviceDuration"/>
+	        <result column="produce_brief_introduction" property="briefIntroduction"/>
+	        <result column="produce_details" property="details"/>
+	        <result column="produce_sub_title" property="subTitle"/>
+        	<collection property="listProduceSku" ofType="com.gogirl.gogirl_order.entity.BaseProduceSku">
+			    <result column="prosku_id" property="id" jdbcType="INTEGER" />
+			    <result column="prosku_purchase_sku_id" property="purchaseSkuId" jdbcType="INTEGER" />
+			    <result column="prosku_produce_id" property="produceId" jdbcType="INTEGER" />
+			    <result column="prosku_type" property="type" jdbcType="INTEGER" />
+	        </collection>
+        </association>
+        <association property="serve" javaType="com.gogirl.gogirl_service.entity.Serve">
+            <result column="ser_id" property="id" />
+            <result column="ser_name" property="name"/>
+            <result column="ser_type" property="type"/>
+            <result column="ser_label" property="label"/>
+            <result column="ser_shop_sort" property="shopSort"/>
+            <result column="ser_price" property="price"/>
+            <result column="ser_picture_path" property="picturePath"/>
+            <result column="ser_status" property="status"/>
+            <result column="ser_remark" property="remark"/>
+            <result column="ser_details" property="details"/>
+            <result column="ser_service_duration" property="serviceDuration"/>
+        </association>
+        <collection property="listOrderServeSku" ofType="com.gogirl.gogirl_order.entity.OrderServeSku">
+		    <result column="ossku_id" property="id" jdbcType="INTEGER" />
+		    <result column="ossku_order_serve_id" property="orderServeId" jdbcType="INTEGER" />
+		    <result column="ossku_sku_id" property="skuId" jdbcType="INTEGER" />
+		    <result column="ossku_type" property="type" jdbcType="INTEGER" />
+		    <result column="ossku_count" property="count" jdbcType="DECIMAL" />
+        	<association property="purchaseSku" javaType="com.gogirl.gogirl_order.entity.PurchaseSku">
+			    <result column="pursku_id" property="id" jdbcType="INTEGER" />
+			    <result column="pursku_sku" property="sku" jdbcType="VARCHAR" />
+			    <result column="pursku_picture_path" property="picturePath" jdbcType="VARCHAR" />
+			    <result column="pursku_sku_name" property="skuName" jdbcType="VARCHAR" />
+			    <result column="pursku_sku_type" property="skuType" jdbcType="INTEGER" />
+			    <result column="pursku_sku_model" property="skuModel" jdbcType="VARCHAR" />
+			    <result column="pursku_shop_price" property="shopPrice" jdbcType="DOUBLE" />
+			    <result column="pursku_purchase_price" property="purchasePrice" jdbcType="DOUBLE" />
+			    <result column="pursku_supplier" property="supplier" jdbcType="VARCHAR" />
+			    <result column="pursku_use_type" property="useType" jdbcType="INTEGER" />
+			    <result column="pursku_series_id" property="seriesId" jdbcType="INTEGER" />
+			    <result column="pursku_pps_parent_id" property="ppsParentId" jdbcType="INTEGER" />
+			    <result column="pursku_pps_sku" property="ppsSku" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_multiattribute" property="ppsMultiattribute" jdbcType="BIT" />
+			    <result column="pursku_pps_category_id" property="ppsCategoryId" jdbcType="INTEGER" />
+			    <result column="pursku_pps_category_name" property="ppsCategoryName" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_shopping_mall_category_id" property="ppsShoppingMallCategoryId" jdbcType="INTEGER" />
+			    <result column="pursku_pps_shopping_mall_category_name" property="ppsShoppingMallCategoryName" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_goods_title" property="ppsGoodsTitle" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_description" property="ppsDescription" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_original_price" property="ppsOriginalPrice" jdbcType="DECIMAL" />
+			    <result column="pursku_pps_member_price" property="ppsMemberPrice" jdbcType="DECIMAL" />
+			    <result column="pursku_pps_discount_price" property="ppsDiscountPrice" jdbcType="DECIMAL" />
+			    <result column="pursku_pps_picture_path" property="ppsPicturePath" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_vedio_path" property="ppsVedioPath" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_brand" property="ppsBrand" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_color_number" property="ppsColorNumber" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_color_name" property="ppsColorName" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_specs" property="ppsSpecs" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_size" property="ppsSize" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_weight" property="ppsWeight" jdbcType="DOUBLE" />
+			    <result column="pursku_pps_unit" property="ppsUnit" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_logistics_description" property="ppsLogisticsDescription" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_guarantee_instruction" property="ppsGuaranteeInstruction" jdbcType="VARCHAR" />
+			    <result column="pursku_pps_after_sale_instructions" property="ppsAfterSaleInstructions" jdbcType="VARCHAR" />
+			    <result column="pursku_source" property="source" jdbcType="INTEGER" />
+			    <result column="pursku_color_value" property="colorValue" jdbcType="VARCHAR" />
+			    <result column="pursku_color_name" property="colorName" jdbcType="VARCHAR" />
+			    <result column="pursku_color_img_path" property="colorImgPath" jdbcType="VARCHAR" />
+        	</association>
+        </collection>
+        <collection property="listTechnicianManage" ofType="com.gogirl.gogirl_technician.technician_commons.dto.TechnicianManage">
+            <result column="tech_id" property="id"/>
+            <result column="tech_technician_no" property="technicianNo"/>
+            <result column="tech_name" property="name"/>
+        </collection>
+        <collection property="orderRecord" ofType="com.gogirl.gogirl_order.order_commons.dto.OrderRecord">
+            <result column="orre_id" property="id"/>
+            <result column="orre_order_serve_id" property="orderServeId"/>
+            <result column="orre_fix_hour" property="fixHour"/>
+
+            <result column="orre_is_time_out" property="isTimeOut"/>
+            <result column="orre_link_cause" property="linkCause"/>
+            <result column="orre_user_feedback" property="userFeedback"/>
+
+            <result column="orre_technician_feedback" property="technicianFeedback"/>
+            <result column="orre_picture_path" property="picturePath"/>
+            <result column="orre_existing_problems" property="existingProblems"/>
+
+            <result column="orre_solution" property="solution"/>
+            <result column="orre_is_guest_photo" property="isGuestPhoto"/>
+            <result column="orre_after_sale_feedback" property="afterSaleFeedback"/>
+        </collection>
+        <collection property="listOrderServeDescribe" ofType="com.gogirl.gogirl_order.entity.OrderServeDescribe">
+		    <result column="osdesc_id" property="id" jdbcType="INTEGER" />
+		    <result column="osdesc_describe" property="describe" jdbcType="VARCHAR" />
+		    <result column="osdesc_type" property="type" jdbcType="INTEGER" />
+		    <result column="osdesc_status" property="status" jdbcType="INTEGER" />
+        </collection>
+    </resultMap>
+
+    <sql id="baseSql">
+        os.id, os.order_id orderId, os.technician_id technicianId,os.serve_id serveId , os.produce_name produceName, os.serve_price servePrice, os.serve_change_price serveChangePrice, os.serve_number serveNumber, os.create_time createTime, os.scheduled_time scheduledTime, os.start_time startTime, os.end_time endTime, os.execution_status executionStatus
+    </sql>
+    <sql id="orderRecordSql">
+        orre.id orre_id, orre.order_serve_id orre_order_serve_id, orre.fix_hour orre_fix_hour, orre.is_time_out orre_is_time_out, orre.link_cause orre_link_cause, orre.user_feedback orre_user_feedback, orre.technician_feedback orre_technician_feedback, orre.picture_path orre_picture_path, orre.existing_problems orre_existing_problems, orre.solution orre_solution, orre.is_guest_photo orre_is_guest_photo, orre.after_sale_feedback orre_after_sale_feedback
+    </sql>
+    <sql id="userManageSql">
+        us.id us_id, us.name us_name, us.no us_no, us.department_id us_department_id, us.jobs us_jobs, us.create_time us_create_time, us.mobile us_mobile
+    </sql>
+  <sql id="orderServeSkuSql" >
+   ossku.id ossku_id,ossku.order_serve_id ossku_order_serve_id,ossku.sku_id ossku_sku_id,ossku.type ossku_type,ossku.count ossku_count
+  </sql>
+
+    <sql id="orderServeSql">
+        orser.id orser_id, orser.order_id orser_order_id, orser.serve_id orser_serve_id, orser.technician_id orser_technician_id, orser.serve_id orser_serve_id, orser.produce_name orser_produce_name, orser.serve_type orser_serve_type, orser.serve_name orser_serve_name, orser.serve_price orser_serve_price, orser.serve_change_price orser_serve_change_price, orser.serve_number orser_serve_number, orser.create_time orser_create_time, orser.scheduled_time orser_scheduled_time, orser.start_time orser_start_date, orser.start_time orser_start_time, orser.end_time orser_end_time, orser.execution_status orser_execution_status,orser.comment_score orser_comment_score
+    </sql>
+
+    <sql id="serveSql">
+        ser.id ser_id, ser.name ser_name,ser.type ser_type, ser.label ser_label, ser.shop_sort ser_shop_sort, ser.price ser_price, ser.picture_path ser_picture_path, ser.status ser_status, ser.remark ser_remark, ser.details ser_details, ser.service_duration ser_service_duration
+    </sql>
+    <sql id="produceSql">
+        produce.id produce_id, produce.name produce_name, produce.picture_path produce_picture_path, produce.type produce_type, produce.label produce_label,
+        produce.shop_sort produce_shop_sort,produce.req_grade, produce.status produce_status, produce.remark produce_remark,produce.praise_sum produce_praise_sum,
+        produce.current_price produce_current_price,produce.bargain_price produce_bargain_price,produce.service_duration produce_service_duration,
+        produce.brief_introduction produce_brief_introduction,produce.details produce_details,produce.sub_title produce_sub_title
+    </sql>
+    <sql id="proskuSql">
+        prosku.id prosku_id,prosku.purchase_sku_id prosku_purchase_sku_id,prosku.produce_id prosku_produce_id,prosku.type prosku_type
+    </sql>
+    <sql id="technicianSql">
+        tech.id tech_id, tech.technician_no tech_technician_no, tech.name tech_name
+    </sql>
+  <sql id="purskuSql" >
+   pursku.id pursku_id,pursku.sku pursku_sku,pursku.picture_path pursku_picture_path,pursku.sku_name pursku_sku_name,pursku.sku_type pursku_sku_type,pursku.sku_model pursku_sku_model,pursku.shop_price pursku_shop_price,pursku.purchase_price pursku_purchase_price, 
+   pursku.supplier pursku_supplier,pursku.use_type pursku_use_type,pursku.series_id pursku_series_id,pursku.pps_parent_id pursku_pps_parent_id,pursku.pps_sku pursku_pps_sku,pursku.pps_multiattribute pursku_pps_multiattribute,pursku.pps_category_id pursku_pps_category_id, 
+   pursku.pps_category_name pursku_pps_category_name,pursku.pps_shopping_mall_category_id pursku_pps_shopping_mall_category_id,pursku.pps_shopping_mall_category_name pursku_pps_shopping_mall_category_name, 
+   pursku.pps_goods_title pursku_pps_goods_title,pursku.pps_description pursku_pps_description,pursku.pps_original_price pursku_pps_original_price,pursku.pps_member_price pursku_pps_member_price,pursku.pps_discount_price pursku_pps_discount_price, 
+   pursku.pps_picture_path pursku_pps_picture_path,pursku.pps_vedio_path pursku_pps_vedio_path,pursku.pps_brand pursku_pps_brand,pursku.pps_color_number pursku_pps_color_number,pursku.pps_color_name pursku_pps_color_name,pursku.pps_specs pursku_pps_specs, 
+   pursku.pps_size pursku_pps_size,pursku.pps_weight pursku_pps_weight,pursku.pps_unit pursku_pps_unit,pursku.pps_logistics_description pursku_pps_logistics_description,pursku.pps_guarantee_instruction pursku_pps_guarantee_instruction, 
+   pursku.pps_after_sale_instructions pursku_pps_after_sale_instructions,pursku.source pursku_source,pursku.color_value pursku_color_value,pursku.color_name pursku_color_name,pursku.color_img_path pursku_color_img_path
+  </sql>
+  <sql id="osdescSql" >
+   osdesc.id osdesc_id,osdesc.describe osdesc_describe,osdesc.type osdesc_type,osdesc.status osdesc_status
+  </sql>
+
+
+
+
+
+    <select id="listTimesCardCanUseOrderServeId1" resultType="com.gogirl.gogirl_order.order_commons.dto.OrderServe">
+        select distinct
+        <include refid="baseSql"/>
+        from order_serve os
+        left join base_serve bs on bs.id = os.serve_id
+        left join times_card_serve_type_relevance tcstr on tcstr.serve_type_id = bs.type_id
+        where os.order_id = #{orderId} and tcstr.times_card_id=#{timesCardId} and bs.type_id not in
+        (select bs2.type_id from base_serve bs2,order_serve os2,times_card_serve_relevance tcsr2 where bs2.id = os2.serve_id and os2.order_id = #{orderId} and tcsr2.serve_id = os2.serve_id and tcsr2.times_card_type_id = #{timesCardId})
+    </select>
+    <select id="listTimesCardCanUseOrderServeId2" resultType="com.gogirl.gogirl_order.order_commons.dto.OrderServe">
+        select distinct
+        <include refid="baseSql"/>
+        from order_serve os
+        left join times_card_serve_relevance tcsr on tcsr.serve_id = os.serve_id
+        where os.order_id = #{orderId} and tcsr.times_card_type_id = #{timesCardId}
+    </select>
+    <select id="listCouponCanUseOrderServeId1" resultType="com.gogirl.gogirl_order.order_commons.dto.OrderServe">
+select distinct	
+<include refid="baseSql"/> 
+from order_serve os
+left join base_serve bs on bs.id = os.serve_id
+left join coupon_serve_type_relevance tcstr on tcstr.serve_type_id = bs.type_id
+where os.order_id = #{orderId} and tcstr.coupon_id = #{couponId} and bs.type_id not in
+(select bs2.type_id from base_serve bs2,order_serve os2,coupon_serve_relevance tcsr2 where bs2.id = os2.serve_id and os2.order_id = #{orderId} and tcsr2.serve_id = os2.serve_id and tcsr2.coupon_id=#{couponId})
+    </select>
+    <select id="listCouponCanUseOrderServeId2" resultType="com.gogirl.gogirl_order.order_commons.dto.OrderServe">
+        select distinct
+        <include refid="baseSql"/>
+        from order_serve os
+        left join coupon_serve_relevance tcsr on tcsr.serve_id = os.serve_id
+        where os.order_id = #{orderId} and tcsr.coupon_id = #{couponId}
+    </select>
+    
+    
+    <select id="listOrderServe" resultType="com.gogirl.gogirl_order.order_commons.dto.OrderServe">
+        select
+        <include refid="baseSql"/>
+        from order_serve
+        where order_id = #{orderId}
+    </select>
+
+    <select id="getOrderServeDetail" resultMap="OrderServeResultBaseMap">
+        select
+        <include refid="orderServeSql"/>,
+        <include refid="orderServeSkuSql"/>,
+        <include refid="serveSql"/>,
+        <include refid="produceSql"/>,
+        <include refid="technicianSql"/>,
+        <include refid="orderRecordSql"/>,
+        <include refid="proskuSql"/>,
+        <include refid="purskuSql"/>,
+        <include refid="osdescSql"/>
+        from order_serve orser
+        left join order_serve_sku ossku on ossku.order_serve_id = orser.id
+        left join base_serve ser on orser.serve_id = ser.id
+        left join base_produce produce on orser.produce_id = produce.id
+        left join base_produce_sku prosku on prosku.produce_id = produce.id
+        left join purchase_sku pursku on pursku.id = ossku.sku_id
+        left join store_technician tech on find_in_set(tech.id, orser.technician_id)
+        left join order_record orre on orser.id = orre.order_serve_id
+        left join order_serve_describe_relevance osdescrele on osdescrele.order_serve_id = orser.id
+        left join order_serve_describe osdesc on osdesc.id = osdescrele.describe_id
+        where
+        orser.id = #{id}
+    </select>
+
+    <update id="updateOrderService">
+        update order_serve
+        <trim prefix="set" suffixOverrides=",">
+            <if test="executionStatus != null">
+                execution_status = #{executionStatus},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="produceId != null">
+                produce_id = #{produceId},
+            </if>
+            <if test="serveChangePrice != null">
+                serve_change_price = #{serveChangePrice},
+            </if>
+            <if test="removeCouponId != null">
+                remove_coupon_id = #{removeCouponId},
+            </if>
+            <if test="achievement != null">
+                achievement = #{achievement},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime}
+            </if>
+            <if test="commentScore != null">
+                comment_score = #{commentScore}
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateOrderServiceByOrderId">
+        update order_serve
+        <trim prefix="set" suffixOverrides=",">
+            <if test="executionStatus != null">
+                execution_status = #{executionStatus},
+            </if>
+            <if test="technicianId != null">
+                technician_id = #{technicianId},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime}
+            </if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
+
+    <update id="modifyOrderServeByUpdate" parameterType="java.util.List">
+        update order_serve
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="technician_id = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.technicianId}
+                </foreach>
+            </trim>
+            <trim prefix="serve_id = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.serveId}
+                </foreach>
+            </trim>
+            <trim prefix="produce_name = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.produceName}
+                </foreach>
+            </trim>
+            <trim prefix="serve_price = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.servePrice}
+                </foreach>
+            </trim>
+            <trim prefix="serve_change_price = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.serveChangePrice}
+                </foreach>
+            </trim>
+            <trim prefix="serve_type = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.serveType}
+                </foreach>
+            </trim>
+            <trim prefix="serve_name = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.serveName}
+                </foreach>
+            </trim>
+            <trim prefix="serve_number = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.serveNumber}
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="scheduled_time = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.scheduledTime}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+
+    </update>
+
+    <select id="listOrderServeById" resultType="java.lang.Integer">
+        select
+        id
+        from order_serve
+        where order_id = #{id}
+    </select>
+
+    <delete id="deleteOrderServeById">
+        delete from order_serve where id = #{id}
+    </delete>
+
+    <insert id="insertOrderServeByUpdate" parameterType="java.util.List">
+        insert into order_serve
+        (order_id, technician_id, serve_id, produce_name, serve_price, serve_change_price, serve_type, serve_name, serve_number, create_time, scheduled_time, execution_status)
+        values
+        <foreach collection="list" item="list" separator=",">
+        (
+            #{list.orderId},
+            #{list.technicianId},
+            #{list.serveId},
+            #{list.produceName},
+            #{list.servePrice},
+            #{list.serveChangePrice},
+            #{list.serveType},
+            #{list.serveName},
+            #{list.serveNumber},
+            #{list.createTime},
+            #{list.scheduledTime},
+            1
+        )
+        </foreach>
+    </insert>
+
+    <insert id="insertOrderServe" parameterType="java.util.Map">
+        insert into order_serve
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="orderId != null ">
+                order_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            scheduled_time,start_time, end_time, technician_id, serve_id, produce_name, serve_type, serve_name, serve_number, serve_price, serve_change_price,produce_id, execution_status
+        </trim>
+        values
+        <foreach collection="listScheduleServe" item="item" index="index" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides="," >
+                <if test="orderId != null ">
+                    #{orderId},
+                </if>
+                <if test="createTime != null ">
+                    #{createTime},
+                </if>
+                #{item.startTime},#{item.startTime}, #{item.endTime}, #{item.technicianId},
+                #{item.serveId}, #{item.produceName}, #{item.serveType}, #{item.serveName}, #{item.serveNumber},
+                <choose>
+                    <when test="item.serve != null">
+                        #{item.serve.price},
+                    </when>
+                    <otherwise>
+                        #{item.servePrice},
+                    </otherwise>
+                </choose>
+
+                <choose>
+                    <when test="item.serveChangePrice != null">
+                        #{item.serveChangePrice},
+                    </when>
+                    <otherwise>
+                        0,
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="item != null and item.produceId != null">
+                        #{item.produceId},
+                    </when>
+                    <otherwise>
+                        null,
+                    </otherwise>
+                </choose>
+                1
+            </trim>
+        </foreach>
+    </insert>
+</mapper>

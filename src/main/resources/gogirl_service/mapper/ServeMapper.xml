@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_service.dao.serve.ServeMapper">
+
+    <resultMap id="ServerWithProduce" type="com.gogirl.gogirl_service.entity.Serve">
+        <result column="id" property="id" />
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="type_id" property="typeId"/>
+        <result column="label" property="label"/>
+        <result column="shop_sort" property="shopSort"/>
+        <result column="price" property="price"/>
+        <result column="picture_path" property="picturePath"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="details" property="details"/>
+        <result column="service_duration" property="serviceDuration"/>
+        <result column="has_index_show" property="hasIndexShow"/>
+        <result column="index_sort" property="indexSort"/>
+        <result column="praise_sum" property="praiseSum"/>
+        <result column="brief_introduction" property="briefIntroduction"/>
+        <result column="sch_type_id" property="schTypeId"/>
+        <association property="produce" javaType="com.gogirl.gogirl_service.entity.Produce">
+            <result column="produce_id" property="id"/>
+            <result column="produce_name" property="name"/>
+            <result column="produce_picture_path" property="picturePath"/>
+            <result column="produce_type" property="type"/>
+            <result column="produce_label" property="label"/>
+            <result column="produce_shop_sort" property="shopSort"/>
+            <result column="reqduce_grade" property="reqGrade"/>
+            <result column="produce_status" property="status"/>
+            <result column="produce_remark" property="remark"/>
+        </association>
+        <collection property="listProduce" ofType="com.gogirl.gogirl_service.entity.Produce">
+            <result column="pro_id" property="id"/>
+            <result column="pro_name" property="name"/>
+            <result column="pro_picture_path" property="picturePath"/>
+            <result column="pro_type" property="type"/>
+            <result column="pro_label" property="label"/>
+            <result column="pro_shop_sort" property="shopSort"/>
+            <result column="req_grade" property="reqGrade"/>
+            <result column="pro_status" property="status"/>
+            <result column="pro_remark" property="remark"/>
+	        <result column="pro_praise_sum" property="praiseSum"/>
+	        <result column="pro_current_price" property="currentPrice"/>
+	        <result column="pro_bargain_price" property="bargainPrice"/>
+	        <result column="pro_service_duration" property="serviceDuration"/>
+	        <result column="pro_brief_introduction" property="briefIntroduction"/>
+	        <result column="pro_details" property="details"/>
+        </collection>
+        <collection property="praiseRecord" ofType="com.gogirl.gogirl_service.entity.PraiseRecord">
+		    <id column="praiseid" property="id" jdbcType="INTEGER" />
+		    <result column="praisecustomer_id" property="customerId" jdbcType="INTEGER" />
+		    <result column="praiseserve_id" property="serveId" jdbcType="INTEGER" />
+		    <result column="praisetime" property="time" jdbcType="TIMESTAMP" />
+        </collection>
+		<collection property="listLabel" ofType="com.gogirl.gogirl_service.entity.Label">
+			<result column="lid" property="id" jdbcType="INTEGER" />
+			<result column="lname" property="name" jdbcType="VARCHAR" />
+			<result column="lpic_url" property="picUrl" jdbcType="VARCHAR" />
+		</collection>
+    </resultMap>
+
+    <resultMap id="ServerWithProduceForPage" type="com.gogirl.gogirl_service.entity.Serve">
+        <result column="id" property="id" />
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="type_id" property="typeId"/>
+        <result column="label" property="label"/>
+        <result column="shop_sort" property="shopSort"/>
+        <result column="price" property="price"/>
+        <result column="picture_path" property="picturePath"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="details" property="details"/>
+        <result column="service_duration" property="serviceDuration"/>
+        <result column="has_index_show" property="hasIndexShow"/>
+        <result column="index_sort" property="indexSort"/>
+        <result column="praise_sum" property="praiseSum"/>
+        <result column="brief_introduction" property="briefIntroduction"/>
+        <result column="sch_type_id" property="schTypeId"/>
+        <association property="produce" javaType="com.gogirl.gogirl_service.entity.Produce">
+            <result column="produce_id" property="id"/>
+            <result column="produce_name" property="name"/>
+            <result column="produce_picture_path" property="picturePath"/>
+            <result column="produce_type" property="type"/>
+            <result column="produce_label" property="label"/>
+            <result column="produce_shop_sort" property="shopSort"/>
+            <result column="reqduce_grade" property="reqGrade"/>
+            <result column="produce_status" property="status"/>
+            <result column="produce_remark" property="remark"/>
+        </association>
+        <collection property="listProduce" ofType="com.gogirl.gogirl_service.entity.Produce" column="id"
+                    select="listProduceByServeId">
+        </collection>
+        <collection property="praiseRecord" ofType="com.gogirl.gogirl_service.entity.PraiseRecord">
+		    <id column="praiseid" property="id" jdbcType="INTEGER" />
+		    <result column="praisecustomer_id" property="customerId" jdbcType="INTEGER" />
+		    <result column="praiseserve_id" property="serveId" jdbcType="INTEGER" />
+		    <result column="praisetime" property="time" jdbcType="TIMESTAMP" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="produceResultMap" type="com.gogirl.gogirl_service.entity.Produce">
+        <result column="pro_id" property="id"/>
+        <result column="pro_name" property="name"/>
+        <result column="pro_picture_path" property="picturePath"/>
+        <result column="pro_type" property="type"/>
+        <result column="pro_label" property="label"/>
+        <result column="pro_shop_sort" property="shopSort"/>
+        <result column="req_grade" property="reqGrade"/>
+        <result column="pro_status" property="status"/>
+        <result column="pro_remark" property="remark"/>
+    </resultMap>
+
+    <sql id="baseSql">
+        id, name,type,type_id, label, shop_sort, price, picture_path, status, remark, details, service_duration,brief_introduction,sch_type_id
+    </sql>
+    <sql id="serveSql">
+        ser.id, ser.name,ser.type,ser.type_id, ser.label, ser.shop_sort, ser.price, ser.picture_path, ser.status, ser.remark, ser.details, 
+        ser.service_duration, ser.has_index_show, ser.index_sort, ser.praise_sum,ser.brief_introduction,ser.sch_type_id
+    </sql>
+    <sql id="praiseSql">
+     praise.id praiseid,praise.customer_id praisecustomer_id,praise.serve_id praiseserve_id,praise.time praisetime
+    </sql>
+    <sql id="proSql">
+        pro.id pro_id, pro.name pro_name, pro.picture_path pro_picture_path, pro.type pro_type, pro.label pro_label, pro.shop_sort pro_shop_sort,
+        pro.req_grade, pro.status pro_status, pro.remark pro_remark,pro.praise_sum pro_praise_sum,pro.current_price pro_current_price,
+        pro.bargain_price pro_bargain_price,pro.service_duration pro_service_duration,pro.brief_introduction pro_brief_introduction,
+        pro.details pro_details
+    </sql>
+    <sql id="produceSql">
+        produce.id produce_id, produce.name produce_name, produce.picture_path produce_picture_path, produce.type produce_type, produce.label produce_label, produce.shop_sort produce_shop_sort, produce.req_grade, produce.status produce_status, produce.remark produce_remark
+    </sql>
+  <sql id="labelSql" >
+    l.id lid, l.name lname, l.pic_url lpic_url
+  </sql>
+
+    <select id="getServeForDetail" resultMap="ServerWithProduce">
+        select
+        <include refid="serveSql"/>,
+        <include refid="proSql"/>,
+        <include refid="labelSql"/>
+        from base_serve ser
+        left join base_produce pro on pro.service_id = ser.id
+        left join label_relation lsr on ser.id = lsr.main_id and lsr.type=1
+        left join label l on l.id = lsr.label_id
+        where
+        ser.id = #{id}
+    </select>
+    <select id="queryNewServePage" resultMap="ServerWithProduceForPage">
+        select
+        <include refid="serveSql"/>,
+        <include refid="praiseSql"/>,
+        <include refid="produceSql"/>
+        from base_serve ser
+        left join praise_record praise on ser.id=praise.serve_id and praise.customer_id =#{cusId}
+        left join base_produce produce on produce.service_id = ser.id
+        where produce.has_index_show = 1 and ser.status =1 and produce.status=1
+        order by produce.index_sort desc
+	</select>
+    <select id="listProduceByServeId" resultMap="produceResultMap">
+        select
+        <include refid="proSql"/>
+        from base_produce pro
+        left join base_produce_serve ps on pro.id = ps.produce_id
+        where ps.serve_id = #{id}
+    </select>
+    <select id="listServeCount" resultType="java.lang.Integer">
+        select distinct ser.id
+        from base_serve ser
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join  base_produce pro on pro.id = ps.produce_id
+        where ser.status = 1
+        <if test="name != null and name != '' ">
+            and ser.name = #{name}
+        </if>
+        <if test="type != null and type != ''">
+            and ser.type = #{type}
+        </if>
+        <if test="shopSort != null">
+            and ser.shop_sort = #{shopSort}
+        </if>
+        <if test="price != null">
+            and ser.price = #{price}
+        </if>
+        <if test="picturePath != null">
+            and ser.picture_path = #{picturePath}
+        </if>
+        <if test="remark != null and remark != ''">
+            and ser.remark = #{remark}
+        </if>
+        <if test="produces != null and produce != ''">
+            and ser.produces = #{produces}
+        </if>
+        <if test="details != null and details != ''">
+            and ser.details = #{details}
+        </if>
+    </select>
+    
+    
+    <select id="getCountByGroup" resultType="java.lang.Integer">
+        select
+        count(ser.id)
+        from base_serve ser
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join  base_produce pro on pro.id = ps.produce_id
+        where ser.status = 1
+        <if test="name != null and name != '' ">
+            and ser.name = #{name}
+        </if>
+        <if test="type != null and type != ''">
+            and ser.type = #{type}
+        </if>
+        <if test="shopSort != null">
+            and ser.shop_sort = #{shopSort}
+        </if>
+        <if test="price != null">
+            and ser.price = #{price}
+        </if>
+        <if test="picturePath != null">
+            and ser.picture_path = #{picturePath}
+        </if>
+        <if test="remark != null and remark != ''">
+            and ser.remark = #{remark}
+        </if>
+        <if test="produces != null and produce != ''">
+            and ser.produces = #{produces}
+        </if>
+        <if test="details != null and details != ''">
+            and ser.details = #{details}
+        </if>
+        group by ser.id
+        order by ser.update_time desc
+
+
+    </select>
+    <select id="listServeForPage" resultMap="ServerWithProduce">
+        select
+        <include refid="serveSql"/>,
+        <include refid="proSql"/>
+        from base_serve ser
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join  base_produce pro on pro.id = ps.produce_id
+        where ser.status = 1
+        <if test="serve.name != null and serve.name != '' ">
+            and ser.name = #{serve.name}
+        </if>
+        <if test="serve.type != null and serve.type != ''">
+            and ser.type = #{serve.type}
+        </if>
+        <if test="serve.shopSort != null">
+            and ser.shop_sort = #{serve.shopSort}
+        </if>
+        <if test="serve.price != null">
+            and ser.price = #{serve.price}
+        </if>
+        <if test="serve.picturePath != null">
+            and ser.picture_path = #{serve.picturePath}
+        </if>
+        <if test="serve.remark != null and serve.remark != ''">
+            and ser.remark = #{serve.remark}
+        </if>
+        <if test="serve.produces != null and serve.produce != ''">
+            and ser.produces = #{serve.produces}
+        </if>
+        <if test="serve.details != null and serve.details != ''">
+            and ser.details = #{serve.details}
+        </if>
+        order by ser.update_time desc
+        <if test="skipNumber != null and newPageSize != null">
+            limit #{skipNumber}, #{newPageSize}
+        </if>
+    </select>
+
+    <select id="listServeForPageXcx" resultMap="ServerWithProduce">
+        select
+        <include refid="serveSql"/>,
+        <include refid="proSql"/>
+        from base_serve ser
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join  base_produce pro on pro.id = ps.produce_id
+        where  ser.status = 1
+        <if test="serve.name != null and serve.name != '' ">
+            and ser.name = #{serve.name}
+        </if>
+        <if test="serve.type != null and serve.type != ''">
+            and ser.type = #{serve.type}
+        </if>
+        <if test="serve.typeId != null and serve.type != ''">
+            and ser.type_id = #{serve.typeId}
+        </if>
+        <if test="serve.shopSort != null">
+            and ser.shop_sort = #{serve.shopSort}
+        </if>
+        <if test="serve.price != null">
+            and ser.price = #{serve.price}
+        </if>
+        <if test="serve.picturePath != null">
+            and ser.picture_path = #{serve.picturePath}
+        </if>
+        <if test="serve.remark != null and serve.remark != ''">
+            and ser.remark = #{serve.remark}
+        </if>
+        <if test="serve.produces != null and serve.produce != ''">
+            and ser.produces = #{serve.produces}
+        </if>
+        <if test="serve.details != null and serve.details != ''">
+            and ser.details = #{serve.details}
+        </if>
+        order by ser.update_time desc
+    </select>
+
+
+
+
+
+
+
+    <select id="listServeByTypeCount" resultType="java.lang.Integer">
+        select distinct ser.id
+        from base_serve ser
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join base_produce bp on bp.id = ps.produce_id
+        where ser.type = #{type}
+        and ser.id in (select serve_id from store_shop_serve_relation where store_id = #{departmentId})
+        and ser.status = 1 and ser.id in (ps.serve_id)
+        and bp.status = 1
+    </select>
+    <select id="listServeByTypeAndGroup" resultType="java.lang.Integer">
+        select
+        count(ser.id)
+        from base_serve ser
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join base_produce bp on bp.id = ps.produce_id
+        where ser.type = #{type}
+        and ser.id in (select serve_id from store_shop_serve_relation where store_id = #{departmentId})
+        and ser.status = 1 and ser.id in (ps.serve_id)
+        and bp.status = 1
+        group by ser.id
+    </select>
+    <select id="listServeByType" resultMap="ServerWithProduce">
+        select
+        <include refid="serveSql"/>
+        from base_serve ser
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join base_produce bp on bp.id = ps.produce_id
+        where ser.type = #{type}
+        and ser.id in (select serve_id from store_shop_serve_relation where store_id = #{departmentId})
+        <if test="skipNumber != null and newPageSize != null">
+            limit #{skipNumber}, #{newPageSize}
+        </if>
+    </select>
+
+    <select id="listServeByShopIdCount" resultType="java.lang.Integer">
+        select
+        <include refid="serveSql"/>,
+        <include refid="proSql"/>
+        from (select serve_id from store_shop_serve_relation where store_id = #{id}) a
+        left join base_serve ser on ser.id = a.serve_id
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join  base_produce pro on pro.id = ps.produce_id
+        where ser.status = 1 and ser.id in (ps.serve_id)
+        and pro.status = 1
+    </select>
+
+
+
+
+
+
+
+
+    <select id="listServeByShopIdForPage" resultMap="ServerWithProduce">
+        select
+        <include refid="serveSql"/>,
+        <include refid="proSql"/>
+        from (select serve_id from store_shop_serve_relation where store_id = #{id}) a
+        left join base_serve ser on ser.id = a.serve_id
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join  base_produce pro on pro.id = ps.produce_id
+        where ser.status = 1 and ser.id in (ps.serve_id)
+        and pro.status = 1
+    </select>
+    <select id="listServeAllForPage" resultMap="ServerWithProduceForPage">
+        select
+        <include refid="serveSql"/>
+        from base_serve ser
+        where 1 = 1
+            and ser.status != 4
+        <if test="name != null and name != '' ">
+            and ser.name like '%${name}%'
+        </if>
+        <if test="type != null and type != ''">
+            and ser.type = #{type}
+        </if>
+        <if test="label != null and label != ''">
+            <foreach collection="label.split(',')" item="item" index="index">
+                and ser.label like '%${item}%'
+            </foreach>
+        </if>
+        <if test="shopSort != null">
+            and ser.shop_sort = #{shopSort}
+        </if>
+        <if test="price != null">
+            and ser.price = #{price}
+        </if>
+        <if test="picturePath != null">
+            and ser.picture_path = #{picturePath}
+        </if>
+        <if test="status != null and status != ''">
+            and ser.status = #{status}
+        </if>
+        <if test="remark != null and remark != ''">
+            and ser.remark = #{remark}
+        </if>
+        <if test="produces != null and produce != ''">
+            and ser.produces = #{produces}
+        </if>
+        <if test="details != null and details != ''">
+            and ser.details = #{details}
+        </if>
+        <if test="hasIndexShow != null">
+            and ser.has_index_show = #{hasIndexShow}
+        </if>
+        order by ser.update_time desc
+    </select>
+
+    <select id="queryServeForAll" resultType="com.gogirl.gogirl_service.entity.Serve">
+        select
+        <include refid="baseSql"/>
+        from
+        base_serve
+        where status != 4
+    </select>
+
+
+
+    <select id="getServeAndProduceForDetail" resultMap="ServerWithProduce">
+        select
+        <include refid="serveSql"/>,
+        <include refid="produceSql"/>,
+        <include refid="proSql"/>,
+        <include refid="labelSql"/>
+        from base_serve ser
+        left join base_produce_serve ps on ser.id = ps.serve_id
+        left join base_produce pro on pro.id = ps.produce_id
+        left join base_produce produce on produce.service_id = ser.id
+        left join label_relation lsr on ser.id = lsr.main_id and lsr.type=1
+        left join label l on l.id = lsr.label_id
+        where
+        ser.id = #{id}
+    </select>
+
+    <delete id="deleteShopServeByServeId">
+        delete from store_shop_serve_relation where serve_id = #{id}
+    </delete>
+
+    <!--<delete id="deleteServe">
+        delete from base_serve where id = #{id}
+    </delete>-->
+
+    <delete id="deleteServeProduce">
+        delete from base_produce_serve where serve_id = #{id}
+    </delete>
+
+    <update id="deleteServe">
+        update base_serve
+        set
+        status = 4
+        where
+        id = #{id}
+    </update>
+
+    <update id="updateServe">
+        update base_serve
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="typeId != null">
+                type_id = #{typeId},
+            </if>
+            <if test="label != null">
+                label = #{label},
+            </if>
+            <if test="shopSort != null">
+                shop_sort = #{shopSort},
+            </if>
+            <if test="picturePath != null">
+                picture_path = #{picturePath},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="details != null ">
+                details = #{details},
+            </if>
+            <if test="serviceDuration != null">
+                service_duration = #{serviceDuration},
+            </if>
+            <if test="hasIndexShow != null">
+                has_index_show = #{hasIndexShow},
+            </if>
+            <if test="indexSort != null">
+                index_sort = #{indexSort},
+            </if>
+            <if test="praiseSum != null">
+                praise_sum = #{praiseSum},
+            </if>
+                update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insertServeProduce">
+        insert into base_produce_serve(serve_id, produce_id)
+        values
+        <foreach collection ="list" item="splist" index= "index" separator =",">
+            (
+            #{splist.serveId},#{splist.produceId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertServeStore">
+        insert into store_shop_serve_relation(store_id, serve_id)
+        select id, #{serveId} from store_manage
+    </insert>
+
+    <insert id="insertServe" useGeneratedKeys="true" keyProperty="id" parameterType="com.gogirl.gogirl_service.entity.Serve">
+        insert into base_serve
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null">
+                name,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="typeId != null">
+                type_id,
+            </if>
+            <if test="label != null">
+                label,
+            </if>
+            <if test="shopSort != null">
+                shop_sort,
+            </if>
+            <if test="picturePath != null">
+                picture_path,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="details != null ">
+                details,
+            </if>
+            <if test="serviceDuration != null">
+                service_duration,
+            </if>
+                update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="typeId != null">
+                #{type_id},
+            </if>
+            <if test="label != null">
+                #{label},
+            </if>
+            <if test="shopSort != null">
+                #{shopSort},
+            </if>
+            <if test="picturePath != null">
+                #{picturePath},
+            </if>
+            <if test="price != null">
+                #{price},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="details != null">
+                #{details},
+            </if>
+            <if test="serviceDuration != null">
+                #{serviceDuration},
+            </if>
+                now()
+        </trim>
+    </insert>
+    <select id="getServeShortCode" resultType="java.lang.String">
+        select bt.short_code from base_serve bs
+left join base_type bt on bt.id = bs.type_id
+where bs.id = #{serveId}
+	</select>
+</mapper>

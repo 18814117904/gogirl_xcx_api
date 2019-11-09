@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_service.dao.user.AuthorityMapper">
+
+    <resultMap id="permission" type="com.gogirl.gogirl_service.entity.Permission">
+        <result column="id" property="id"/>
+        <result column="keyword" property="keyword"/>
+        <result column="url" property="url"/>
+        <result column="img_src" property="imgSrc"/>
+        <result column="pid" property="pid"/>
+        <result column="status" property="status"/>
+        <result column="title" property="title"/>
+    </resultMap>
+
+    <sql id="baseSql">
+        id, keyword, url, pid, status, title, img_src, type
+    </sql>
+
+    <select id="getMenuByPermission" resultMap="permission">
+        select
+        <include refid="baseSql"/>
+        from base_permission
+        where
+        id in
+        <foreach collection="list" index="index" item="idval" open="(" separator="," close=")" >
+            #{idval}
+        </foreach>
+        <if test="pid != null and pid != '' ">
+            and pid = #{pid}
+        </if>
+        <if test="type != null and type != '' ">
+            and type = #{type}
+        </if>
+    </select>
+</mapper>

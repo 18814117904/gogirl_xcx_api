@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.dao.OrderCommentLabelMapper">
+  <resultMap id="OrderCommentLabelMap" type="com.gogirl.gogirl_order.order_commons.dto.OrderCommentLabel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+
+    <sql id="baseSql">
+        id, name
+    </sql>
+    <select id="listOrderCommentLabel" resultMap="OrderCommentLabelMap">
+        select
+        <include refid="baseSql"/>
+        from
+        order_comment_label ocl
+    </select>
+
+</mapper>

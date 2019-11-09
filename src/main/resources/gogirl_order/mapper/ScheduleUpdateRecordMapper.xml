@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.order_schedule.dao.ScheduleUpdateRecordMapper">
+
+    <resultMap id="scheduleDetail" type="com.gogirl.gogirl_order.order_commons.dto.ScheduleRecordManage">
+        <result column="id" property="id" />
+        <result column="scheduled_no" property="scheduledNo"/>
+        <result column="scheduled_user" property="scheduledUser"/>
+        <result column="store_schedule_username" property="storeScheduleUsername"/>
+        <result column="telephone" property="telephone"/>
+        <result column="scheduled_time" property="scheduledTime"/>
+        <result column="last_update_time" property="lastUpdateTime"/>
+        <result column="arrive_time" property="arriveTime"/>
+        <result column="last_service_time" property="lastServiceTime"/>
+        <result column="arrive_user" property="arriveUser"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="remark" property="remark"/>
+        <result column="openbill_time" property="openbillTime"/>
+        <result column="status" property="status"/>
+        <association property="customer" javaType="com.gogirl.gogirl_user.entity.Customer">
+            <result column="cus_id" property="id"/>
+            <result column="cus_phone" property="phone"/>
+            <result column="cus_nickname" property="nickname"/>
+            <result column="cus_real_name" property="realName"/>
+        </association>
+        <collection property="listScheduleUpdateRecord" ofType="com.gogirl.gogirl_order.order_commons.dto.ScheduleUpdateRecord">
+            <result column="schser_id" property="id"/>
+            <result column="schser_sch_id" property="schId"/>
+            <result column="schser_technician_id" property="technicianId"/>
+            <result column="schser_start_time" property="startTime"/>
+            <result column="schser_end_time" property="endTime"/>
+            <result column="schser_create_time" property="createTime"/>
+            <result column="schser_produce_name" property="produceName"/>
+            <result column="schser_serve_number" property="serveNumber"/>
+            <result column="schser_type" property="type"/>
+            <association property="serve" javaType="com.gogirl.gogirl_service.entity.Serve">
+                <result column="ser_id" property="id" />
+                <result column="ser_name" property="name"/>
+                <result column="ser_type" property="type"/>
+                <result column="ser_label" property="label"/>
+                <result column="ser_shop_sort" property="shopSort"/>
+                <result column="ser_price" property="price"/>
+                <result column="ser_picture_path" property="picturePath"/>
+                <result column="ser_status" property="status"/>
+                <result column="ser_remark" property="remark"/>
+                <result column="ser_details" property="details"/>
+                <result column="ser_service_duration" property="serviceDuration"/>
+            </association>
+            <association property="technicianManage" javaType="com.gogirl.gogirl_technician.technician_commons.dto.TechnicianManage">
+                <result column="tech_id" property="id"/>
+                <result column="tech_technician_no" property="technicianNo"/>
+                <result column="tech_name" property="name"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <sql id="scheduleSql">
+        sch.id, sch.scheduled_no, sch.scheduled_user, sch.telephone, sch.store_schedule_username, sch.scheduled_time, sch.arrive_time, sch.last_service_time, sch.arrive_user, sch.department_id, sch.remark, sch.openbill_time, sch.status, sch.last_update_time
+    </sql>
+    <sql id="baseSql">
+        id, sch_id, technician_id, serve_id, start_time, end_time, create_time, produce_name, serve_number
+    </sql>
+
+    <sql id="scheduleServeRecordSql">
+        schser.id schser_id, schser.sch_id schser_sch_id, schser.technician_id schser_technician_id, schser.start_time schser_start_time, schser.end_time schser_end_time, schser.create_time schser_create_time, schser.produce_name schser_produce_name, schser.serve_number schser_serve_number, schser.type schser_type
+    </sql>
+    <sql id="serveSql">
+        ser.id ser_id, ser.name ser_name,ser.type ser_type, ser.label ser_label, ser.shop_sort ser_shop_sort, ser.price ser_price, ser.picture_path ser_picture_path, ser.status ser_status, ser.remark ser_remark, ser.details ser_details, ser.service_duration ser_service_duration
+    </sql>
+    <sql id="technicianSql">
+        tech.id tech_id, tech.technician_no tech_technician_no, tech.name tech_name
+    </sql>
+
+    <select id="getScheduleRecordForDetail" resultMap="scheduleDetail">
+        select
+        <include refid="scheduleSql"/>,
+        <include refid="scheduleServeRecordSql"/>,
+        ser.id ser_id, ser.name ser_name,ser.picture_path ser_picture_path, ser.price ser_price,ser.type ser_type, ser.label ser_label, ser.service_duration ser_service_duration,
+        cus.id cus_id, cus.phone cus_phone, cus.nickname cus_nickname, cus.real_name cus_real_name,
+        <include refid="technicianSql"/>
+        from scheduled_manage sch
+        left join customer cus on cus.id = sch.scheduled_user or cus.phone = sch.telephone
+        left join scheduled_update_record schser on sch.id = schser.sch_id
+        left join base_serve ser on ser.id = schser.serve_id
+        left join store_technician tech on schser.technician_id = tech.id
+        where sch.id = #{id}
+    </select>
+
+    <!--<select id="listScheduleServeRecord" resultMap="scheduleServeDetail">
+        select
+        <include refid="scheduleServeRecordSql"/>,
+        <include refid="serveSql"/>
+        from scheduled_update_record schser left join base_serve ser on schser.serve_id = ser.id
+        where schser.sch_id = #{id}
+    </select>-->
+
+    <insert id="insertScheduleServeRecord">
+        replace into
+        scheduled_update_record(id, sch_id, technician_id, serve_id, start_time, end_time, create_time, produce_name, serve_number, type)
+        <foreach collection="list" item="listRecord" index="index" separator="UNION ALL">
+            select  id, sch_id, technician_id, serve_id, start_time, end_time, now(), produce_name, serve_number, #{listRecord.recordType} from scheduled_serve where id = #{listRecord.id}
+        </foreach>
+    </insert>
+
+    <update id="updateScheduleServeRecord">
+        update scheduled_update_record sur
+        inner join (select * from scheduled_serve where id in(
+        <foreach collection="list" item="scheduleId" separator=",">
+            #{scheduledId.id}
+        </foreach>
+        )) ss on sur.id = ss.id
+        set sur.technician_id = ss.technician_id,
+        sur.serve_id = ss.serve_id,
+        sur.start_time = ss.start_time,
+        sur.create_time = now(),
+        sur.produce_name = ss.produce_name,
+        sur.serve_number = ss.serve_number
+    </update>
+
+    <insert id="insertScheduleUpdateRecordByDelete">
+        insert into scheduled_update_record select * , #{type} from scheduled_serve where id = #{id}
+    </insert>
+
+    <insert id="insertScheduleServeRecordByUser">
+        insert into scheduled_update_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="schId != null">
+                sch_id,
+            </if>
+            <if test="technicianId != null">
+                technician_id,
+            </if>
+            <if test="serveId">
+                serve_id,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime">
+                end_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="produceName != null">
+                produce_name,
+            </if>
+            <if test="serveNumber != null">
+                serve_number,
+            </if>
+            <if test="type != null">
+                type
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="schId != null">
+                #{schId},
+            </if>
+            <if test="technicianId != null">
+                #{technicianId},
+            </if>
+            <if test="serveId">
+                #{serveId},
+            </if>
+            <if test="startTime != null">
+                #{startTime},
+            </if>
+            <if test="endTime">
+                #{endTime},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="produceName != null">
+                #{produceName},
+            </if>
+            <if test="serveNumber != null">
+                #{serveNumber},
+            </if>
+            <if test="type != null">
+                #{type}
+            </if>
+        </trim>
+    </insert>
+</mapper>

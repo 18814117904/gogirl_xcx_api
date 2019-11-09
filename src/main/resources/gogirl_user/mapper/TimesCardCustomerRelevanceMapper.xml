@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_user.dao.TimesCardCustomerRelevanceMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_user.entity.TimesCardCustomerRelevance" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="card_type_id" property="cardTypeId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="used_times" property="usedTimes" jdbcType="INTEGER" />
+    <result column="valid_start_time" property="validStartTime" jdbcType="TIMESTAMP" />
+    <result column="valid_end_time" property="validEndTime" jdbcType="TIMESTAMP" />
+    <result column="referee_id" property="refereeId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+	<association property="timesCardType" javaType="com.gogirl.gogirl_user.entity.TimesCardType">
+	    <result column="tct_id" property="id" jdbcType="INTEGER" />
+	    <result column="tct_name" property="name" jdbcType="VARCHAR" />
+	    <result column="tct_sum_times" property="sumTimes" jdbcType="INTEGER" />
+	    <result column="tct_discount_amount" property="discountAmount" jdbcType="DECIMAL" />
+	    <result column="tct_pay_amount" property="payAmount" jdbcType="DECIMAL" />
+	    <result column="tct_valid_days" property="validDays" jdbcType="INTEGER" />
+	    <result column="tct_notes" property="notes" jdbcType="VARCHAR" />
+	    <result column="tct_create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="tct_status" property="status" jdbcType="INTEGER" />
+		<collection property="cardTypeCententList" ofType="com.gogirl.gogirl_user.entity.TimesCardTypeContent">
+			<result column="tctc_card_type_id" property="cardTypeId" jdbcType="INTEGER" />
+			<result column="tctc_name" property="name" jdbcType="VARCHAR" />
+			<result column="tctc_num" property="num" jdbcType="INTEGER" />
+		    <result column="tctc_amount" property="amount" jdbcType="DECIMAL" />
+		    <result column="tctc_note" property="note" jdbcType="VARCHAR" />
+		</collection>
+		<collection property="storeList" ofType="com.gogirl.gogirl_store.store_commons.dto.ShopManage">
+	        <result column="sm_id" property="id"/>
+	        <result column="sm_store_no" property="storeNo"/>
+	        <result column="sm_logo" property="logo"/>
+	        <result column="sm_name" property="name"/>
+	        <result column="sm_longitude" property="longitude"/>
+	        <result column="sm_latitude" property="latitude"/>
+	        <result column="sm_address" property="address"/>
+	        <result column="sm_master" property="master"/>
+	        <result column="sm_employee_number" property="employeeNumber"/>
+	        <result column="sm_customer_service_telphone" property="customerServiceTelphone"/>
+	        <result column="sm_contact_name" property="contactName"/>
+	        <result column="sm_contact_telphone" property="contactTelphone"/>
+	        <result column="sm_remark" property="remark"/>
+	        <result column="sm_business_day" property="businessDay"/>
+	        <result column="sm_business_start_time" property="businessStartTime"/>
+	        <result column="sm_business_end_time" property="businessEndTime"/>
+	        <result column="sm_shop_environment_photos" property="shopEnvironmentPhotos"/>
+	        <result column="sm_short_code" property="shortCode"/>
+		</collection>	
+	</association>
+	<collection property="timesCardUsedRecordList" ofType="com.gogirl.gogirl_user.entity.TimesCardUsedRecord" >
+		<result column="tcur_id" property="id" jdbcType="INTEGER" />
+		<result column="tcur_card_type_id" property="cardTypeId" jdbcType="INTEGER" />
+		<result column="tcur_customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="tcur_card_relevance_customer_id" property="cardRelevanceCustomerId" jdbcType="INTEGER" />
+		<result column="tcur_time" property="time" jdbcType="TIMESTAMP" />
+		<result column="tcur_type" property="type" jdbcType="INTEGER" />
+		<result column="tcur_order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="tcur_serve_id" property="serveId" jdbcType="INTEGER" />
+		<result column="tcur_technician_id" property="technicianId" jdbcType="INTEGER" />
+		<result column="tcur_department_id" property="departmentId" jdbcType="INTEGER" />
+		<result column="tcur_serve_name" property="serveName" jdbcType="VARCHAR" />
+		<result column="tcur_technician_name" property="technicianName" jdbcType="VARCHAR" />
+		<result column="tcur_department_name" property="departmentName" jdbcType="VARCHAR" />
+    	<result column="tcur_status" property="status" jdbcType="INTEGER" />
+	</collection>
+  </resultMap>
+  <sql id="timesCardCustomerRelevanceSql" >
+    tccr.id, tccr.card_type_id, tccr.customer_id, tccr.create_time, tccr.used_times, tccr.valid_start_time, tccr.valid_end_time,tccr.referee_id,tccr.status
+  </sql>
+  <sql id="TimesCardTypeSql" >
+    tct.id tct_id, tct.name tct_name, tct.sum_times tct_sum_times, tct.discount_amount tct_discount_amount, tct.pay_amount tct_pay_amount, tct.valid_days tct_valid_days, tct.notes tct_notes, tct.create_time tct_create_time,tct.status tct_status
+  </sql>
+  <sql id="TimesCardTypeContentSql" >
+    tctc.card_type_id tctc_card_type_id, tctc.name tctc_name, tctc.num tctc_num,tctc.amount tctc_amount,tctc.note tctc_note
+  </sql>
+  <sql id="storeManageSql">
+  sm.id sm_id, sm.store_no sm_store_no, sm.logo sm_logo, sm.name sm_name, sm.longitude sm_longitude, sm.latitude sm_latitude, sm.address sm_address, sm.master sm_master, sm.employee_number sm_employee_number, sm.customer_service_telphone sm_customer_service_telphone, sm.contact_name sm_contact_name, sm.contact_telphone sm_contact_telphone, sm.remark sm_remark, sm.business_day sm_business_day, sm.business_start_time sm_business_start_time, sm.business_end_time sm_business_end_time,sm.shop_environment_photos sm_shop_environment_photos
+  </sql>
+  <sql id="timesCardUsedRecordSql" >
+    tcur.id tcur_id,tcur.card_type_id tcur_card_type_id,tcur.customer_id tcur_customer_id,tcur.card_relevance_customer_id tcur_card_relevance_customer_id,tcur.time tcur_time,tcur.type tcur_type,tcur.order_id tcur_order_id, 
+    tcur.serve_id tcur_serve_id,tcur.technician_id tcur_technician_id,tcur.department_id tcur_department_id,tcur.status tcur_status
+  </sql>
+
+
+  <select id="getTimesCardList" resultMap="BaseResultMap" parameterType="com.gogirl.gogirl_user.entity.TimesCardCustomerRelevance" >
+    select 
+    <include refid="timesCardCustomerRelevanceSql" />,
+    <include refid="TimesCardTypeSql" /> 
+    from times_card_customer_relevance tccr
+    left join times_card_type tct on tct.id = tccr.card_type_id
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="timesCardCustomerRelevanceSql" />,
+    <include refid="TimesCardTypeSql" />,
+    <include refid="TimesCardTypeContentSql" />,
+    <include refid="storeManageSql" />,
+    <include refid="timesCardUsedRecordSql" />,bs.name tcur_serve_name,tech.name tcur_technician_name,storem.name tcur_department_name
+    from times_card_customer_relevance tccr
+    left join times_card_type tct on tct.id = tccr.card_type_id
+    left join times_card_type_content tctc on tctc.card_type_id = tct.id
+    left join sys_member_authority sma on sma.member_id = tct.id and sma.type=1 and sma.member_type=10
+    left join store_manage sm on sm.id = sma.data_id
+    left join times_card_used_record tcur on tcur.card_relevance_customer_id = tccr.id
+    left join base_serve bs on bs.id = tcur.serve_id
+    left join store_technician tech on tech.id = tcur.technician_id
+    left join store_manage storem on storem.id = tcur.department_id
+    where tccr.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from times_card_customer_relevance
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gogirl.gogirl_user.entity.TimesCardCustomerRelevance" >
+    insert into times_card_customer_relevance (id, card_type_id, customer_id, 
+      create_time, used_times, valid_start_time, 
+      valid_end_time, referee_id)
+    values (#{id,jdbcType=INTEGER}, #{cardTypeId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{usedTimes,jdbcType=INTEGER}, #{validStartTime,jdbcType=TIMESTAMP}, 
+      #{validEndTime,jdbcType=TIMESTAMP}, #{refereeId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_user.entity.TimesCardCustomerRelevance" >
+    insert into times_card_customer_relevance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cardTypeId != null" >
+        card_type_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="usedTimes != null" >
+        used_times,
+      </if>
+      <if test="validStartTime != null" >
+        valid_start_time,
+      </if>
+      <if test="validEndTime != null" >
+        valid_end_time,
+      </if>
+      <if test="refereeId != null" >
+        referee_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cardTypeId != null" >
+        #{cardTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usedTimes != null" >
+        #{usedTimes,jdbcType=INTEGER},
+      </if>
+      <if test="validStartTime != null" >
+        #{validStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validEndTime != null" >
+        #{validEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refereeId != null" >
+        #{refereeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_user.entity.TimesCardCustomerRelevance" >
+    update times_card_customer_relevance
+    <set >
+      <if test="cardTypeId != null" >
+        card_type_id = #{cardTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usedTimes != null" >
+        used_times = #{usedTimes,jdbcType=INTEGER},
+      </if>
+      <if test="validStartTime != null" >
+        valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validEndTime != null" >
+        valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refereeId != null" >
+        referee_id = #{refereeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gogirl.gogirl_user.entity.TimesCardCustomerRelevance" >
+    update times_card_customer_relevance
+    set card_type_id = #{cardTypeId,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      used_times = #{usedTimes,jdbcType=INTEGER},
+      valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
+      valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
+      referee_id = #{refereeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

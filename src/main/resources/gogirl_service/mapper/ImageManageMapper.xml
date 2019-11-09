@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_service.dao.image.ImageManageMapper">
+
+    <sql id="baseSql">
+        id, name,img_group imgGroup, url
+    </sql>
+
+    <select id="listImageManageForPage" resultType="com.gogirl.gogirl_service.entity.ImageManage">
+        select
+        <include refid="baseSql"/>
+        from base_image
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            and name = #{name}
+        </if>
+        <if test="imgGroup != null and imgGroup != ''">
+            and img_group = #{imgGroup}
+        </if>
+        <if test="url != null  and url != ''">
+            and url = #{url}
+        </if>
+    </select>
+
+    <insert id="insertImageManage">
+        insert into
+        base_image(name, img_group, url)
+            values
+            <foreach collection ="list" item="listimage" index= "index" separator =",">
+                (
+                #{listimage.name}, #{listimage.imgGroup}, #{listimage.url}
+                )
+            </foreach>
+    </insert>
+
+</mapper>

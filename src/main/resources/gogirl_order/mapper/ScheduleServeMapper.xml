@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.order_schedule.dao.ScheduleServeMapper">
+
+    <resultMap id="scheduleServeDetail" type="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+            <result column="schser_id" property="id"/>
+            <result column="schser_sch_id" property="schId"/>
+            <result column="schser_technician_id" property="technicianId"/>
+            <result column="schser_serve_id" property="serveId"/>
+            <result column="schser_produce_id" property="produceId"/>
+            <result column="schser_main_serve_id" property="mainServeId"/>
+            <result column="schser_is_customer_pick" property="isCustomerPick"/>
+            <result column="schser_start_time" property="startTime"/>
+            <result column="schser_end_time" property="endTime"/>
+            <result column="schser_create_time" property="createTime"/>
+            <result column="schser_produce_name" property="produceName"/>
+            <result column="schser_serve_number" property="serveNumber"/>
+            <association property="serve" javaType="com.gogirl.gogirl_service.entity.Serve">
+                <result column="ser_id" property="id" />
+                <result column="ser_name" property="name"/>
+                <result column="ser_type" property="type"/>
+                <result column="ser_label" property="label"/>
+                <result column="ser_shop_sort" property="shopSort"/>
+                <result column="ser_price" property="price"/>
+                <result column="ser_picture_path" property="picturePath"/>
+                <result column="ser_status" property="status"/>
+                <result column="ser_remark" property="remark"/>
+                <result column="ser_details" property="details"/>
+                <result column="ser_service_duration" property="serviceDuration"/>
+                <result column="ser_sch_type_id" property="schTypeId"/>
+            </association>
+    </resultMap>
+
+    <sql id="baseSql">
+        id, sch_id, technician_id, serve_id, start_time, end_time, create_time, produce_name, serve_number
+    </sql>
+
+    <sql id="scheduleServeSql">
+        schser.id schser_id, schser.sch_id schser_sch_id, schser.technician_id schser_technician_id, schser.serve_id schser_serve_id, schser.produce_id schser_produce_id, schser.main_serve_id schser_main_serve_id, schser.is_customer_pick schser_is_customer_pick, schser.start_time schser_start_time, schser.end_time schser_end_time, schser.create_time schser_create_time, schser.produce_name schser_produce_name, schser.serve_number schser_serve_number
+    </sql>
+    <sql id="serveSql">
+        ser.id ser_id, ser.name ser_name,ser.type ser_type, ser.label ser_label, ser.shop_sort ser_shop_sort, ser.price ser_price, ser.picture_path ser_picture_path, ser.status ser_status, ser.remark ser_remark, ser.details ser_details, ser.service_duration ser_service_duration,ser.sch_type_id ser_sch_type_id
+    </sql>
+
+    <!-- 判断预约时间已经预约的条数 -->
+    <select id="getCheckSchedule" resultType="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+        select *
+        from scheduled_serve where ((#{startDateTime} >= start_time and end_time > #{startDateTime}) or (#{endDateTime} > start_time and end_time >= #{endDateTime}) or (start_time>=#{startDateTime} and #{endDateTime} > end_time)) and technician_id = #{technicianId} and sch_id in(select id from scheduled_manage where status = 1 or status=6 or status=7)
+    </select>
+
+    <!-- 判断预约时间已经被预约的条数  不包含自身预约 -->
+    <select id="getCheckScheduleNotContainItself" resultType="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+        select *
+        from scheduled_serve where ((#{startDateTime} >= start_time and end_time > #{startDateTime}) or (#{endDateTime} > start_time and end_time >= #{endDateTime}) or (start_time>=#{startDateTime} and #{endDateTime} > end_time)) and technician_id = #{technicianId} and sch_id in(select id from scheduled_manage where status = 1 or status=6 or status=7) and id != #{scheduleServeId}
+    </select>
+
+    <select id="listExistScheduleServe" resultMap="scheduleServeDetail">
+        select
+        <include refid="scheduleServeSql"/>,
+        <include refid="serveSql"/>
+        from
+        scheduled_serve schser
+        left join scheduled_manage sm on sm.id = schser.sch_id
+        left join base_serve ser on ser.id = schser.serve_id
+        where
+        date_format(schser.start_time, '%Y-%m-%d') = #{startDate}
+        and (sm.status = 1 or sm.status=6 or sm.status=7)
+        and sm.scheduled_user = #{customerId}
+    </select>
+    <select id="listScheduleManageByDate" resultMap="scheduleServeDetail">
+        select
+        <include refid="scheduleServeSql"/>,
+        <include refid="serveSql"/>
+        from
+        scheduled_serve schser
+        left join base_serve ser on ser.id = schser.serve_id
+        left join scheduled_manage sm on sm.id = schser.sch_id
+        where (sm.status = 1 or sm.status=6 or sm.status=7) and sm.department_id = #{departmentId}
+        and date_format(schser.start_time, '%Y-%m-%d') = #{date}
+    </select>
+    <select id="listScheduleServe" resultMap="scheduleServeDetail">
+        select
+        <include refid="scheduleServeSql"/>,
+        <include refid="serveSql"/>
+        from
+        scheduled_serve schser
+        left join base_serve ser on ser.id = schser.serve_id
+        where
+        date_format(schser.start_time, '%Y-%m-%d') = #{days}
+        and
+        schser.sch_id in (select id from scheduled_manage where department_id = #{departmentId} and status = 1 or status=6 or status=7)
+        and schser.technician_id is null
+    </select>
+
+    <select id="listScheduleServeBySchId" resultMap="scheduleServeDetail">
+        select
+        <include refid="scheduleServeSql"/>,
+        <include refid="serveSql"/>
+        from scheduled_serve schser left join base_serve ser on schser.serve_id = ser.id
+        where schser.sch_id = #{schId}
+    </select>
+
+    <select id="checkScheduleServeByTechnicianId" resultType="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+        select
+        <include refid="baseSql"/>
+        from scheduled_serve
+        where
+        technician_id in (select id from store_technician where user_id = #{technicianId})
+        and sch_id in(select id from scheduled_manage where status = 1 or status=6 or status=7)
+    </select>
+
+    <update id="updateScheduleServeByOne">
+        update scheduled_serve
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serveId != null">
+                serve_id = #{serveId},
+            </if>
+            <if test="technicianId != null">
+                technician_id = #{technicianId},
+            </if>
+            <if test="isCustomerPick != null">
+                is_customer_pick = #{isCustomerPick},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="lengthTimeForEndTime != null">
+                end_time = adddate(#{startTime}, INTERVAL #{lengthTimeForEndTime}  minute),
+            </if>
+            <if test="produceName != null">
+                produce_name = #{produceName},
+            </if>
+            create_time = now(),
+            serve_number = 1
+        </trim>
+        where id = #{id}
+    </update>
+
+    <!-- 修改预约服务 -->
+    <update id="updateScheduleServe" parameterType="java.util.List">
+        <foreach collection="list" item="list" separator=";">
+            update scheduled_serve
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="list.serveId != null">
+                    serve_id = #{list.serveId},
+                </if>
+                <if test="list.technicianId != null">
+                    technician_id = #{list.technicianId},
+                </if>
+                <if test="list.startTime != null">
+                    start_time = #{list.startTime},
+                </if>
+                <if test="list.lengthTimeForEndTime != null">
+                    end_time = adddate(#{list.startTime}, INTERVAL #{list.lengthTimeForEndTime}  minute),
+                </if>
+                <if test="list.produceName != null">
+                    produce_name = #{list.produceName},
+                </if>
+                create_time = now(),
+                serve_number = 1
+            </trim>
+            where id = #{list.id}
+        </foreach>
+    </update>
+
+    <update id="updateScheduleServeForTechnician">
+        update
+        scheduled_serve
+        set technician_id = #{technicianId}
+        where id = #{id}
+    </update>
+
+    <!-- 删除预约服务 -->
+    <delete id="deleteScheduleServeById">
+        delete from scheduled_serve where id = #{id}
+    </delete>
+
+    <delete id="deleteScheduleServeByServeId">
+        delete from scheduled_serve where sch_id = #{serveId}
+    </delete>
+
+    <!-- 用户端生成预约服务 -->
+    <insert id="insertScheduleServe" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+     insert into scheduled_serve
+     <trim prefix="(" suffix=")" suffixOverrides=",">
+         <if test="id != null">
+         id,
+         </if>
+         <if test="schId != null">
+             sch_id,
+         </if>
+         <if test="technicianId != null">
+             technician_id,
+         </if>
+         <if test="serveId">
+             serve_id,
+         </if>
+         <if test="startTime != null">
+             start_time,
+         </if>
+         <if test="endTime">
+             end_time,
+         </if>
+         <if test="createTime != null">
+             create_time,
+         </if>
+         <if test="produceName != null">
+             produce_name,
+         </if>
+         <if test="serveNumber != null">
+             serve_number
+         </if>
+     </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
+            <if test="schId != null">
+                #{schId},
+            </if>
+            <if test="technicianId != null">
+                #{technicianId},
+            </if>
+            <if test="serveId">
+                #{serveId},
+            </if>
+            <if test="startTime != null">
+                #{startTime},
+            </if>
+            <if test="endTime">
+                #{endTime},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="produceName != null">
+                #{produceName},
+            </if>
+            <if test="serveNumber != null">
+                #{serveNumber}
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertScheduleServeByOne" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into scheduled_serve
+        (sch_id,
+        technician_id,
+        serve_id,
+        start_time,
+        end_time,
+        produce_name,
+        create_time,
+        serve_number)
+        values
+            ( #{schId},
+            #{technicianId},
+            #{serveId},
+            #{startTime},
+            adddate(#{startTime}, INTERVAL #{lengthTimeForEndTime}  minute),
+            #{produceName},
+            now(),
+            1
+            )
+    </insert>
+
+    <insert id="insertScheduleServeByUpdate" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="java.util.List">
+        insert into scheduled_serve
+        (sch_id,
+        technician_id,
+        serve_id,
+        produce_id,
+        main_serve_id,
+        start_time,
+        end_time,
+        produce_name,
+        create_time,
+        serve_number)
+        values
+        <foreach collection="list" item="list" separator=",">
+            ( #{list.schId},
+            #{list.technicianId},
+            #{list.serveId},
+            #{list.produceId},
+            #{list.mainServeId},
+            #{list.startTime},
+            adddate(#{list.startTime}, INTERVAL #{list.lengthTimeForEndTime}  minute),
+            #{list.produceName},
+            now(),
+            1
+            )
+        </foreach>
+    </insert>
+</mapper>

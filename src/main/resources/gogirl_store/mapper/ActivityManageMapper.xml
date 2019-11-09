@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_store.store_activity.dao.ActivityManageMapper">
+
+    <resultMap id="storeActivity" type="com.gogirl.gogirl_store.store_commons.dto.ActivityManage">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="create_time" property="createTime"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="prize" property="prize"/>
+        <result column="condition_use" property="conditionUse"/>
+        <result column="participants_number" property="participantsNumber"/>
+        <result column="recipient_number" property="recipientNumber"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <sql id="baseSql">
+        id, name, create_time, start_time, end_time, prize, condition_use, status
+    </sql>
+
+    <sql id="sql">
+        am.id, am.name, am.create_time, am.start_time, am.end_time, am.prize, am.condition_use, sum(acs.participants_number) as participants_number, sum(acs.recipient_number) as recipient_number, am.status
+    </sql>
+
+    <select id="listActivityForPage" resultMap="storeActivity">
+        select
+        <include refid="sql"/>
+        from activity_manage am
+        left join activity_summary acs
+        on am.id = acs.activity_id
+        where 1 = 1
+        <if test="name != null and name != '' ">
+            and am.name like '%${name}%'
+        </if>
+        <if test="createTime != null">
+            and am.create_time = #{createTime}
+        </if>
+        <if test="startTime != null">
+            and am.start_time = #{startTime}
+        </if>
+        <if test="endTime != null">
+            and am.end_time = #{endTime}
+        </if>
+        <if test="prize != null and prize != ''">
+            and am.prize = #{prize}
+        </if>
+        <if test="conditionUse != null and conditionUse != ''">
+            and am.condition_use = #{conditionUse}
+        </if>
+        <if test="recipientNumber != null">
+            and am.recipient_number = #{recipientNumber}
+        </if>
+        group by am.id
+    </select>
+    
+    <select id="getActivityForDetail" resultMap="storeActivity">
+        select 
+        <include refid="baseSql"/>
+        from activity_manage
+        where id = #{id}
+    </select>
+
+    <delete id="deleteActivityById">
+        delete from activity_manage where id = #{id}
+    </delete>
+
+    <update id="updateActivity">
+        update activity_manage
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+            <if test="prize != null and prize != ''">
+                prize = #{prize},
+            </if>
+            <if test="conditionUse != null and conditionUse != ''">
+                condition_use = #{conditionUse},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insertActivity" parameterType="com.gogirl.gogirl_store.store_commons.dto.ActivityManage" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into activity_manage
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null">
+                name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="prize != null and prize != ''">
+                prize,
+            </if>
+            <if test="conditionUse != null and conditionUse != ''">
+                condition_use,
+            </if>
+            <if test="status != null and status != ''">
+                status
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="startTime != null">
+                #{startTime},
+            </if>
+            <if test="endTime != null">
+                #{endTime},
+            </if>
+            <if test="prize != null and prize != ''">
+                #{prize},
+            </if>
+            <if test="conditionUse != null and conditionUse != ''">
+                #{conditionUse},
+            </if>
+            <if test="status != null and status != ''">
+                #{status}
+            </if>
+        </trim>
+    </insert>
+</mapper>

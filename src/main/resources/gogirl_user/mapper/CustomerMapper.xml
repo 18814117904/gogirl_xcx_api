@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_user.dao.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_user.entity.Customer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="openid" property="openid" jdbcType="CHAR" />
+    <result column="openid1" property="openid1" jdbcType="CHAR" />
+    <result column="unionid" property="unionid" jdbcType="CHAR" />
+    <result column="phone" property="phone" jdbcType="CHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="headimgurl" property="headimgurl" jdbcType="VARCHAR" />
+    <result column="privilege" property="privilege" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="register_department" property="registerDepartment" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="scheduled_times" property="scheduledTimes" jdbcType="INTEGER" />
+    <result column="order_times" property="orderTimes" jdbcType="INTEGER" />
+    <result column="store_record_real_name" property="storeRecordRealName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="remark2" property="remark2" jdbcType="VARCHAR" />
+    <result column="remark3" property="remark3" jdbcType="VARCHAR" />
+    <result column="remark4" property="remark4" jdbcType="VARCHAR" />
+    <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
+    <result column="data_integrity" property="dataIntegrity" jdbcType="DOUBLE" />
+    <result column="customer_source" property="customerSource" jdbcType="INTEGER" />
+    <result column="my_qrcode" property="myQrcode" jdbcType="VARCHAR" />
+	 <association property="storeManage" javaType="com.gogirl.gogirl_user.entity.StoreManage">
+	     <id column="sid" property="id" jdbcType="INTEGER" />
+	     <result column="sstore_no" property="storeNo" jdbcType="VARCHAR" />
+	     <result column="slogo" property="logo" jdbcType="VARCHAR" />
+	     <result column="sname" property="name" jdbcType="VARCHAR" />
+	     <result column="slongitude" property="longitude" jdbcType="DECIMAL" />
+	     <result column="slatitude" property="latitude" jdbcType="DECIMAL" />
+	     <result column="saddress" property="address" jdbcType="VARCHAR" />
+	     <result column="smaster" property="master" jdbcType="VARCHAR" />
+	     <result column="semployee_number" property="employeeNumber" jdbcType="INTEGER" />
+	     <result column="scustomer_service_telphone" property="customerServiceTelphone" jdbcType="VARCHAR" />
+	     <result column="scontact_name" property="contactName" jdbcType="VARCHAR" />
+	     <result column="scontact_telphone" property="contactTelphone" jdbcType="VARCHAR" />
+	     <result column="sbusiness_day" property="businessDay" jdbcType="INTEGER" />
+	     <result column="sbusiness_start_time" property="businessStartTime" jdbcType="TIME" />
+	     <result column="sbusiness_end_time" property="businessEndTime" jdbcType="TIME" />
+	     <result column="sremark" property="remark" jdbcType="VARCHAR" />
+	     <result column="screate_time" property="createTime" jdbcType="TIMESTAMP" />
+	 </association>
+	 <association property="customerBalance" javaType="com.gogirl.gogirl_user.entity.CustomerBalance">
+	    <id column="bcustomer_id" property="customerId" jdbcType="INTEGER" />
+	    <result column="bbalance" property="balance" jdbcType="INTEGER" />
+	    <result column="bcurrent_discount" property="currentDiscount" jdbcType="DOUBLE" />
+	    <result column="bfirst_charge_time" property="firstChargeTime" jdbcType="TIMESTAMP" />
+	    <result column="bupdate_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="btotal_charge" property="totalCharge" jdbcType="INTEGER" />
+	    <result column="btotal_bestow" property="totalBestow" jdbcType="INTEGER" />
+	    <result column="btotal_expenditure" property="totalExpenditure" jdbcType="INTEGER" />
+	    <result column="bversion" property="version" jdbcType="INTEGER" />
+	    <result column="blevel" property="level" jdbcType="VARCHAR" />
+	    <result column="breferee_id" property="refereeId" jdbcType="INTEGER" />
+	    <result column="bdiscount_rate" property="discountRate" jdbcType="DOUBLE" />
+	 </association>
+	 <association property="customerDetail" javaType="com.gogirl.gogirl_user.entity.CustomerDetail">
+    	<id column="dcustomer_id" property="customerId" jdbcType="INTEGER" />
+	    <result column="dwechat_id" property="wechatId" jdbcType="VARCHAR" />
+	    <result column="dreferee" property="referee" jdbcType="VARCHAR" />
+	    <result column="dfirst_serve_time" property="firstServeTime" jdbcType="VARCHAR" />
+	    <result column="dage" property="age" jdbcType="INTEGER" />
+	    <result column="dbirthday" property="birthday" jdbcType="VARCHAR" />
+	    <result column="dmarital_status" property="maritalStatus" jdbcType="VARCHAR" />
+	    <result column="dhave_children" property="haveChildren" jdbcType="VARCHAR" />
+	    <result column="dhobby" property="hobby" jdbcType="VARCHAR" />
+	    <result column="dcolour_of_skin" property="colourOfSkin" jdbcType="VARCHAR" />
+	    <result column="dtype_of_nail_bed" property="typeOfNailBed" jdbcType="VARCHAR" />
+	    <result column="dnail_type" property="nailType" jdbcType="VARCHAR" />
+	    <result column="dnail_hardness" property="nailHardness" jdbcType="INTEGER" />
+	    <result column="dresidence" property="residence" jdbcType="INTEGER" />
+	    <result column="dwork_address" property="workAddress" jdbcType="INTEGER" />
+	    <result column="doccupation" property="occupation" jdbcType="INTEGER" />
+	    <result column="dfrequency_of_nail" property="frequencyOfNail" jdbcType="INTEGER" />
+	    <result column="dkey_points_of_salon" property="keyPointsOfSalon" jdbcType="VARCHAR" />
+	    <result column="dlike_style" property="likeStyle" jdbcType="VARCHAR" />
+	    <result column="dcustomer_concerns" property="customerConcerns" jdbcType="VARCHAR" />
+	    <result column="dsolution" property="solution" jdbcType="VARCHAR" />
+	    <result column="deyelash_condition" property="eyelashCondition" jdbcType="VARCHAR" />
+	    <result column="deye_shape" property="eyeShape" jdbcType="VARCHAR" />
+	    <result column="dquestionnaire_img_url" property="questionnaireImgUrl" jdbcType="VARCHAR" />
+	    <result column="djob" property="job" jdbcType="VARCHAR" />
+	    <result column="dpreference" property="preference" jdbcType="VARCHAR" />
+	    <result column="dcharacter" property="character" jdbcType="VARCHAR" />
+	    <result column="dbirthday_month" property="birthdayMonth" jdbcType="INTEGER" />
+	    <result column="dbirthday_day" property="birthdayDay" jdbcType="INTEGER" />
+	    <result column="dage_group" property="ageGroup" jdbcType="VARCHAR" />
+	 </association>
+  </resultMap>
+
+  <sql id="customerSql" >
+    c.id, c.openid,c.unionid,c.openid1, c.phone, c.nickname, c.password, c.sex, c.country, c.province, c.city, c.headimgurl,c.customer_source, 
+    c.privilege, c.state, c.register_time, c.update_time, c.real_name, c.birthday, c.register_department, c.source, c.scheduled_times,c.order_times,
+    c.store_record_real_name, c.remark,c.remark2,c.remark3,c.remark4,c.responsible_person,c.data_integrity,c.my_qrcode
+  </sql>
+  <sql id="storeSql" >
+    s.id as sid, s.store_no sstore_no, s.logo slogo, s.name sname, s.longitude slongitude, s.latitude slatitude, s.address saddress, s.master smaster, s.employee_number semployee_number, 
+    s.customer_service_telphone scustomer_service_telphone, s.contact_name scontact_name, s.contact_telphone scontact_telphone, s.business_day sbusiness_day, s.business_start_time sbusiness_start_time, 
+    s.business_end_time sbusiness_end_time, s.remark as sremark, s.create_time screate_time
+  </sql>
+  <sql id="balanceSql" >
+    b.customer_id bcustomer_id,b.balance bbalance,b.current_discount bcurrent_discount,b.first_charge_time bfirst_charge_time,b.update_time bupdate_time,b.total_charge btotal_charge,
+    b.total_bestow btotal_bestow,b.total_expenditure btotal_expenditure,b.version bversion,b.level blevel,b.referee_id breferee_id,b.discount_rate bdiscount_rate
+  </sql>
+  <sql id="detailSql" >
+    d.customer_id as dcustomer_id, d.wechat_id dwechat_id, d.referee dreferee, d.first_serve_time dfirst_serve_time, d.age dage, d.birthday dbirthday, d.marital_status dmarital_status, d.have_children dhave_children,
+    d.hobby dhobby, d.colour_of_skin dcolour_of_skin, d.type_of_nail_bed dtype_of_nail_bed, d.nail_type dnail_type, d.nail_hardness dnail_hardness, d.residence dresidence,
+    d.work_address dwork_address, d.occupation doccupation, d.frequency_of_nail dfrequency_of_nail, d.key_points_of_salon dkey_points_of_salon, d.like_style dlike_style, d.customer_concerns dcustomer_concerns,
+    d.solution dsolution, d.eyelash_condition deyelash_condition, d.eye_shape deye_shape, d.questionnaire_img_url dquestionnaire_img_url,d.job djob,d.preference dpreference,d.character dcharacter,
+    d.birthday_month dbirthday_month,d.birthday_day dbirthday_day,d.age_group dage_group
+  </sql>
+  <select id="selectByPrimaryKeyWithCard" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="customerSql" />,
+    <include refid="storeSql" />,
+    <include refid="balanceSql" />,
+    <include refid="detailSql" />
+    from customer c
+     left join customer_detail d on c.id=d.customer_id
+    left join store_manage s on c.register_department=s.id
+    left join customer_balance b on c.id=b.customer_id
+    left join store_user r on r.id = b.referee_id
+    where c.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="customerSql" />
+    from customer c
+    where c.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyWithDetail" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="customerSql" />,
+    <include refid="detailSql" />
+    from customer c
+     left join customer_detail d on c.id=d.customer_id
+    where c.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUnionid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="customerSql" />
+    from customer c
+    where unionid = #{unionid,jdbcType=CHAR}
+  </select>
+  <select id="selectByOpenid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="customerSql" />
+    from customer c
+    where openid = #{openid,jdbcType=CHAR}
+  </select>
+  <select id="selectByOpenid1" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="customerSql" />,
+    <include refid="balanceSql" />
+    from customer  c
+    left join customer_balance b on b.customer_id=c.id
+    where openid1 = #{openid,jdbcType=CHAR}
+  </select>
+  <select id="selectByPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="customerSql" />
+    from customer c
+    where phone = #{phone,jdbcType=CHAR}
+  </select>
+  <select id="selectCustomerWithPhone" resultMap="BaseResultMap"  >
+    select 
+    <include refid="customerSql" />
+    from customer  c where phone is not null and phone != ''
+      <if test="phone != null" >
+        and phone like CONCAT('%',#{phone,jdbcType=CHAR},'%')
+      </if>
+   </select>
+  <select id="selectByCustomer" resultMap="BaseResultMap" parameterType="com.gogirl.gogirl_user.entity.Customer" >
+    select 
+    <include refid="customerSql" />
+    from customer c
+    <where >
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=CHAR}
+      </if>
+      <if test="id != null" >
+        and id = #{id,jdbcType=CHAR}
+      </if>
+      <if test="phone != null" >
+        and phone = #{phone,jdbcType=CHAR}
+      </if>
+      <if test="nickname != null" >
+        and nickname = #{nickname,jdbcType=VARCHAR}
+      </if>
+      <if test="password != null" >
+        and password = #{password,jdbcType=VARCHAR}
+      </if>
+      <if test="sex != null" >
+        and sex = #{sex,jdbcType=CHAR}
+      </if>
+      <if test="country != null" >
+        and country = #{country,jdbcType=VARCHAR}
+      </if>
+      <if test="province != null" >
+        and province = #{province,jdbcType=VARCHAR}
+      </if>
+      <if test="city != null" >
+        and city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="headimgurl != null" >
+        and headimgurl = #{headimgurl,jdbcType=VARCHAR}
+      </if>
+      <if test="privilege != null" >
+        and privilege = #{privilege,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null" >
+        and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="registerTime != null" >
+        and register_time = #{registerTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null" >
+        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="realName != null" >
+        and real_name = #{realName,jdbcType=VARCHAR}
+      </if>
+      <if test="birthday != null" >
+        and birthday = #{birthday,jdbcType=TIMESTAMP}
+      </if>
+      <if test="registerDepartment != null" >
+        and register_department = #{registerDepartment,jdbcType=INTEGER}
+      </if>
+      <if test="source != null" >
+        and source = #{source,jdbcType=INTEGER}
+      </if>
+      <if test="scheduledTimes != null" >
+        and scheduled_times = #{scheduledTimes,jdbcType=INTEGER}
+      </if>
+      <if test="orderTimes != null" >
+        and order_times = #{orderTimes,jdbcType=INTEGER}
+      </if>
+      <if test="storeRecordRealName != null" >
+        and store_record_real_name = #{storeRecordRealName,jdbcType=VARCHAR}
+      </if>
+      <if test="remark != null" >
+        and remark = #{remark,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectByCustomerWithStore" resultMap="BaseResultMap" parameterType="com.gogirl.gogirl_user.entity.Customer" >
+    select 
+    <include refid="customerSql" />,
+    <include refid="storeSql" />
+    from customer c left join store_manage s on c.register_department=s.id
+    <where >
+      <if test="departmentId != null">
+        c.id in (select customer_id from customer_department_relevance re where re.department_id=#{departmentId,jdbcType=INTEGER})
+      </if>
+      <if test="customer.id != null" >
+        and c.id = #{customer.id,jdbcType=CHAR}
+      </if>
+      <if test="customer.openid != null" >
+        and openid = #{customer.openid,jdbcType=CHAR}
+      </if>
+      <if test="customer.phone != null" >
+        and phone like CONCAT('%',#{customer.phone,jdbcType=CHAR},'%')
+      </if>
+      <if test="customer.nickname != null" >
+        and nickname = #{customer.nickname,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.password != null" >
+        and password = #{customer.password,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.sex != null" >
+        and sex = #{customer.sex,jdbcType=CHAR}
+      </if>
+      <if test="customer.country != null" >
+        and country = #{customer.country,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.province != null" >
+        and province = #{customer.province,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.city != null" >
+        and city = #{customer.city,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.headimgurl != null" >
+        and headimgurl = #{customer.headimgurl,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.privilege != null" >
+        and privilege = #{customer.privilege,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.state != null" >
+        and state = #{customer.state,jdbcType=CHAR}
+      </if>
+      <if test="customer.registerTime != null" >
+        and register_time = #{customer.registerTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="customer.updateTime != null" >
+        and update_time = #{customer.updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="customer.realName != null" >
+        and real_name = #{customer.realName,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.birthday != null" >
+        and birthday = #{customer.birthday,jdbcType=TIMESTAMP}
+      </if>
+      <if test="customer.registerDepartment != null" >
+        and register_department = #{customer.registerDepartment,jdbcType=INTEGER}
+      </if>
+      <if test="customer.source != null" >
+        and source = #{customer.source,jdbcType=INTEGER}
+      </if>
+      <if test="customer.scheduledTimes != null" >
+        and scheduled_times = #{customer.scheduledTimes,jdbcType=INTEGER}
+      </if>
+      <if test="customer.orderTimes != null" >
+        and order_times = #{customer.orderTimes,jdbcType=INTEGER}
+      </if>
+      <if test="customer.storeRecordRealName != null" >
+        and store_record_real_name = #{customer.storeRecordRealName,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.remark != null" >
+        and remark = #{customer.remark,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectByCustomerWithStoreAndCard" resultMap="BaseResultMap">
+    select 
+    <include refid="customerSql" />,
+    <include refid="storeSql" />,
+    <include refid="balanceSql" />
+    from customer c 
+    left join store_manage s on c.register_department=s.id
+    left join customer_balance b on c.id=b.customer_id
+    left join store_user r on r.id = b.referee_id
+    <where >
+      <if test="departmentId != null">
+        c.id in (select customer_id from customer_department_relevance re where re.department_id=#{departmentId,jdbcType=INTEGER})
+      </if>
+      <if test="customer.phone != null" >
+        and phone like CONCAT('%',#{customer.phone,jdbcType=CHAR},'%')
+      </if>
+      <if test="customer.id != null" >
+        and c.id = #{customer.id,jdbcType=CHAR}
+      </if>
+      <if test="customer.nickname != null" >
+        and nickname like CONCAT('%',#{customer.nickname,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="customer.realName != null" >
+        and (real_name like CONCAT('%',#{customer.realName,jdbcType=VARCHAR},'%') or store_record_real_name like CONCAT('%',#{customer.realName,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="customer.storeRecordRealName != null" >
+        and (real_name like CONCAT('%',#{customer.storeRecordRealName,jdbcType=VARCHAR},'%') or store_record_real_name like CONCAT('%',#{customer.storeRecordRealName,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="customer.scheduledTimes != null" >
+        and scheduled_times >= #{customer.scheduledTimes,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.orderTimes  != null" >
+        and order_times  >= #{customer.orderTimes ,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by c.register_time desc
+  </select>
+  <select id="selectByCustomerCard" resultMap="BaseResultMap">
+    select 
+    <include refid="customerSql" />,
+    <include refid="storeSql" />,
+    <include refid="balanceSql" />
+    from customer c 
+    left join store_manage s on c.register_department=s.id
+    left join customer_balance b on c.id=b.customer_id
+    left join customer_weibo w on c.id=w.customer_id
+    left join store_user r on r.id = b.referee_id
+    <where >
+    b.customer_id is not null
+      <if test="departmentId != null">
+        and c.id in (select customer_id from customer_department_relevance re where re.department_id=#{departmentId,jdbcType=INTEGER})
+      </if>
+      <if test="customer.id != null" >
+        and c.id = #{customer.id,jdbcType=CHAR}
+      </if>
+      <if test="customer.phone != null" >
+        and phone like CONCAT('%',#{customer.phone,jdbcType=CHAR},'%')
+      </if>
+      <if test="customer.nickname != null" >
+        and nickname like CONCAT('%',#{customer.nickname,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="customer.realName != null" >
+        and (real_name like CONCAT('%',#{customer.realName,jdbcType=VARCHAR},'%') or store_record_real_name like CONCAT('%',#{customer.realName,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="customer.storeRecordRealName != null" >
+        and (real_name like CONCAT('%',#{customer.storeRecordRealName,jdbcType=VARCHAR},'%') or store_record_real_name like CONCAT('%',#{customer.storeRecordRealName,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="customer.scheduledTimes != null" >
+        and scheduled_times >= #{customer.scheduledTimes,jdbcType=VARCHAR}
+      </if>
+      <if test="customer.orderTimes  != null" >
+        and order_times  >= #{customer.orderTimes ,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by b.first_charge_time desc,c.register_time desc
+  </select>
+  <select id="selectByCustomerWithStoreAndCardAndDetail" resultMap="BaseResultMap">
+    select 
+    c.id, c.openid, c.phone, c.nickname, c.password, c.sex, c.country, c.province, c.city, c.headimgurl,c.customer_source, 
+    c.privilege, c.state, c.register_time, c.update_time, c.real_name, c.birthday, c.register_department, c.source,
+    IFNULL(sm.scheduled_count,0) scheduled_times,IFNULL(om.order_count,0) order_times,
+    c.store_record_real_name, c.remark,c.remark2,c.remark3,c.remark4,
+    su.`name` as responsible_person
+    ,c.data_integrity,
+    <include refid="storeSql" />,
+    <include refid="balanceSql" />,
+    <include refid="detailSql" />
+    from customer c 
+    left join store_manage s on c.register_department=s.id
+    left join customer_balance b on c.id=b.customer_id
+    left join customer_detail d on c.id=d.customer_id
+    left join store_user su on su.id = c.responsible_person
+LEFT JOIN 
+(select order_user,count(order_user) order_count from order_manage where department_id=#{departmentId,jdbcType=INTEGER} GROUP BY order_user 
+) om on c.id = om.order_user 
+LEFT JOIN 
+(select scheduled_user,count(scheduled_user) scheduled_count from scheduled_manage where department_id=#{departmentId,jdbcType=INTEGER} GROUP BY scheduled_user 
+) sm on c.id = sm.scheduled_user
+    <where >
+       <if test="isNotRecord">
+    (c.data_integrity is null or 0.8>c.data_integrity)
+    and c.id in (select distinct order_user from order_manage where finish_time>'2019-05-27'
+    <if test="departmentId != null" >
+         and department_id = #{departmentId,jdbcType=INTEGER}
+    </if>
+    )
+      </if>
+      <if test="departmentId != null">
+        and c.id in (select customer_id from customer_department_relevance re where re.department_id=#{departmentId,jdbcType=INTEGER})
+      </if>
+      <if test="customer.id != null" >
+        and c.id = #{customer.id,jdbcType=CHAR}
+      </if>
+      <if test="customer.phone != null" >
+        and phone like CONCAT('%',#{customer.phone,jdbcType=CHAR},'%')
+      </if>
+      <if test="customer.nickname != null" >
+        and nickname like CONCAT('%',#{customer.nickname,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="customer.realName != null" >
+        and (real_name like CONCAT('%',#{customer.realName,jdbcType=VARCHAR},'%') or store_record_real_name like CONCAT('%',#{customer.realName,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="customer.storeRecordRealName != null" >
+        and (real_name like CONCAT('%',#{customer.storeRecordRealName,jdbcType=VARCHAR},'%') or store_record_real_name like CONCAT('%',#{customer.storeRecordRealName,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="customer.orderTimes  != null" >
+and order_times>= #{customer.orderTimes ,jdbcType=INTEGER}
+      </if>
+      <if test="customer.scheduledTimes != null" >
+and scheduled_times>= #{customer.scheduledTimes,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by register_time desc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPhone" parameterType="java.lang.String" >
+    delete from customer
+    where phone = #{phone,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gogirl.gogirl_user.entity.Customer" >
+    insert into customer (id, openid, phone, 
+      nickname, password, sex, 
+      country, province, city, 
+      headimgurl, privilege, state, 
+      register_time, update_time, real_name, 
+      birthday, register_department, source, scheduled_times,order_times, store_record_real_name, 
+      remark,remark2,remark3,remark4)
+    values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=CHAR}, #{phone,jdbcType=CHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, 
+      #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{headimgurl,jdbcType=VARCHAR}, #{privilege,jdbcType=VARCHAR}, #{state,jdbcType=CHAR}, 
+      #{registerTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{realName,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=TIMESTAMP}, #{registerDepartment,jdbcType=INTEGER}, #{source,jdbcType=INTEGER}, 
+      #{scheduledTimes,jdbcType=INTEGER},#{orderTimes,jdbcType=INTEGER},#{storeRecordRealName,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR},#{remark2,jdbcType=VARCHAR},#{remark3,jdbcType=VARCHAR},#{remark4,jdbcType=VARCHAR})
+ <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+  SELECT @@IDENTITY AS id
+ </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_user.entity.Customer" >
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="openid1 != null" >
+        openid1,
+      </if>
+      <if test="unionid != null" >
+        unionid,
+      </if>
+
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl,
+      </if>
+      <if test="privilege != null" >
+        privilege,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="registerTime != null" >
+        register_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="registerDepartment != null" >
+        register_department,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="scheduledTimes != null" >
+        scheduled_times,
+      </if>
+      <if test="orderTimes != null" >
+        order_times,
+      </if>
+      <if test="storeRecordRealName != null" >
+        store_record_real_name,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="remark2 != null" >
+        remark2,
+      </if>
+      <if test="remark3 != null" >
+        remark3,
+      </if>
+      <if test="remark4 != null" >
+        remark4,
+      </if>
+      <if test="responsiblePerson != null" >
+        responsible_person,
+      </if>
+      <if test="dataIntegrity != null" >
+        data_integrity,
+      </if>
+      <if test="myQrcode != null" >
+        my_qrcode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=CHAR},
+      </if>
+      <if test="openid1 != null" >
+        #{openid1,jdbcType=CHAR},
+      </if>
+      <if test="unionid != null" >
+        #{unionid,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="headimgurl != null" >
+        #{headimgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="privilege != null" >
+        #{privilege,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="registerTime != null" >
+        #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registerDepartment != null" >
+        #{registerDepartment,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTimes != null" >
+        #{scheduledTimes,jdbcType=INTEGER},
+      </if>
+      <if test="orderTimes != null" >
+        #{orderTimes,jdbcType=INTEGER},
+      </if>
+      <if test="storeRecordRealName != null" >
+        #{storeRecordRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="responsiblePerson != null" >
+        #{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="dataIntegrity != null" >
+        #{dataIntegrity,jdbcType=DOUBLE},
+      </if>
+      <if test="myQrcode != null" >
+        #{myQrcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+ <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+  SELECT @@IDENTITY AS id
+ </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_user.entity.Customer" >
+    update customer
+    <set >
+      <if test="unionid != null" >
+        unionid = #{unionid,jdbcType=CHAR},
+      </if>
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=CHAR},
+      </if>
+      <if test="openid1 != null" >
+        openid1 = #{openid1,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl = #{headimgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="privilege != null" >
+        privilege = #{privilege,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="registerTime != null" >
+        register_time = #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registerDepartment != null" >
+        register_department = #{registerDepartment,jdbcType=INTEGER},
+      </if>
+      <if test="customerSource != null" >
+        customer_source = #{customerSource,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTimes != null" >
+        scheduled_times = #{scheduledTimes,jdbcType=INTEGER},
+      </if>
+      <if test="orderTimes != null" >
+        order_times = #{orderTimes,jdbcType=INTEGER},
+      </if>
+      <if test="storeRecordRealName != null" >
+        store_record_real_name = #{storeRecordRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null" >
+        remark2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null" >
+        remark3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="remark4 != null" >
+        remark4 = #{remark4,jdbcType=VARCHAR},
+      </if>
+      <if test="responsiblePerson != null" >
+        responsible_person=#{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="dataIntegrity != null" >
+        data_integrity=#{dataIntegrity,jdbcType=DOUBLE},
+      </if>
+      <if test="myQrcode != null" >
+        my_qrcode=#{myQrcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="checkActiveIsEnd" resultType="java.lang.Integer">
+  select count(1) from customer  c where remark is not null
+  </select>
+  <select id="getJoinActiveCustomer" resultMap="BaseResultMap" >
+    select 
+     <include refid="customerSql" />
+    from customer c where remark is not null and  phone like CONCAT('%',#{phone,jdbcType=CHAR},'%') order by update_time desc
+  </select>
+  <select id="getGroupCustomer" resultMap="BaseResultMap" >
+    select 
+    <include refid="customerSql" />
+    from customer c
+    <where>
+      <if test="havePhone != null">
+        (c.phone is not null and c.phone !='')
+      </if>
+      <if test="orderTimes != null">
+        or c.id in 
+(select order_user from order_manage
+where status=2 or status=3
+group by order_user 
+having count(order_user)>=#{orderTimes,jdbcType=INTEGER})
+      </if>
+      <if test="haveBalance != null">
+        or c.id in (select distinct customer_id from customer_balance)
+      </if>
+    </where>
+    order by update_time desc
+  </select>
+</mapper>

@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.order_schedule.dao.ScheduleManageMapper">
+
+    <resultMap id="scheduleDetail" type="com.gogirl.gogirl_order.order_commons.dto.ScheduleManage">
+        <result column="id" property="id" />
+        <result column="scheduled_no" property="scheduledNo"/>
+        <result column="scheduled_user" property="scheduledUser"/>
+        <result column="store_schedule_username" property="storeScheduleUsername"/>
+        <result column="telephone" property="telephone"/>
+        <result column="create_user" property="createUser"/>
+        <result column="scheduled_time" property="scheduledTime"/>
+        <result column="last_update_time" property="lastUpdateTime"/>
+        <result column="arrive_time" property="arriveTime"/>
+        <result column="last_service_time" property="lastServiceTime"/>
+        <result column="arrive_user" property="arriveUser"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="remark" property="remark"/>
+        <result column="openbill_time" property="openbillTime"/>
+        <result column="status" property="status"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="scheduled_type" property="scheduledType"/>
+        <association property="customer" javaType="com.gogirl.gogirl_user.entity.Customer">
+            <result column="openid" property="openid"/>
+            <result column="cus_id" property="id"/>
+            <result column="cus_phone" property="phone"/>
+            <result column="cus_nickname" property="nickname"/>
+            <result column="cus_real_name" property="realName"/>
+            <result column="cus_store_record_real_name" property="storeRecordRealName"/>
+        </association>
+        <collection property="listScheduleServer" ofType="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe" column="id"
+            select="listScheduleServeByScheduleId">
+        </collection>
+    </resultMap>
+
+    <resultMap id="ScheduleServeResultMapper" type="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+        <result column="schser_id" property="id"/>
+        <result column="schser_sch_id" property="schId"/>
+        <result column="schser_technician_id" property="technicianId"/>
+        <result column="schser_serve_id" property="serveId"/>
+        <result column="schser_produce_id" property="produceId"/>
+        <result column="schser_main_serve_id" property="mainServeId"/>
+        <result column="schser_is_customer_pick" property="isCustomerPick"/>
+        <result column="schser_start_time" property="startTime"/>
+        <result column="schser_end_time" property="endTime"/>
+        <result column="schser_create_time" property="createTime"/>
+        <result column="schser_produce_name" property="produceName"/>
+        <result column="schser_serve_number" property="serveNumber"/>
+        <association property="produce" javaType="com.gogirl.gogirl_service.entity.Produce">
+	        <result column="produce_id" property="id"/>
+	        <result column="produce_name" property="name"/>
+	        <result column="produce_picture_path" property="picturePath"/>
+	        <result column="produce_type" property="type"/>
+	        <result column="produce_label" property="label"/>
+	        <result column="produce_shop_sort" property="shopSort"/>
+	        <result column="reqduce_grade" property="reqGrade"/>
+	        <result column="produce_status" property="status"/>
+	        <result column="produce_remark" property="remark"/>
+	        <result column="produce_praise_sum" property="praiseSum"/>
+	        <result column="produce_current_price" property="currentPrice"/>
+	        <result column="produce_bargain_price" property="bargainPrice"/>
+	        <result column="produce_service_duration" property="serviceDuration"/>
+	        <result column="produce_brief_introduction" property="briefIntroduction"/>
+	        <result column="produce_details" property="details"/>
+	        <result column="produce_sub_title" property="subTitle"/>
+        </association>
+        <association property="serve" javaType="com.gogirl.gogirl_service.entity.Serve">
+            <result column="ser_id" property="id" />
+            <result column="ser_name" property="name"/>
+            <result column="ser_type" property="type"/>
+            <result column="ser_label" property="label"/>
+            <result column="ser_shop_sort" property="shopSort"/>
+            <result column="ser_price" property="price"/>
+            <result column="ser_picture_path" property="picturePath"/>
+            <result column="ser_status" property="status"/>
+            <result column="ser_remark" property="remark"/>
+            <result column="ser_details" property="details"/>
+            <result column="ser_service_duration" property="serviceDuration"/>
+        </association>
+        <association property="technicianManage" javaType="com.gogirl.gogirl_technician.technician_commons.dto.TechnicianManage">
+            <result column="tech_id" property="id"/>
+            <result column="tech_technician_no" property="technicianNo"/>
+            <result column="tech_name" property="name"/>
+        </association>
+    </resultMap>
+
+
+    <sql id="baseSql">
+        id,scheduled_no, scheduled_user,telephone, scheduled_type, store_schedule_username, create_user, scheduled_time, last_update_time, arrive_time, last_service_time, arrive_user, department_id, remark, openbill_time, status
+    </sql>
+    <sql id="scheduleSql">
+        sch.id, sch.scheduled_no, sch.scheduled_user, sch.scheduled_type, sch.telephone, sch.store_schedule_username, sch.create_user, sch.scheduled_time, sch.last_update_time, sch.arrive_time, sch.last_service_time, sch.arrive_user, sch.department_id, sch.remark, sch.openbill_time, sch.status
+    </sql>
+    <sql id="scheduleServeSql">
+        schser.id schser_id, schser.sch_id schser_sch_id, schser.technician_id schser_technician_id,schser.serve_id schser_serve_id,schser.produce_id schser_produce_id, schser.main_serve_id schser_main_serve_id, schser.is_customer_pick schser_is_customer_pick, schser.start_time schser_start_time, schser.end_time schser_end_time, schser.create_time schser_create_time, schser.produce_name schser_produce_name, schser.serve_number schser_serve_number
+    </sql>
+    <sql id="serveSql">
+        ser.id ser_id, ser.name ser_name,ser.type ser_type, ser.label ser_label, ser.shop_sort ser_shop_sort, ser.price ser_price, ser.picture_path ser_picture_path, ser.status ser_status, ser.remark ser_remark, ser.details ser_details, ser.service_duration ser_service_duration
+    </sql>
+    <sql id="technicianSql">
+        tech.id tech_id, tech.technician_no tech_technician_no, tech.name tech_name
+    </sql>
+    <sql id="produceSql">
+        produce.id produce_id, produce.name produce_name, produce.picture_path produce_picture_path, produce.type produce_type, produce.label produce_label,
+        produce.shop_sort produce_shop_sort,produce.req_grade, produce.status produce_status, produce.remark produce_remark,produce.praise_sum produce_praise_sum,
+        produce.current_price produce_current_price,produce.bargain_price produce_bargain_price,produce.service_duration produce_service_duration,
+        produce.brief_introduction produce_brief_introduction,produce.details produce_details,produce.sub_title produce_sub_title
+    </sql>
+
+    <select id="listScheduleServeByScheduleId" resultMap="ScheduleServeResultMapper">
+        select
+        <include refid="scheduleServeSql"/>,
+        ser.id ser_id, ser.name ser_name, ser.price ser_price,ser.type ser_type, ser.label ser_label, ser.picture_path ser_picture_path, ser.service_duration ser_service_duration,
+        <include refid="technicianSql"/>,
+        <include refid="produceSql"/>
+        from scheduled_serve schser
+        left join base_serve ser on ser.id = schser.serve_id
+        left join store_technician tech on schser.technician_id = tech.id
+        left join base_produce produce on produce.id = schser.produce_id
+        where
+        schser.sch_id = #{id}
+    </select>
+    <select id="listScheduleManageForPage" resultMap="scheduleDetail">
+        select
+        <include refid="scheduleSql"/>,
+        cus.id cus_id, cus.phone cus_phone, cus.nickname cus_nickname, cus.real_name cus_real_name, cus.store_record_real_name cus_store_record_real_name,
+        sm.name department_name
+        from scheduled_manage sch
+        left join customer cus on cus.id = sch.scheduled_user or cus.phone = sch.telephone
+        left join store_manage sm on sch.department_id = sm.id
+        where 1 = 1
+        <if test="scheduledUser != null">
+            and sch.scheduled_user = #{scheduledUser}
+        </if>
+        <if test="storeScheduleUsername != null and storeScheduleUsername != '' ">
+            and (sch.store_schedule_username like '%${storeScheduleUsername}%' or cus.nickname like '%${storeScheduleUsername}%' or cus.real_name like '%${storeScheduleUsername}%')
+        </if>
+        <if test="telephone != null and telephone != ''">
+            and telephone like '%${telephone}%'
+        </if>
+        <choose>
+            <when test="status != null and status != ''">
+                and sch.status = #{status}
+            </when>
+            <otherwise>
+                and sch.status != 5
+            </otherwise>
+        </choose>
+        <if test="departmentId != null">
+            and sch.department_id = #{departmentId}
+        </if>
+        <if test="sameDayTime != null and sameDayTime != ''">
+            and date_format(arrive_time, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+        </if>
+        <choose>
+            <when test="arriveTime != null and arriveTime != '' ">
+                order by sch.arrive_time asc
+            </when>
+            <otherwise>
+                order by sch.scheduled_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getScheduleNumber" resultType="java.lang.Integer">
+        select count(1)
+        from
+        scheduled_manage
+        where
+        scheduled_user = #{scheduledUser}
+        and status = 1
+    </select>
+
+    <select id="getTodaySummary" resultType="java.lang.Integer">
+        select count(1)
+        from
+        scheduled_manage
+        where status = 1
+        and date_format(arrive_time, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+        <if test="departmentId != null">
+            and department_id = #{departmentId}
+        </if>
+    </select>
+
+    <select id="getScheduleSummary" resultType="java.lang.Integer">
+        select count(1)
+        from
+        scheduled_manage
+        where 1 = 1
+        and status not in(4, 5)
+        <if test="departmentId != null">
+            and department_id = #{departmentId}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and date_format(arrive_time, '%Y-%m-%d') &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and date_format(arrive_time, '%Y-%m-%d') &lt;=  #{endTime}
+        </if>
+    </select>
+
+    <!-- 预约修改时和用户端查询预约详情 -->
+    <select id="getScheduleForDetail" resultMap="scheduleDetail">
+        select
+        <include refid="scheduleSql"/>,
+        cus.id cus_id, cus.phone cus_phone, cus.nickname cus_nickname, cus.real_name cus_real_name,cus.store_record_real_name cus_store_record_real_name, sm.name as department_name
+        from scheduled_manage sch
+        left join customer cus on cus.id = sch.scheduled_user or cus.phone = sch.telephone
+        left join store_manage sm on sch.department_id = sm.id
+        where sch.id = #{id}
+    </select>
+
+    <select id="listScheduleManageDetail" resultMap="scheduleDetail">
+        select
+        <include refid="scheduleSql"/>,
+        cus.id cus_id, cus.phone cus_phone, cus.nickname cus_nickname, cus.real_name cus_real_name,cus.store_record_real_name cus_store_record_real_name, sm.name as department_name
+        from scheduled_manage sch
+        left join customer cus on cus.id = sch.scheduled_user or cus.phone = sch.telephone
+        left join store_manage sm on sch.department_id = sm.id
+        where sch.store_is_reminder = 1
+    </select>
+
+    <select id="checkScheduledNo" resultType="com.gogirl.gogirl_order.order_commons.dto.ScheduleManage">
+        select *
+        from scheduled_manage
+        where scheduled_no = #{no}
+    </select>
+
+    <select id="listScheduleServe" resultType="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+        select *
+        from scheduled_serve where ((#{startDateTime} >= start_time and end_time > #{startDateTime}) or (#{endDateTime} > start_time and end_time >= #{endDateTime})) and sch_id in(select id from scheduled_manage where department_id = #{departmentId} and status in(1,6,7))
+    </select>
+
+    <select id="getScheduleNoReadNum" resultType="java.lang.Integer">
+        select count(1) from scheduled_manage where department_id = #{departmentId} and status = 1 and is_read = 2
+    </select>
+
+    <select id="getScheduleNoReadNumByGroup" resultType="java.util.Map">
+        select count(sm.is_read) as noReadNum, sm.is_read isRead, sm.department_id  as departmentId,
+       (select count(is_aging_read) from scheduled_manage
+       where status = 1 and is_aging_read = 2 and department_id = sm.department_id group by is_aging_read) as raingNum
+        from scheduled_manage sm
+        where sm.status = 1 group by sm.department_id, sm.is_read
+        order by sm.department_id, sm.is_read desc;
+    </select>
+
+    <select id="getScheduleNoRaingReadNumByGroup" resultType="java.util.Map">
+        select count(is_aging_read) as noAgingReadNum, department_id  as departmentId from scheduled_manage where status = 1 and is_aging_read = 2 group by department_id, is_aging_read;
+    </select>
+
+    <select id="listScheduleServeNotContainItself" resultType="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+         select *,technician_id technicianId
+        from scheduled_serve where ((#{startDateTime} >= start_time and end_time > #{startDateTime}) or (#{endDateTime} > start_time and end_time >= #{endDateTime}) or (start_time>=#{startDateTime} and #{endDateTime} > end_time)) and sch_id in(select id from scheduled_manage where department_id = #{departmentId} and status in(1,6,7))
+        and id != #{scheduleServeId}
+    </select>
+    <select id="listScheduleServeNotContainOrderId" resultType="com.gogirl.gogirl_order.order_commons.dto.ScheduleServe">
+         select *,technician_id technicianId
+        from scheduled_serve where ((#{startDateTime} >= start_time and end_time > #{startDateTime}) or (#{endDateTime} > start_time and end_time >= #{endDateTime}) or (start_time>=#{startDateTime} and #{endDateTime} > end_time)) and sch_id in(select id from scheduled_manage where department_id = #{departmentId} and status in(1,6,7))
+        <if test="orderId!=null">
+        and sch_id not in (select scheduled_id from order_manage where id != #{orderId})
+        </if>
+    </select>
+
+    <select id="listScheduleNoReminder" resultMap="scheduleDetail">
+        select
+        <include refid="scheduleSql"/>,
+        sm.name as department_name, cus.id cus_id, cus.openid openid
+        from scheduled_manage sch
+        left join store_manage sm on sch.department_id = sm.id
+        left join customer cus on cus.id = sch.scheduled_user
+        where sch.status = 1 and is_reminder = 1
+    </select>
+
+    <update id="updateScheduleManage">
+        update scheduled_manage
+        <set>
+            <trim suffixOverrides=",">
+                last_update_time = now(),
+                <if test="storeScheduleUsername != null">
+                    store_schedule_username  = #{storeScheduleUsername},
+                </if>
+                <if test="scheduledUser != null">
+                    scheduled_user = #{scheduledUser},
+                </if>
+                <if test="telephone != null ">
+                    telephone  = #{telephone},
+                </if>
+                <if test="remark != null">
+                    remark = #{remark},
+                </if>
+                <if test="arriveTime != null and arriveTime != ''">
+                    arrive_time = #{arriveTime}
+                </if>
+            </trim>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateSchedule">
+        update scheduled_manage
+        <set>
+            last_update_time = now(),
+            <trim suffixOverrides=",">
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="openbillTime != null ">
+                openbill_time = #{openbillTime}
+            </if>
+            </trim>
+        </set>
+          where id = #{id}
+    </update>
+
+    <update id="modifyScheduleReadStatus">
+        update scheduled_manage set is_aging_read = 2 where arrive_time &lt; (adddate(now(), interval 15 minute)) and is_read = 1 and is_aging_read is null and status = 1
+    </update>
+
+    <update id="updateScheduleReminderStatus">
+        update scheduled_manage set is_reminder = 1 where arrive_time &lt; (adddate(now(), interval 60 minute)) and is_reminder is null and status = 1
+    </update>
+
+    <update id="updateScheduleStoreReminderStatus">
+        update scheduled_manage set store_is_reminder = 1 where scheduled_time &lt; (subdate(now(), interval 10 minute)) and store_is_reminder is null and status = 1 and scheduled_type = 2
+    </update>
+
+    <update id="updateScheduleStoreIsReminderStatus">
+        update scheduled_manage set store_is_reminder = 2 where store_is_reminder = 1 and status = 1
+    </update>
+
+    <update id="updateScheduleIsReminderStatus">
+        update scheduled_manage set is_reminder = 2 where  is_reminder = 1 and status = 1
+    </update>
+
+    <update id="updatecheduleIsReadStatus">
+        update scheduled_manage set is_read = 1 where department_id = #{departmentId} and is_read = 2 and status = 1
+    </update>
+
+    <update id = "updatescheduleRaingStatus">
+        update scheduled_manage set is_aging_read = 1 where department_id = #{departmentId} and is_aging_read = 2 and status = 1
+    </update>
+
+    <update id="updateScheduledStatusByTime">
+        update scheduled_manage set status = 3 where status = 1 and
+         id in(select sch_id from scheduled_serve where date_format(start_time, '%Y-%m-%d') = #{dayTime})
+    </update>
+
+    <update id="deleteScheduleById">
+        update scheduled_manage set
+        <if test="delRemark != null">
+            del_remark = #{delRemark},
+        </if>
+        status = 5 where id = #{serveId}
+    </update>
+
+    <!---->
+	<delete id="deleteScheduleByIdStatus5">
+        delete from scheduled_manage where id = #{scheduleId} and status = 5
+    </delete>
+    <insert id="insertScheduleAndServe" parameterType="com.gogirl.gogirl_order.order_commons.dto.ScheduleManage" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+     insert into scheduled_manage
+     <trim prefix="(" suffix=")" suffixOverrides=",">
+         <if test="scheduledNo != null and scheduledNo != ''">
+             scheduled_no,
+         </if>
+         <if test="scheduledUser != null">
+             scheduled_user,
+         </if>
+         <if test="storeScheduleUsername != null and storeScheduleUsername != ''">
+             store_schedule_username,
+         </if>
+         <if test="telephone != null and telephone != ''">
+             telephone,
+         </if>
+         <if test="createUser != null and createUser != ''">
+             create_user,
+         </if>
+         <if test="scheduledTime">
+             scheduled_time,
+         </if>
+         <if test="lastUpdateTime != null">
+             last_update_time,
+         </if>
+         <if test="arriveTime != null">
+             arrive_time,
+         </if>
+         <if test="lastServiceTime">
+             last_service_time,
+         </if>
+         <if test="arriveUser != null">
+             arrive_user,
+         </if>
+         <if test="departmentId != null">
+             department_id,
+         </if>
+         <if test="remark != null">
+             remark,
+         </if>
+         <if test="openbillTime != null">
+             openbill_time,
+         </if>
+         <if test="scheduledType != null">
+             scheduled_type,
+         </if>
+         <if test="status != null">
+             status,
+         </if>
+         <if test="isRead != null">
+             is_read
+         </if>
+     </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="scheduledNo != null and scheduledNo != ''">
+                #{scheduledNo},
+            </if>
+            <if test="scheduledUser != null">
+                #{scheduledUser},
+            </if>
+            <if test="storeScheduleUsername != null and storeScheduleUsername != ''">
+                #{storeScheduleUsername},
+            </if>
+            <if test="telephone != null and telephone != ''">
+                #{telephone},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                #{createUser},
+            </if>
+            <if test="scheduledTime">
+                #{scheduledTime},
+            </if>
+            <if test="lastUpdateTime != null">
+                #{lastUpdateTime},
+            </if>
+            <if test="arriveTime != null">
+                #{arriveTime},
+            </if>
+            <if test="lastServiceTime">
+                #{lastServiceTime},
+            </if>
+            <if test="arriveUser != null">
+                #{arriveUser},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="openbillTime != null">
+                #{openbillTime},
+            </if>
+            <if test="scheduledType != null">
+                #{scheduledType},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="isRead != null">
+                #{isRead}
+            </if>
+        </trim>
+		 <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+		  SELECT @@IDENTITY AS id
+		 </selectKey>        
+    </insert>
+    <select id="getMaxScheduleNo" resultMap="scheduleDetail">
+        select
+        <include refid="scheduleSql"/>
+        from scheduled_manage sch order by id desc limit 1;
+    </select>
+    <insert id="insertScheduleManage" parameterType="com.gogirl.gogirl_order.order_commons.dto.ScheduleManage" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+     insert into scheduled_manage
+     <trim prefix="(" suffix=")" suffixOverrides=",">
+         <if test="id != null">
+             id,
+         </if>
+         <if test="scheduledNo != null and scheduledNo != ''">
+             scheduled_no,
+         </if>
+         <if test="scheduledUser != null">
+             scheduled_user,
+         </if>
+         <if test="storeScheduleUsername != null and storeScheduleUsername != ''">
+             store_schedule_username,
+         </if>
+         <if test="telephone != null and telephone != ''">
+             telephone,
+         </if>
+         <if test="createUser != null and createUser != ''">
+             create_user,
+         </if>
+         <if test="scheduledTime">
+             scheduled_time,
+         </if>
+         <if test="lastUpdateTime != null">
+             last_update_time,
+         </if>
+         <if test="arriveTime != null">
+             arrive_time,
+         </if>
+         <if test="lastServiceTime">
+             last_service_time,
+         </if>
+         <if test="arriveUser != null">
+             arrive_user,
+         </if>
+         <if test="departmentId != null">
+             department_id,
+         </if>
+         <if test="remark != null">
+             remark,
+         </if>
+         <if test="openbillTime != null">
+             openbill_time,
+         </if>
+         <if test="scheduledType != null">
+             scheduled_type,
+         </if>
+         <if test="status != null">
+             status,
+         </if>
+         <if test="isRead != null">
+             is_read
+         </if>
+     </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="scheduledNo != null and scheduledNo != ''">
+                #{scheduledNo},
+            </if>
+            <if test="scheduledUser != null">
+                #{scheduledUser},
+            </if>
+            <if test="storeScheduleUsername != null and storeScheduleUsername != ''">
+                #{storeScheduleUsername},
+            </if>
+            <if test="telephone != null and telephone != ''">
+                #{telephone},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                #{createUser},
+            </if>
+            <if test="scheduledTime">
+                #{scheduledTime},
+            </if>
+            <if test="lastUpdateTime != null">
+                #{lastUpdateTime},
+            </if>
+            <if test="arriveTime != null">
+                #{arriveTime},
+            </if>
+            <if test="lastServiceTime">
+                #{lastServiceTime},
+            </if>
+            <if test="arriveUser != null">
+                #{arriveUser},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="openbillTime != null">
+                #{openbillTime},
+            </if>
+            <if test="scheduledType != null">
+                #{scheduledType},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="isRead != null">
+                #{isRead}
+            </if>
+        </trim>
+		 <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+		  SELECT @@IDENTITY AS id
+		 </selectKey>        
+    </insert>
+</mapper>

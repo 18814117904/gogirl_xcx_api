@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_technician.technician_user.dao.UserTechnicianMapper">
+    <resultMap id="resultTechnician" type="com.gogirl.gogirl_technician.technician_commons.dto.UserTechnician">
+        <result property="id" column="id"/>
+        <result property="technicianId" column="technician_id"/>
+        <result property="openid" column="openid"/>
+        <result property="picturePath" column="picture_path"/>
+        <result property="technicianNo" column="technician_no"/>
+        <result property="name" column="name"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="mobile" column="mobile"/>
+        <result property="userAuthority" column="user_authority"/>
+        <result property="grade" column="grade"/>
+        <result property="status" column="status"/>
+        <result property="score" column="score"/>
+        <result property="userId" column="user_id"/>
+        <result property="jobs" column="jobs"/>
+        <association property="classesTechnician" javaType="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">
+            <result property="id" column="ct_id"/>
+            <result property="userId" column="ct_user_id"/>
+            <result property="days" column="ct_days"/>
+            <result property="classes" column="ct_classes"/>
+            <result property="status" column="ct_status"/>
+            <association property="classesManage" javaType="com.gogirl.gogirl_store.store_commons.dto.ClassesManage">
+                <result property="id" column="cls_id"/>
+                <result property="name" column="cls_name"/>
+                <result property="startTime" column="cls_start_time"/>
+                <result property="endTime" column="cls_end_time"/>
+                <result property="useNumber" column="cls_use_number"/>
+                <result property="departmentId" column="cls_department_id"/>
+            </association>
+        </association>
+    </resultMap>
+    <sql id="technicianSql">
+        tech.id technician_id,tech.openid openid ,tech.picture_path picture_path ,tech.technician_no technician_no ,tech.name name ,tech.create_time create_time ,tech.mobile mobile ,tech.user_authority user_authority ,tech.grade grade ,tech.status status ,tech.score score ,tech.user_id user_id
+    </sql>
+    <sql id="classestechnician">
+        ct.id ct_id, ct.user_id ct_user_id, ct.days ct_days, ct.classes ct_classes, ct.status ct_status
+    </sql>
+
+    <sql id="classes">
+        cls.id cla_id, cls.name cls_name, cls.start_time cls_start_time, cls.end_time cls_end_time, cls.use_number cls_use_number, cls.department_id cls_department_id
+    </sql>
+    <select id="getTechnicianManageForDetail" resultMap="resultTechnician">
+        select
+        ssa.id id,
+        <include refid="technicianSql"/>,sm.name department_name,suser.jobs jobs,ssa.store_id department_id
+        from staff_store_authority ssa
+        left join store_technician tech on tech.user_id = ssa.user_id
+        left join store_manage sm on sm.id = ssa.store_id
+        left join store_user suser on suser.id = ssa.user_id
+        where
+        ssa.id = #{id}
+    </select>
+    <select id="listTechnicianForPage" resultMap="resultTechnician">
+        select
+        ssa.id id,
+        <include refid="technicianSql"/>,sm.name department_name,suser.jobs jobs,ssa.store_id department_id
+        from staff_store_authority ssa
+        left join store_technician tech on tech.user_id = ssa.user_id
+        left join store_manage sm on sm.id = ssa.store_id
+        left join store_user suser on suser.id = ssa.user_id
+        <where>
+        <if test="id != null">
+            and ssa.id = #{id}
+        </if>
+        <if test="name != null and name != '' ">
+            and tech.name = #{name}
+        </if>
+        <if test="departmentId!= null">
+            and ssa.store_id = #{departmentId}
+        </if>
+        <if test="grade != null and grade != ''">
+            and tech.grade = #{grade}
+        </if>
+        <if test="createTime != null and createTime != ''">
+            and tech.create_time = #{createTime}
+        </if>
+        <if test="openid != null">
+            and tech.openid = #{openid}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            and tech.mobile = #{mobile}
+        </if>
+        </where>
+    </select>
+    <select id="getTechnicianManageByOpenid" resultMap="resultTechnician">
+        select
+        ssa.id id,
+        <include refid="technicianSql"/>,sm.name department_name,suser.jobs jobs,ssa.store_id department_id
+        from staff_store_authority ssa
+        left join store_technician tech on tech.user_id = ssa.user_id
+        left join store_manage sm on sm.id = ssa.store_id
+        left join store_user suser on suser.id = ssa.user_id
+        <where>tech.openid = #{openid}</where>
+        
+    </select>
+    <select id="queryDayTechnicianClasses" resultMap="resultTechnician">
+        select
+        ssa.id id,
+        <include refid="technicianSql"/>,sm.name department_name,suser.jobs jobs,ssa.store_id department_id,
+        <include refid="classestechnician"/>,
+        <include refid="classes"/>
+        from staff_store_authority ssa
+        left join store_technician tech on tech.user_id = ssa.user_id
+        left join store_manage sm on sm.id = ssa.store_id
+        left join store_user suser on suser.id = ssa.user_id
+        left join store_classes_technician ct on tech.id = ct.user_id and ct.days = #{day}
+		left join store_classes cls on cls.id = ct.classes
+        where ssa.store_id = #{departmentId}
+        and tech.status = 1
+    </select>
+
+    <update id="updateTechnicianByAuthorityId">
+        update store_technician
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="departmentId != null">
+                department_id = #{departmentId},
+            </if>
+            <if test="grade != null">
+                grade = #{grade},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="userAuthority != null">
+                user_authority = #{userAuthority},
+            </if>
+            <if test="openid != null">
+                openid  = #{openid},
+            </if>
+            <if test="mobile != null">
+                mobile  = #{mobile}
+            </if>
+            where id = #{technicianId}
+        </set>
+    </update>
+    <select id="getShortCode" resultType="java.lang.String">
+        select short_code from store_technician 
+where id = #{techId}
+	</select>
+</mapper>

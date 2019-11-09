@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gogirl.gogirl_xcx.dao.TemplateMapper">
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_xcx.entity.Template">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="template_id" jdbcType="VARCHAR" property="templateId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="primary_industry" jdbcType="VARCHAR" property="primaryIndustry" />
+    <result column="deputy_industry" jdbcType="VARCHAR" property="deputyIndustry" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="example" jdbcType="VARCHAR" property="example" />
+    <result column="first" jdbcType="VARCHAR" property="first" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="keyword1" jdbcType="VARCHAR" property="keyword1" />
+    <result column="keyword2" jdbcType="VARCHAR" property="keyword2" />
+    <result column="keyword3" jdbcType="VARCHAR" property="keyword3" />
+    <result column="keyword4" jdbcType="VARCHAR" property="keyword4" />
+    <result column="keyword5" jdbcType="VARCHAR" property="keyword5" />
+    <result column="keyword6" jdbcType="VARCHAR" property="keyword6" />
+    <result column="keyword7" jdbcType="VARCHAR" property="keyword7" />
+    <result column="keyword8" jdbcType="VARCHAR" property="keyword8" />
+    <result column="keyword9" jdbcType="VARCHAR" property="keyword9" />
+    <result column="keyword10" jdbcType="VARCHAR" property="keyword10" />
+    <result column="keyword11" jdbcType="VARCHAR" property="keyword11" />
+    <result column="keyword12" jdbcType="VARCHAR" property="keyword12" />
+    <result column="keyword13" jdbcType="VARCHAR" property="keyword13" />
+    <result column="keyword14" jdbcType="VARCHAR" property="keyword14" />
+    <result column="keyword15" jdbcType="VARCHAR" property="keyword15" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, template_id, title, primary_industry, deputy_industry, content, example, 
+    first, remark, keyword1, keyword2, keyword3, keyword4, keyword5, keyword6, keyword7, 
+    keyword8, keyword9, keyword10, keyword11, keyword12, keyword13, keyword14, keyword15
+  </sql>
+  <select id="selectByTemplate" parameterType="com.gogirl.gogirl_xcx.entity.Template" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from template
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from template
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from template
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gogirl.gogirl_xcx.entity.Template">
+    insert into template (id, name, template_id, 
+      title, primary_industry, deputy_industry, 
+      content, example, first, 
+      remark, keyword1, keyword2, 
+      keyword3, keyword4, keyword5, 
+      keyword6, keyword7, keyword8, 
+      keyword9, keyword10, keyword11, 
+      keyword12, keyword13, keyword14, 
+      keyword15)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{templateId,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{primaryIndustry,jdbcType=VARCHAR}, #{deputyIndustry,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{example,jdbcType=VARCHAR}, #{first,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{keyword1,jdbcType=VARCHAR}, #{keyword2,jdbcType=VARCHAR}, 
+      #{keyword3,jdbcType=VARCHAR}, #{keyword4,jdbcType=VARCHAR}, #{keyword5,jdbcType=VARCHAR}, 
+      #{keyword6,jdbcType=VARCHAR}, #{keyword7,jdbcType=VARCHAR}, #{keyword8,jdbcType=VARCHAR}, 
+      #{keyword9,jdbcType=VARCHAR}, #{keyword10,jdbcType=VARCHAR}, #{keyword11,jdbcType=VARCHAR}, 
+      #{keyword12,jdbcType=VARCHAR}, #{keyword13,jdbcType=VARCHAR}, #{keyword14,jdbcType=VARCHAR}, 
+      #{keyword15,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_xcx.entity.Template">
+    insert into template
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="primaryIndustry != null">
+        primary_industry,
+      </if>
+      <if test="deputyIndustry != null">
+        deputy_industry,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="example != null">
+        example,
+      </if>
+      <if test="first != null">
+        first,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="keyword1 != null">
+        keyword1,
+      </if>
+      <if test="keyword2 != null">
+        keyword2,
+      </if>
+      <if test="keyword3 != null">
+        keyword3,
+      </if>
+      <if test="keyword4 != null">
+        keyword4,
+      </if>
+      <if test="keyword5 != null">
+        keyword5,
+      </if>
+      <if test="keyword6 != null">
+        keyword6,
+      </if>
+      <if test="keyword7 != null">
+        keyword7,
+      </if>
+      <if test="keyword8 != null">
+        keyword8,
+      </if>
+      <if test="keyword9 != null">
+        keyword9,
+      </if>
+      <if test="keyword10 != null">
+        keyword10,
+      </if>
+      <if test="keyword11 != null">
+        keyword11,
+      </if>
+      <if test="keyword12 != null">
+        keyword12,
+      </if>
+      <if test="keyword13 != null">
+        keyword13,
+      </if>
+      <if test="keyword14 != null">
+        keyword14,
+      </if>
+      <if test="keyword15 != null">
+        keyword15,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null">
+        #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="primaryIndustry != null">
+        #{primaryIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="deputyIndustry != null">
+        #{deputyIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="example != null">
+        #{example,jdbcType=VARCHAR},
+      </if>
+      <if test="first != null">
+        #{first,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword1 != null">
+        #{keyword1,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword2 != null">
+        #{keyword2,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword3 != null">
+        #{keyword3,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword4 != null">
+        #{keyword4,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword5 != null">
+        #{keyword5,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword6 != null">
+        #{keyword6,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword7 != null">
+        #{keyword7,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword8 != null">
+        #{keyword8,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword9 != null">
+        #{keyword9,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword10 != null">
+        #{keyword10,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword11 != null">
+        #{keyword11,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword12 != null">
+        #{keyword12,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword13 != null">
+        #{keyword13,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword14 != null">
+        #{keyword14,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword15 != null">
+        #{keyword15,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_xcx.entity.Template">
+    update template
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null">
+        template_id = #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="primaryIndustry != null">
+        primary_industry = #{primaryIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="deputyIndustry != null">
+        deputy_industry = #{deputyIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="example != null">
+        example = #{example,jdbcType=VARCHAR},
+      </if>
+      <if test="first != null">
+        first = #{first,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword1 != null">
+        keyword1 = #{keyword1,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword2 != null">
+        keyword2 = #{keyword2,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword3 != null">
+        keyword3 = #{keyword3,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword4 != null">
+        keyword4 = #{keyword4,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword5 != null">
+        keyword5 = #{keyword5,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword6 != null">
+        keyword6 = #{keyword6,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword7 != null">
+        keyword7 = #{keyword7,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword8 != null">
+        keyword8 = #{keyword8,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword9 != null">
+        keyword9 = #{keyword9,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword10 != null">
+        keyword10 = #{keyword10,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword11 != null">
+        keyword11 = #{keyword11,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword12 != null">
+        keyword12 = #{keyword12,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword13 != null">
+        keyword13 = #{keyword13,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword14 != null">
+        keyword14 = #{keyword14,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword15 != null">
+        keyword15 = #{keyword15,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gogirl.gogirl_xcx.entity.Template">
+    update template
+    set name = #{name,jdbcType=VARCHAR},
+      template_id = #{templateId,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      primary_industry = #{primaryIndustry,jdbcType=VARCHAR},
+      deputy_industry = #{deputyIndustry,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      example = #{example,jdbcType=VARCHAR},
+      first = #{first,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      keyword1 = #{keyword1,jdbcType=VARCHAR},
+      keyword2 = #{keyword2,jdbcType=VARCHAR},
+      keyword3 = #{keyword3,jdbcType=VARCHAR},
+      keyword4 = #{keyword4,jdbcType=VARCHAR},
+      keyword5 = #{keyword5,jdbcType=VARCHAR},
+      keyword6 = #{keyword6,jdbcType=VARCHAR},
+      keyword7 = #{keyword7,jdbcType=VARCHAR},
+      keyword8 = #{keyword8,jdbcType=VARCHAR},
+      keyword9 = #{keyword9,jdbcType=VARCHAR},
+      keyword10 = #{keyword10,jdbcType=VARCHAR},
+      keyword11 = #{keyword11,jdbcType=VARCHAR},
+      keyword12 = #{keyword12,jdbcType=VARCHAR},
+      keyword13 = #{keyword13,jdbcType=VARCHAR},
+      keyword14 = #{keyword14,jdbcType=VARCHAR},
+      keyword15 = #{keyword15,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

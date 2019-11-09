@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_store.store_shop.dao.ShopManageMapper">
+
+    <resultMap id="storeByServeIdSql" type="com.gogirl.gogirl_store.store_commons.dto.ShopManage">
+        <result column="sm_id" property="id"/>
+        <result column="sm_store_no" property="storeNo"/>
+        <result column="sm_logo" property="logo"/>
+        <result column="sm_name" property="name"/>
+        <result column="sm_longitude" property="longitude"/>
+        <result column="sm_latitude" property="latitude"/>
+        <result column="sm_address" property="address"/>
+        <result column="sm_master" property="master"/>
+        <result column="sm_employee_number" property="employeeNumber"/>
+        <result column="sm_customer_service_telphone" property="customerServiceTelphone"/>
+        <result column="sm_contact_name" property="contactName"/>
+        <result column="sm_contact_telphone" property="contactTelphone"/>
+        <result column="sm_remark" property="remark"/>
+        <result column="sm_business_day" property="businessDay"/>
+        <result column="sm_business_start_time" property="businessStartTime"/>
+        <result column="sm_business_end_time" property="businessEndTime"/>
+        <result column="sm_shop_environment_photos" property="shopEnvironmentPhotos"/>
+        <result column="sm_short_code" property="shortCode"/>
+    </resultMap>
+
+    <sql id="baseSql">
+    id, store_no, logo, name, longitude, latitude, address, master, employee_number employeeNumber, customer_service_telphone customerServiceTelphone, contact_name contactName, contact_telphone contactTelphone, remark, business_day businessDay, business_start_time businessStartTime,  business_end_time businessEndTime,shop_environment_photos shopEnvironmentPhotos,short_code shortCode
+    </sql>
+
+    <sql id="storeByServeIdSql">
+    sm.id sm_id, sm.store_no sm_store_no, sm.logo sm_logo, sm.name sm_name, sm.longitude sm_longitude, sm.latitude sm_latitude, sm.address sm_address, sm.master sm_master, sm.employee_number sm_employee_number, sm.customer_service_telphone sm_customer_service_telphone, sm.contact_name sm_contact_name, sm.contact_telphone sm_contact_telphone, sm.remark sm_remark, sm.business_day sm_business_day, sm.business_start_time sm_business_start_time, sm.business_end_time sm_business_end_time,sm.shop_environment_photos sm_shop_environment_photos
+    </sql>
+
+    <select id="listShopManageForPage" resultType="com.gogirl.gogirl_store.store_commons.dto.ShopManage">
+        select
+        <include refid="baseSql"/>
+        from store_manage
+        where operating_status = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != '' ">
+            and name like '%${name}%'
+        </if>
+        <if test="address != null and address != ''">
+            and address = #{address}
+        </if>
+        <if test="master != null and master != ''">
+            and master = #{master}
+        </if>
+    </select>
+
+    <select id="listShopByServeIdForPage" resultMap="storeByServeIdSql">
+        select
+        <include refid="storeByServeIdSql"/>
+        from (select store_id from store_shop_serve_relation where serve_id = #{id}) a left join
+            store_manage sm on sm.id = a.store_id
+    </select>
+
+    <select id="getShopManageForDetail" resultType="com.gogirl.gogirl_store.store_commons.dto.ShopManage">
+        select
+        <include refid="baseSql"/>
+        from store_manage
+        where
+        id = #{id}
+    </select>
+
+    <select id="checkShopManageNo" resultType="com.gogirl.gogirl_store.store_commons.dto.ShopManage">
+        select
+        <include refid="baseSql"/>
+        from store_manage
+        where
+        store_no = #{shopNo}
+    </select>
+
+    <delete id="deleteShopServeByShopId">
+        delete from store_shop_serve_relation where store_id = #{id}
+    </delete>
+
+    <delete id="deleteShopTechnicianById">
+        delete from store_technician where department_id = #{id}
+    </delete>
+
+    <delete id="deleteShopManageById">
+        delete from store_manage where id = #{id}
+    </delete>
+
+    <update id="updateShopManage">
+        update store_manage
+        <set>
+            <if test="storeNo != null">
+                store_no = #{storeNo},
+            </if>
+            <if test="logo != null">
+                logo = #{logo},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="master != null">
+                master = #{master},
+            </if>
+            <if test="employeeNumber != null">
+                employee_number = #{employeeNumber},
+            </if>
+            <if test="customerServiceTelphone != null">
+                customer_service_telphone = #{customerServiceTelphone},
+            </if>
+            <if test="contactName != null">
+                contact_name = #{contactName},
+            </if>
+            <if test="contactTelphone != null">
+                contact_telphone = #{contactTelphone},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="businessDay != null">
+                business_day = #{businessDay},
+            </if>
+            <if test="businessStartTime != null">
+                business_start_time = #{businessStartTime},
+            </if>
+            <if test="businessEndTime != null">
+                business_end_time = #{businessEndTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insertShopServe">
+        insert into store_shop_serve_relation(serve_id, store_id)
+        select id, #{shopId} from base_serve
+    </insert>
+
+    <insert id="insertShopManage" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.gogirl.gogirl_store.store_commons.dto.ShopManage">
+        insert into store_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="storeNo != null">
+                store_no,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="logo != null">
+                logo,
+            </if>
+            <if test="longitude != null">
+                longitude,
+            </if>
+            <if test="latitude != null">
+                latitude,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="master != null">
+                master,
+            </if>
+            <if test="employeeNumber != null">
+                employee_number,
+            </if>
+            <if test="customerServiceTelphone">
+                customer_service_telphone,
+            </if>
+            <if test="contactName != null">
+                contact_name,
+            </if>
+            <if test="contactTelphone != null">
+                contact_telphone,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="businessDay != null">
+                business_day,
+            </if>
+            <if test="businessStartTime != null">
+                business_start_time,
+            </if>
+            <if test="businessEndTime != null">
+                business_end_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="storeNo != null">
+                #{storeNo},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="logo != null">
+                #{logo},
+            </if>
+            <if test="longitude != null">
+                #{longitude},
+            </if>
+            <if test="latitude != null">
+                #{latitude},
+            </if>
+            <if test="address != null">
+                #{address},
+            </if>
+            <if test="master != null">
+                #{master},
+            </if>
+            <if test="employeeNumber != null">
+                #{employeeNumber},
+            </if>
+            <if test="customerServiceTelphone">
+                #{customerServiceTelphone},
+            </if>
+            <if test="contactName != null">
+                #{contactName},
+            </if>
+            <if test="contactTelphone != null">
+                #{contactTelphone},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="businessDay != null">
+                #{businessDay},
+            </if>
+            <if test="businessStartTime != null">
+                #{businessStartTime},
+            </if>
+            <if test="businessEndTime != null">
+                #{businessEndTime}
+            </if>
+        </trim>
+    </insert>
+</mapper>

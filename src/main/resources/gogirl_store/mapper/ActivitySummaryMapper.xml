@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_store.store_activity.dao.ActivitySummaryMapper">
+
+    <resultMap id="storeActivitySummary" type="com.gogirl.gogirl_store.store_commons.dto.ActivitySummary">
+        <result column="id" property="id"/>
+        <result column="activity_id" property="activityId"/>
+        <result column="summary_time" property="summaryTime"/>
+        <result column="eject_times" property="ejectTimes"/>
+        <result column="participation_times" property="participationTimes"/>
+        <result column="participants_number" property="participantsNumber"/>
+        <result column="recipient_number" property="recipientNumber"/>
+    </resultMap>
+
+    <sql id="baseSql">
+        id, activity_id, summary_time, eject_times, participation_times, participants_number, recipient_number
+    </sql>
+
+    <select id="listActivitySummaryForPage" resultMap="storeActivitySummary">
+        select
+        <include refid="baseSql"/>
+        from activity_summary
+        where 1 = 1
+        <if test="activityId != null ">
+            and activity_id = #{activityId}
+        </if>
+        <if test="summaryTime != null">
+            and summary_time = #{summaryTime}
+        </if>
+        <if test="ejectTimes != null">
+            and eject_times = #{ejectTimes}
+        </if>
+        <if test="participationTimes != null">
+            and participation_times = #{participationTimes}
+        </if>
+        <if test="participantsNumber != null">
+            and participants_number = #{participantsNumber}
+        </if>
+        <if test="recipientNumber != null">
+            and recipient_number = #{recipientNumber}
+        </if>
+    </select>
+
+    <select id="getActivitySummaryDetail" resultMap="storeActivitySummary">
+        select
+        <include refid="baseSql"/>
+        from
+        activity_summary
+        where
+        activity_id = #{activityId}
+        and summary_time = #{summaryTime}
+    </select>
+
+    <select id="checkActivitySummary" resultMap="storeActivitySummary">
+        select
+        <include refid="baseSql"/>
+        from
+        activity_summary
+        where
+        activity_id = #{activityId}
+        and summary_time = date_format(#{summaryTime}, '%Y-%m-%d')
+    </select>
+
+    <update id="updateActivitySummary">
+        update activity_summary
+        <set>
+            <if test="ejectTimes != null">
+                eject_times = eject_times + 1,
+            </if>
+            <if test="participationTimes != null">
+                participation_times = participation_times + 1,
+            </if>
+            <if test="participantsNumber != null">
+                participants_number = participants_number + 1,
+            </if>
+            <if test="recipientNumber != null">
+                recipient_number = recipient_number + 1
+            </if>
+        </set>
+        where activity_id = #{activityId}
+        and summary_time = date_format(#{summaryTime}, '%Y-%m-%d')
+    </update>
+
+    <insert id="insertActivitySummary" parameterType="com.gogirl.gogirl_store.store_commons.dto.ActivitySummary" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into activity_summary
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="activityId != null ">
+                activity_id,
+            </if>
+            <if test="summaryTime != null">
+                summary_time,
+            </if>
+            <if test="ejectTimes != null">
+                eject_times,
+            </if>
+            <if test="participationTimes != null">
+                participation_times,
+            </if>
+            <if test="participantsNumber != null">
+                participants_number,
+            </if>
+            <if test="recipientNumber != null">
+                recipient_number,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="activityId != null ">
+                #{activityId},
+            </if>
+            <if test="summaryTime != null">
+                #{summaryTime},
+            </if>
+            <if test="ejectTimes != null">
+                #{ejectTimes},
+            </if>
+            <if test="participationTimes != null">
+                #{participationTimes},
+            </if>
+            <if test="participantsNumber != null">
+                #{participantsNumber},
+            </if>
+            <if test="recipientNumber != null">
+                #{recipientNumber}
+            </if>
+        </trim>
+    </insert>
+</mapper>

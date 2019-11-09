@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_user.dao.TimesCardTypeContentMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_user.entity.TimesCardTypeContent" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="card_type_id" property="cardTypeId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, card_type_id, name, num, amount, note
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from times_card_type_content
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from times_card_type_content
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gogirl.gogirl_user.entity.TimesCardTypeContent" >
+    insert into times_card_type_content (id, card_type_id, name, 
+      num, amount, note)
+    values (#{id,jdbcType=INTEGER}, #{cardTypeId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{num,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{note,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_user.entity.TimesCardTypeContent" >
+    insert into times_card_type_content
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cardTypeId != null" >
+        card_type_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cardTypeId != null" >
+        #{cardTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_user.entity.TimesCardTypeContent" >
+    update times_card_type_content
+    <set >
+      <if test="cardTypeId != null" >
+        card_type_id = #{cardTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gogirl.gogirl_user.entity.TimesCardTypeContent" >
+    update times_card_type_content
+    set card_type_id = #{cardTypeId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      note = #{note,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

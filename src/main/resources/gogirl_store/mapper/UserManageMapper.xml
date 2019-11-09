@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_store.store_user.dao.UserManageMapper">
+
+    <resultMap id="storeUserWithStore" type="com.gogirl.gogirl_store.store_commons.dto.UserManage">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="no" property="no"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="jobs" property="jobs"/>
+        <result column="create_time" property="createTime"/>
+        <result column="mobile" property="mobile"/>
+        <result column="status" property="status"/>
+        <association property="shopManage" javaType="com.gogirl.gogirl_store.store_commons.dto.ShopManage">
+            <result column="sm_id" property="id"/>
+            <result column="sm_store_no" property="storeNo"/>
+            <result column="sm_name" property="name"/>
+        </association>
+    </resultMap>
+
+    <sql id="Sql">
+        su.id, su.name, su.no, su.department_id, su.jobs, su.create_time, su.mobile, su.user_authority, su.picture_path, su.status
+    </sql>
+
+    <sql id="baseSql">
+        id, name, no, department_id, jobs, create_time, mobile, user_authority, picture_path, status
+    </sql>
+  <select id="selectByOpenid" resultMap="storeUserWithStore" parameterType="java.lang.String" >
+    select 
+    <include refid="baseSql" />
+    from store_user
+    where openid = #{openid,jdbcType=CHAR}
+  </select>
+
+    <select id="listUserManageForPage" resultMap="storeUserWithStore">
+        select
+        <include refid="Sql"/>,
+        sm.id sm_id, sm.store_no sm_store_no, sm.name sm_name
+        from store_user su
+        left join store_manage sm on sm.id = su.department_id
+        where 1 = 1
+        <if test="name != null and name != '' ">
+            and su.name like '%${name}%'
+        </if>
+        <if test="departmentId != null">
+            and su.department_id = #{departmentId}
+        </if>
+        <if test="jobs != null and jobs != ''">
+            and su.jobs = #{jobs}
+        </if>
+        <if test="createTime != null">
+            and su.create_time = #{createTime}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            and su.mobile = #{mobile}
+        </if>
+    </select>
+
+    <select id="checkLogin" resultType="com.gogirl.gogirl_store.store_commons.dto.UserManage">
+        select *
+        from
+        store_user
+        where
+        name = #{name}
+        and
+        password = #{password}
+    </select>
+
+    <select id="getUserManageForDetail" resultType="com.gogirl.gogirl_store.store_commons.dto.UserManage">
+        select
+        <include refid="baseSql"/>
+        from store_user
+        where
+        id = #{id}
+    </select>
+
+    <select id="getAllStoreUser" resultType="com.gogirl.gogirl_store.store_commons.dto.UserManage">
+        select
+        <include refid="baseSql"/>
+        from store_user
+    </select>
+    <select id="listUserManageForAll" resultType="com.gogirl.gogirl_store.store_commons.dto.UserManage">
+        select
+        <include refid="baseSql"/>
+        from store_user
+        where 1 = 1
+        <if test="departmentId != null">
+            and department_id = #{departmentId}
+        </if>
+    </select>
+
+    <select id="listUserForAllNotQuit" resultType="com.gogirl.gogirl_store.store_commons.dto.UserManage">
+        select
+        <include refid="baseSql"/>
+        from store_user
+        where status = 1
+        <if test="departmentId != null">
+            and department_id = #{departmentId}
+        </if>
+    </select>
+
+    <delete id="deleteUserManageById">
+        delete from store_user where id = #{id}
+    </delete>
+
+    <update id="updateUserManage">
+        update store_user
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="departmentId != null">
+                department_id = #{departmentId},
+            </if>
+            <if test="jobs != null">
+                jobs = #{jobs},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="mobile != null">
+                mobile  = #{mobile},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="picturePath != null">
+                picture_path = #{picturePath}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insertUserManage" parameterType="com.gogirl.gogirl_store.store_commons.dto.UserManage" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into store_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null">
+                name,
+            </if>
+            <if test="departmentId != null">
+                department_id,
+            </if>
+            <if test="jobs != null">
+                jobs,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="picturePath != null">
+                picture_path
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId},
+            </if>
+            <if test="jobs != null">
+                #{jobs},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="mobile != null">
+                #{mobile},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="picturePath != null">
+                #{picturePath}
+            </if>
+        </trim>
+    </insert>
+</mapper>

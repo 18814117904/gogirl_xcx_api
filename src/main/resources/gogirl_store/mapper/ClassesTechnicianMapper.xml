@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_store.store_classes.dao.ClassesTechnicianMapper">
+
+    <resultMap id="classesTechnicianMap" type="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="days" column="days"/>
+        <result property="classes" column="classes"/>
+        <result property="status" column="status"/>
+        <association property="classesManage" javaType="com.gogirl.gogirl_store.store_commons.dto.ClassesManage">
+            <result property="id" column="cls_id"/>
+            <result property="name" column="cls_name"/>
+            <result property="startTime" column="cls_start_time"/>
+            <result property="endTime" column="cls_end_time"/>
+            <result property="useNumber" column="cls_use_number"/>
+            <result property="departmentId" column="cls_department_id"/>
+        </association>
+        <association property="technicianManage" javaType="com.gogirl.gogirl_technician.technician_commons.dto.TechnicianManage">
+            <result property="id" column="tech_id"/>
+            <result property="name" column="tech_name"/>
+            <result property="departmentId" column="tech_department_id"/>
+	        <result property="openid" column="tech_openid"/>
+	        <result property="picturePath" column="tech_picture_path"/>
+	        <result property="technicianNo" column="tech_technician_no"/>
+	        <result property="createTime" column="tech_create_time"/>
+	        <result property="mobile" column="tech_mobile"/>
+	        <result property="userAuthority" column="tech_user_authority"/>
+	        <result property="grade" column="tech_grade"/>
+	        <result property="status" column="tech_status"/>
+	        <result property="score" column="tech_score"/>
+	        <result property="userId" column="tech_user_id"/>
+        </association>
+        <collection property="listScheduleServe" ofType="com.gogirl.gogirl_store.store_commons.dto.ScheduleServe">
+            <result column="ss_id" property="id"/>
+            <result column="ss_start_time" property="startTime"/>
+            <result column="ss_end_time" property="endTime"/>
+            <result column="ss_produce_name" property="produceName"/>
+            <result column="bs_name" property="serveName"/>
+            <result column="bs_type" property="serveType"/>
+        </collection>
+    </resultMap>
+
+    <sql id="baseSql">
+        id, user_id, days, classes, `status`
+    </sql>
+
+    <sql id="classestechnician">
+        ct.id, ct.user_id, ct.days, ct.classes, ct.`status`
+    </sql>
+
+    <sql id="classes">
+        cls.id cla_id, cls.name cls_name, cls.start_time cls_start_time, cls.end_time cls_end_time, cls.use_number cls_use_number, cls.department_id cls_department_id
+    </sql>
+
+    <sql id="technicianSql">
+        tech.id tech_id ,tech.openid tech_openid ,tech.picture_path tech_picture_path ,tech.technician_no tech_technician_no ,tech.name tech_name ,tech.department_id tech_department_id,tech.create_time tech_create_time ,tech.mobile tech_mobile ,tech.user_authority tech_user_authority ,tech.grade tech_grade ,tech.status tech_status ,tech.score tech_score ,tech.user_id tech_user_id
+    </sql>
+
+    <select id="listClassesTechnicianForPage" resultType="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">
+        select
+        <include refid="baseSql"/>
+        from store_classes_technician
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="userId != null">
+            and user_id = #{userId}
+        </if>
+        <if test="days != null">
+            and days = #{days}
+        </if>
+        <if test="classes != null">
+            and classes = #{classes}
+        </if>
+        <if test="status != null">
+            and `status` = #{status}
+        </if>
+    </select>
+
+    <select id="listClassesTechnicianDetail" resultMap="classesTechnicianMap">
+        select
+        <include refid="classestechnician"/>
+        from
+        store_classes_technician ct
+        where
+        user_id = #{userId}
+        and
+        date_format(days, '%Y-%m') = #{days}
+    </select>
+    <select id="listClassesTechnicianDetailByDays" resultType="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">
+        select
+        <include refid="baseSql"/>
+        from
+        store_classes_technician
+        where
+        user_id = #{userId}
+        and
+        date_format(days, '%Y-%m-%d') = #{days}
+    </select>
+
+    <select id="listClassesTechnician" resultMap="classesTechnicianMap">
+        select 
+        <include refid="classestechnician"/>,
+        <include refid="classes"/>,
+        ss.start_time ss_start_time,ss.id ss_id, ss.end_time ss_end_time, ss.produce_name ss_produce_name,
+        bs.name bs_name, bs.type bs_type,
+        <include refid="technicianSql"/>
+        from
+        store_classes_technician ct
+        left join store_classes cls on cls.id = ct.classes
+        left join store_technician tech on tech.id = ct.user_id
+        left join scheduled_serve ss on ss.technician_id = ct.user_id and date_format(ss.start_time, '%Y-%m-%d') = #{days}  and ss.sch_id in (select id from scheduled_manage where `status` = 1 or `status` = 6 or `status` = 7)
+        left join base_serve bs on bs.id = ss.serve_id
+        where ct.days = #{days}
+        and ct.user_id in (select id from store_technician where department_id = #{departmentId} )
+    </select>
+
+    <!--<select id="listClassesTechnicianByStartTime" resultType="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">
+        select * from store_classes_technician where classes in
+        (select id from store_classes where #{startTime} >= start_time and end_time >= #{startTime})
+        and days = #{startDate}
+    </select>-->
+
+    <select id="listClassTimeByStartDate" resultMap="classesTechnicianMap">
+        select
+        <include refid="classestechnician"/>,
+        <include refid="technicianSql"/>
+        from store_classes_technician ct
+        left join store_technician tech on tech.id = ct.user_id
+        where ct.classes in
+        (select id from store_classes where #{startTime} >= start_time and end_time > #{startTime})
+        and ct.days = #{startDate} and ct.user_id in (select id from store_technician where store_technician.department_id = #{departmentId})
+    </select>
+
+    <select id="getClassesTechnicianForDetail" resultType="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">
+        select
+        <include refid="baseSql"/>
+        from store_classes_technician
+        where
+        id = #{id}
+    </select>
+
+    <delete id="deleteClassesTechnicianById">
+        delete from store_classes_technician where id = #{id}
+    </delete>
+
+    <update id="updateClassesTechnician" parameterType="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">
+        update store_classes_technician
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="days != null">
+                days = #{days},
+            </if>
+            <if test="classes != null">
+                classes = #{classes},
+            </if>
+            <if test="status != null">
+                `status` = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateClassesTechnicianByIdAndStatus">
+        update store_classes_technician set classes = 0 where user_id in(select id from store_technician where user_id = #{id}) and days >= DATE_FORMAT(NOW(),'%Y-%m-%d')
+    </update>
+
+    <update id="updateClassesTechnicianByList" parameterType="java.util.List">
+        update store_classes_technician
+        set classes =
+        <foreach collection="list" item="item" index="index" separator=" " open="CASE id" close="END">
+                    WHEN #{item.id} THEN #{item.classes}
+        </foreach>
+                     WHERE id IN
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+                     #{item.id}
+        </foreach>
+    </update>
+
+    <insert id="insertClassesTechnicianByStore" parameterType="java.util.Map">
+        insert into store_classes_technician
+        (user_id, days, classes, `status`)
+        VALUES
+        <foreach collection="dateClasses" item="dateClasses" separator=",">
+            (
+            #{userId},
+            date_format(CONCAT(#{time} , #{dateClasses.days}), '%Y-%m-%d'),
+            #{dateClasses.classes},
+            2
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertClassesTechnician" parameterType="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">
+        insert into store_classes_technician
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="days != null">
+                days,
+            </if>
+            <if test="classes != null">
+                classes,
+            </if>
+            <if test="status != null">
+                `status`
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="days != null">
+                #{days},
+            </if>
+            <if test="classes != null">
+                #{classes},
+            </if>
+            <if test="status != null">
+                #{status}
+            </if>
+        </trim>
+    </insert>
+</mapper>

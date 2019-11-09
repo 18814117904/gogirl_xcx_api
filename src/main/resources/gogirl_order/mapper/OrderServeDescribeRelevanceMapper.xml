@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.dao.OrderServeDescribeRelevanceMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_order.entity.OrderServeDescribeRelevance" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_serve_id" property="orderServeId" jdbcType="INTEGER" />
+    <result column="describe_id" property="describeId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_serve_id, describe_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_serve_describe_relevance
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByOrderServeId" parameterType="java.lang.Integer" >
+    delete from order_serve_describe_relevance
+    where order_serve_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gogirl.gogirl_order.entity.OrderServeDescribe" >
+    insert into order_serve_describe (id, describe, type, 
+      status)
+    values 
+        <foreach collection="list" item="list" separator=",">
+        (#{id,jdbcType=INTEGER}, #{describe,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},#{status,jdbcType=INTEGER})
+        </foreach>
+  </insert>
+  <insert id="insertList" parameterType="java.util.List" >
+    insert into order_serve_describe_relevance (order_serve_id, describe_id)
+    values 
+        <foreach collection="list" item="list" separator=",">
+    (#{list.orderServeId,jdbcType=INTEGER}, #{list.describeId,jdbcType=INTEGER})
+        </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_order.entity.OrderServeDescribeRelevance" >
+    insert into order_serve_describe_relevance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderServeId != null" >
+        order_serve_id,
+      </if>
+      <if test="describeId != null" >
+        describe_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderServeId != null" >
+        #{orderServeId,jdbcType=INTEGER},
+      </if>
+      <if test="describeId != null" >
+        #{describeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_order.entity.OrderServeDescribeRelevance" >
+    update order_serve_describe_relevance
+    <set >
+      <if test="orderServeId != null" >
+        order_serve_id = #{orderServeId,jdbcType=INTEGER},
+      </if>
+      <if test="describeId != null" >
+        describe_id = #{describeId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gogirl.gogirl_order.entity.OrderServeDescribeRelevance" >
+    update order_serve_describe_relevance
+    set order_serve_id = #{orderServeId,jdbcType=INTEGER},
+      describe_id = #{describeId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

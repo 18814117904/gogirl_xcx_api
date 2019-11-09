@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_store.store_classes.dao.ClassesManageMapper">
+
+    <sql id="baseSql">
+        id, name,start_time startTime,end_time endTime,use_number useNumber,department_id departmentId
+    </sql>
+
+    <select id="listClassesManageForPage" resultType="com.gogirl.gogirl_store.store_commons.dto.ClassesManage">
+        select
+        <include refid="baseSql"/>
+        from store_classes
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != '' ">
+            and name = #{name}
+        </if>
+        <if test="startTime!= null">
+            and start_time = #{startTime}
+        </if>
+        <if test="endTime != null">
+            and end_time = #{endTime}
+        </if>
+        <if test="useNumber != null">
+            and use_number = #{useNumber}
+        </if>
+        <if test="departmentId != null">
+            and department_id = #{departmentId}
+        </if>
+    </select>
+
+    <select id="listClassesManage" resultType="com.gogirl.gogirl_store.store_commons.dto.ClassesManage">
+        select
+        <include refid="baseSql"/>
+        from
+        store_classes
+        where 1 = 1
+        <if test="departmentId != null">
+            and department_id = #{departmentId}
+        </if>
+    </select>
+
+    <select id="getClassesManageForDetail" resultType="com.gogirl.gogirl_store.store_commons.dto.ClassesManage">
+        select
+        <include refid="baseSql"/>
+        from store_classes
+        where
+        id = #{id}
+    </select>
+
+    <delete id="deleteClassesManageById">
+        delete from store_classes where id = #{id}
+    </delete>
+
+    <update id="updateUseNumber">
+        update store_classes set use_number = use_number+1 where id = #{id}
+    </update>
+
+    <update id="updateClassesManage" parameterType="com.gogirl.gogirl_store.store_commons.dto.ClassesManage">
+        update store_classes
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+            <if test="useNumber != null">
+                use_number = #{useNumber},
+            </if>
+            <if test="departmentId != null">
+                department_id  = #{departmentId}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insertClassesManage" parameterType="com.gogirl.gogirl_store.store_commons.dto.ClassesManage">
+        insert into store_classes
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null">
+                name,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="useNumber != null">
+                use_number,
+            </if>
+            <if test="departmentId != null">
+                department_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="startTime != null">
+                #{startTime},
+            </if>
+            <if test="endTime != null">
+                #{endTime},
+            </if>
+            <if test="useNumber != null">
+                #{useNumber},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId}
+            </if>
+        </trim>
+    </insert>
+</mapper>

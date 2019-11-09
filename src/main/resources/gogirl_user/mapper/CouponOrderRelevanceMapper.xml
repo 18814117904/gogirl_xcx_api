@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_user.dao.CouponOrderRelevanceMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_user.entity.CouponOrderRelevance" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="coupon_id" property="couponId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="coupon_customer_relevance_id" property="couponCustomerRelevanceId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+    <result column="technician_id" property="technicainId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_serve_id" property="orderServeId" jdbcType="INTEGER" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="discount_amount" property="discountAmount" jdbcType="DECIMAL" />
+	<association property="coupon" javaType="com.gogirl.gogirl_user.entity.Coupon">
+	    <id column="couid" jdbcType="INTEGER" property="id" />
+	    <result column="couname" jdbcType="VARCHAR" property="name" />
+	    <result column="coudiscount_amount" jdbcType="DOUBLE" property="discountAmount" />
+	    <result column="coureaching_amount" jdbcType="DOUBLE" property="reachingAmount" />
+	    <result column="coudiscount_percent" jdbcType="DOUBLE" property="discountPercent" />
+	    <result column="coutype" jdbcType="INTEGER" property="type" />
+	    <result column="coucondition1" jdbcType="VARCHAR" property="condition1" />
+	    <result column="counote" jdbcType="VARCHAR" property="note" />
+	    <result column="couvalid_type" jdbcType="INTEGER" property="validType" />
+	    <result column="couvalid_date" jdbcType="INTEGER" property="validDate" />
+	    <result column="couvalid_start_time" jdbcType="TIMESTAMP" property="validStartTime" />
+	    <result column="couvalid_end_time" jdbcType="TIMESTAMP" property="validEndTime" />
+	    <result column="couall_quantity" jdbcType="INTEGER" property="allQuantity" />
+	    <result column="coureceive_quantity" jdbcType="INTEGER" property="receiveQuantity" />
+	    <result column="couuse_quantity" jdbcType="INTEGER" property="useQuantity" />
+	    <result column="coulimit_quantity" jdbcType="INTEGER" property="limitQuantity" />
+	    <result column="coustate" jdbcType="INTEGER" property="state" />
+	    <result column="couupdate_time" jdbcType="TIMESTAMP" property="updateTime" />
+	    <result column="couremark" jdbcType="VARCHAR" property="remark" />
+	    <result column="cousource_type" jdbcType="INTEGER" property="sourceType" />
+	    <result column="coupay_source" jdbcType="INTEGER" property="paySource" />
+	    <result column="coupay_amount" property="payAmount" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cor.id, cor.coupon_id, cor.customer_id, cor.coupon_customer_relevance_id, cor.status,cor.message, cor.create_time, cor.confirm_time, 
+    cor.technician_id,cor.order_id,cor.order_serve_id,cor.discount_amount
+  </sql>
+  <sql id="couponSql" >
+    cou.id couid,cou.name couname,cou.discount_amount coudiscount_amount,cou.reaching_amount coureaching_amount,cou.discount_percent coudiscount_percent,cou.type coutype,cou.condition1 coucondition1,cou.note counote,cou.valid_type couvalid_type, 
+   cou.valid_date couvalid_date,cou.valid_start_time couvalid_start_time,cou.valid_end_time couvalid_end_time,cou.all_quantity couall_quantity,cou.receive_quantity coureceive_quantity,cou.use_quantity couuse_quantity, 
+   cou.limit_quantity coulimit_quantity,cou.state coustate,cou.update_time couupdate_time, cou.remark couremark,cou.source_type cousource_type,cou.pay_source coupay_source,cou.pay_amount coupay_amount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from coupon_order_relevance cor
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByOrderId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />,
+    <include refid="couponSql" />
+    from coupon_order_relevance cor
+    left join coupon cou on cou.id=cor.coupon_id
+    where order_id = #{orderId,jdbcType=INTEGER} and status!=4 and status!=5 
+  </select>
+
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_user.entity.CouponOrderRelevance" >
+    insert into coupon_order_relevance 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="couponId != null" >
+        coupon_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="couponCustomerRelevanceId != null" >
+        coupon_customer_relevance_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="confirmTime != null" >
+        confirm_time,
+      </if>
+      <if test="technicainId != null" >
+        technician_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderServeId != null" >
+        order_serve_id,
+      </if>
+      <if test="discountAmount != null" >
+        discount_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="couponId != null" >
+        #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="couponCustomerRelevanceId != null" >
+        #{couponCustomerRelevanceId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmTime != null" >
+        #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="technicainId != null" >
+        #{technicainId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderServeId != null" >
+        #{orderServeId,jdbcType=INTEGER},
+      </if>
+      <if test="discountAmount != null" >
+        #{discountAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_user.entity.CouponOrderRelevance" >
+    update coupon_order_relevance
+    <set >
+      <if test="couponId != null" >
+        coupon_id = #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="couponCustomerRelevanceId != null" >
+        coupon_customer_relevance_id = #{couponCustomerRelevanceId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmTime != null" >
+        confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="technicainId != null" >
+        technician_id = #{technicainId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderServeId != null" >
+        order_serve_id = #{orderServeId,jdbcType=INTEGER},
+      </if>
+      <if test="discountAmount != null" >
+        discount_amount = #{discountAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER} and status!=4 and status!=5
+  </update>
+  <update id="updateByCouponCustomerRelevanceId" parameterType="com.gogirl.gogirl_user.entity.CouponOrderRelevance" >
+    update coupon_order_relevance
+    <set >
+      <if test="couponId != null" >
+        coupon_id = #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmTime != null" >
+        confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="technicainId != null" >
+        technician_id = #{technicainId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where coupon_customer_relevance_id = #{couponCustomerRelevanceId,jdbcType=INTEGER} and order_id = #{orderId,jdbcType=INTEGER} and status!=4 and status!=5
+  </update>
+  <update id="updateByOrderId" parameterType="com.gogirl.gogirl_user.entity.CouponOrderRelevance" >
+    update coupon_order_relevance
+    <set >
+      <if test="couponId != null" >
+        coupon_id = #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmTime != null" >
+        confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="technicainId != null" >
+        technician_id = #{technicainId,jdbcType=INTEGER},
+      </if>
+      <if test="couponCustomerRelevanceId != null" >
+        coupon_customer_relevance_id = #{couponCustomerRelevanceId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER} and status!=4 and status!=5
+  </update>
+  <update id="updateCouponCustomerRelevanceUse" parameterType="java.lang.Integer" >
+    update coupon_order_relevance cor,coupon_customer_relevance ccr set state = 2  
+    where cor.coupon_customer_relevance_id=ccr.id and cor.status!=4 and cor.status!=5 and cor.order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+</mapper>

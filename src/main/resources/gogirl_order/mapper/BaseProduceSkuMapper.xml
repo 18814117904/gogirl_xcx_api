@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.dao.BaseProduceSkuMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_order.entity.BaseProduceSku" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="purchase_sku_id" property="purchaseSkuId" jdbcType="INTEGER" />
+    <result column="produce_id" property="produceId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, purchase_sku_id, produce_id, type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from base_produce_sku
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from base_produce_sku
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gogirl.gogirl_order.entity.BaseProduceSku" >
+    insert into base_produce_sku (id, purchase_sku_id, produce_id, 
+      type)
+    values (#{id,jdbcType=INTEGER}, #{purchaseSkuId,jdbcType=INTEGER}, #{produceId,jdbcType=INTEGER}, 
+      #{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_order.entity.BaseProduceSku" >
+    insert into base_produce_sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="purchaseSkuId != null" >
+        purchase_sku_id,
+      </if>
+      <if test="produceId != null" >
+        produce_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseSkuId != null" >
+        #{purchaseSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="produceId != null" >
+        #{produceId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_order.entity.BaseProduceSku" >
+    update base_produce_sku
+    <set >
+      <if test="purchaseSkuId != null" >
+        purchase_sku_id = #{purchaseSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="produceId != null" >
+        produce_id = #{produceId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gogirl.gogirl_order.entity.BaseProduceSku" >
+    update base_produce_sku
+    set purchase_sku_id = #{purchaseSkuId,jdbcType=INTEGER},
+      produce_id = #{produceId,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

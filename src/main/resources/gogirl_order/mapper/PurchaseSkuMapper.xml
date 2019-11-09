@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.dao.PurchaseSkuMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_order.entity.PurchaseSku" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sku" property="sku" jdbcType="VARCHAR" />
+    <result column="picture_path" property="picturePath" jdbcType="VARCHAR" />
+    <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
+    <result column="sku_type" property="skuType" jdbcType="INTEGER" />
+    <result column="sku_model" property="skuModel" jdbcType="VARCHAR" />
+    <result column="shop_price" property="shopPrice" jdbcType="DOUBLE" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE" />
+    <result column="supplier" property="supplier" jdbcType="VARCHAR" />
+    <result column="use_type" property="useType" jdbcType="INTEGER" />
+    <result column="series_id" property="seriesId" jdbcType="INTEGER" />
+    <result column="pps_parent_id" property="ppsParentId" jdbcType="INTEGER" />
+    <result column="pps_sku" property="ppsSku" jdbcType="VARCHAR" />
+    <result column="pps_multiattribute" property="ppsMultiattribute" jdbcType="BIT" />
+    <result column="pps_category_id" property="ppsCategoryId" jdbcType="INTEGER" />
+    <result column="pps_category_name" property="ppsCategoryName" jdbcType="VARCHAR" />
+    <result column="pps_shopping_mall_category_id" property="ppsShoppingMallCategoryId" jdbcType="INTEGER" />
+    <result column="pps_shopping_mall_category_name" property="ppsShoppingMallCategoryName" jdbcType="VARCHAR" />
+    <result column="pps_goods_title" property="ppsGoodsTitle" jdbcType="VARCHAR" />
+    <result column="pps_description" property="ppsDescription" jdbcType="VARCHAR" />
+    <result column="pps_original_price" property="ppsOriginalPrice" jdbcType="DECIMAL" />
+    <result column="pps_member_price" property="ppsMemberPrice" jdbcType="DECIMAL" />
+    <result column="pps_discount_price" property="ppsDiscountPrice" jdbcType="DECIMAL" />
+    <result column="pps_picture_path" property="ppsPicturePath" jdbcType="VARCHAR" />
+    <result column="pps_vedio_path" property="ppsVedioPath" jdbcType="VARCHAR" />
+    <result column="pps_brand" property="ppsBrand" jdbcType="VARCHAR" />
+    <result column="pps_color_number" property="ppsColorNumber" jdbcType="VARCHAR" />
+    <result column="pps_color_name" property="ppsColorName" jdbcType="VARCHAR" />
+    <result column="pps_specs" property="ppsSpecs" jdbcType="VARCHAR" />
+    <result column="pps_size" property="ppsSize" jdbcType="VARCHAR" />
+    <result column="pps_weight" property="ppsWeight" jdbcType="DOUBLE" />
+    <result column="pps_unit" property="ppsUnit" jdbcType="VARCHAR" />
+    <result column="pps_logistics_description" property="ppsLogisticsDescription" jdbcType="VARCHAR" />
+    <result column="pps_guarantee_instruction" property="ppsGuaranteeInstruction" jdbcType="VARCHAR" />
+    <result column="pps_after_sale_instructions" property="ppsAfterSaleInstructions" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="color_value" property="colorValue" jdbcType="VARCHAR" />
+    <result column="color_name" property="colorName" jdbcType="VARCHAR" />
+    <result column="color_img_path" property="colorImgPath" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.gogirl.gogirl_order.entity.PurchaseSku" extends="BaseResultMap" >
+    <result column="pps_details" property="ppsDetails" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sku, picture_path, sku_name, sku_type, sku_model, shop_price, purchase_price, 
+    supplier, use_type, series_id, pps_parent_id, pps_sku, pps_multiattribute, pps_category_id, 
+    pps_category_name, pps_shopping_mall_category_id, pps_shopping_mall_category_name, 
+    pps_goods_title, pps_description, pps_original_price, pps_member_price, pps_discount_price, 
+    pps_picture_path, pps_vedio_path, pps_brand, pps_color_number, pps_color_name, pps_specs, 
+    pps_size, pps_weight, pps_unit, pps_logistics_description, pps_guarantee_instruction, 
+    pps_after_sale_instructions, source, color_value, color_name, color_img_path
+  </sql>
+  <sql id="Blob_Column_List" >
+    pps_details
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from purchase_sku
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySkuName" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from purchase_sku
+    where sku_name = #{skuName,jdbcType=VARCHAR} limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from purchase_sku
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gogirl.gogirl_order.entity.PurchaseSku" >
+    insert into purchase_sku (id, sku, picture_path, 
+      sku_name, sku_type, sku_model, 
+      shop_price, purchase_price, supplier, 
+      use_type, series_id, pps_parent_id, 
+      pps_sku, pps_multiattribute, pps_category_id, 
+      pps_category_name, pps_shopping_mall_category_id, 
+      pps_shopping_mall_category_name, pps_goods_title, 
+      pps_description, pps_original_price, pps_member_price, 
+      pps_discount_price, pps_picture_path, pps_vedio_path, 
+      pps_brand, pps_color_number, pps_color_name, 
+      pps_specs, pps_size, pps_weight, 
+      pps_unit, pps_logistics_description, pps_guarantee_instruction, 
+      pps_after_sale_instructions, source, color_value, 
+      color_name, color_img_path, pps_details
+      )
+    values (#{id,jdbcType=INTEGER}, #{sku,jdbcType=VARCHAR}, #{picturePath,jdbcType=VARCHAR}, 
+      #{skuName,jdbcType=VARCHAR}, #{skuType,jdbcType=INTEGER}, #{skuModel,jdbcType=VARCHAR}, 
+      #{shopPrice,jdbcType=DOUBLE}, #{purchasePrice,jdbcType=DOUBLE}, #{supplier,jdbcType=VARCHAR}, 
+      #{useType,jdbcType=INTEGER}, #{seriesId,jdbcType=INTEGER}, #{ppsParentId,jdbcType=INTEGER}, 
+      #{ppsSku,jdbcType=VARCHAR}, #{ppsMultiattribute,jdbcType=BIT}, #{ppsCategoryId,jdbcType=INTEGER}, 
+      #{ppsCategoryName,jdbcType=VARCHAR}, #{ppsShoppingMallCategoryId,jdbcType=INTEGER}, 
+      #{ppsShoppingMallCategoryName,jdbcType=VARCHAR}, #{ppsGoodsTitle,jdbcType=VARCHAR}, 
+      #{ppsDescription,jdbcType=VARCHAR}, #{ppsOriginalPrice,jdbcType=DECIMAL}, #{ppsMemberPrice,jdbcType=DECIMAL}, 
+      #{ppsDiscountPrice,jdbcType=DECIMAL}, #{ppsPicturePath,jdbcType=VARCHAR}, #{ppsVedioPath,jdbcType=VARCHAR}, 
+      #{ppsBrand,jdbcType=VARCHAR}, #{ppsColorNumber,jdbcType=VARCHAR}, #{ppsColorName,jdbcType=VARCHAR}, 
+      #{ppsSpecs,jdbcType=VARCHAR}, #{ppsSize,jdbcType=VARCHAR}, #{ppsWeight,jdbcType=DOUBLE}, 
+      #{ppsUnit,jdbcType=VARCHAR}, #{ppsLogisticsDescription,jdbcType=VARCHAR}, #{ppsGuaranteeInstruction,jdbcType=VARCHAR}, 
+      #{ppsAfterSaleInstructions,jdbcType=VARCHAR}, #{source,jdbcType=INTEGER}, #{colorValue,jdbcType=VARCHAR}, 
+      #{colorName,jdbcType=VARCHAR}, #{colorImgPath,jdbcType=VARCHAR}, #{ppsDetails,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_order.entity.PurchaseSku" >
+    insert into purchase_sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sku != null" >
+        sku,
+      </if>
+      <if test="picturePath != null" >
+        picture_path,
+      </if>
+      <if test="skuName != null" >
+        sku_name,
+      </if>
+      <if test="skuType != null" >
+        sku_type,
+      </if>
+      <if test="skuModel != null" >
+        sku_model,
+      </if>
+      <if test="shopPrice != null" >
+        shop_price,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="supplier != null" >
+        supplier,
+      </if>
+      <if test="useType != null" >
+        use_type,
+      </if>
+      <if test="seriesId != null" >
+        series_id,
+      </if>
+      <if test="ppsParentId != null" >
+        pps_parent_id,
+      </if>
+      <if test="ppsSku != null" >
+        pps_sku,
+      </if>
+      <if test="ppsMultiattribute != null" >
+        pps_multiattribute,
+      </if>
+      <if test="ppsCategoryId != null" >
+        pps_category_id,
+      </if>
+      <if test="ppsCategoryName != null" >
+        pps_category_name,
+      </if>
+      <if test="ppsShoppingMallCategoryId != null" >
+        pps_shopping_mall_category_id,
+      </if>
+      <if test="ppsShoppingMallCategoryName != null" >
+        pps_shopping_mall_category_name,
+      </if>
+      <if test="ppsGoodsTitle != null" >
+        pps_goods_title,
+      </if>
+      <if test="ppsDescription != null" >
+        pps_description,
+      </if>
+      <if test="ppsOriginalPrice != null" >
+        pps_original_price,
+      </if>
+      <if test="ppsMemberPrice != null" >
+        pps_member_price,
+      </if>
+      <if test="ppsDiscountPrice != null" >
+        pps_discount_price,
+      </if>
+      <if test="ppsPicturePath != null" >
+        pps_picture_path,
+      </if>
+      <if test="ppsVedioPath != null" >
+        pps_vedio_path,
+      </if>
+      <if test="ppsBrand != null" >
+        pps_brand,
+      </if>
+      <if test="ppsColorNumber != null" >
+        pps_color_number,
+      </if>
+      <if test="ppsColorName != null" >
+        pps_color_name,
+      </if>
+      <if test="ppsSpecs != null" >
+        pps_specs,
+      </if>
+      <if test="ppsSize != null" >
+        pps_size,
+      </if>
+      <if test="ppsWeight != null" >
+        pps_weight,
+      </if>
+      <if test="ppsUnit != null" >
+        pps_unit,
+      </if>
+      <if test="ppsLogisticsDescription != null" >
+        pps_logistics_description,
+      </if>
+      <if test="ppsGuaranteeInstruction != null" >
+        pps_guarantee_instruction,
+      </if>
+      <if test="ppsAfterSaleInstructions != null" >
+        pps_after_sale_instructions,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="colorValue != null" >
+        color_value,
+      </if>
+      <if test="colorName != null" >
+        color_name,
+      </if>
+      <if test="colorImgPath != null" >
+        color_img_path,
+      </if>
+      <if test="ppsDetails != null" >
+        pps_details,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null" >
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="picturePath != null" >
+        #{picturePath,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null" >
+        #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null" >
+        #{skuType,jdbcType=INTEGER},
+      </if>
+      <if test="skuModel != null" >
+        #{skuModel,jdbcType=VARCHAR},
+      </if>
+      <if test="shopPrice != null" >
+        #{shopPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="supplier != null" >
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="useType != null" >
+        #{useType,jdbcType=INTEGER},
+      </if>
+      <if test="seriesId != null" >
+        #{seriesId,jdbcType=INTEGER},
+      </if>
+      <if test="ppsParentId != null" >
+        #{ppsParentId,jdbcType=INTEGER},
+      </if>
+      <if test="ppsSku != null" >
+        #{ppsSku,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsMultiattribute != null" >
+        #{ppsMultiattribute,jdbcType=BIT},
+      </if>
+      <if test="ppsCategoryId != null" >
+        #{ppsCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="ppsCategoryName != null" >
+        #{ppsCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsShoppingMallCategoryId != null" >
+        #{ppsShoppingMallCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="ppsShoppingMallCategoryName != null" >
+        #{ppsShoppingMallCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsGoodsTitle != null" >
+        #{ppsGoodsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsDescription != null" >
+        #{ppsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsOriginalPrice != null" >
+        #{ppsOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="ppsMemberPrice != null" >
+        #{ppsMemberPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="ppsDiscountPrice != null" >
+        #{ppsDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="ppsPicturePath != null" >
+        #{ppsPicturePath,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsVedioPath != null" >
+        #{ppsVedioPath,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsBrand != null" >
+        #{ppsBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsColorNumber != null" >
+        #{ppsColorNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsColorName != null" >
+        #{ppsColorName,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsSpecs != null" >
+        #{ppsSpecs,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsSize != null" >
+        #{ppsSize,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsWeight != null" >
+        #{ppsWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="ppsUnit != null" >
+        #{ppsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsLogisticsDescription != null" >
+        #{ppsLogisticsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsGuaranteeInstruction != null" >
+        #{ppsGuaranteeInstruction,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsAfterSaleInstructions != null" >
+        #{ppsAfterSaleInstructions,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="colorValue != null" >
+        #{colorValue,jdbcType=VARCHAR},
+      </if>
+      <if test="colorName != null" >
+        #{colorName,jdbcType=VARCHAR},
+      </if>
+      <if test="colorImgPath != null" >
+        #{colorImgPath,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsDetails != null" >
+        #{ppsDetails,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_order.entity.PurchaseSku" >
+    update purchase_sku
+    <set >
+      <if test="sku != null" >
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="picturePath != null" >
+        picture_path = #{picturePath,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null" >
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null" >
+        sku_type = #{skuType,jdbcType=INTEGER},
+      </if>
+      <if test="skuModel != null" >
+        sku_model = #{skuModel,jdbcType=VARCHAR},
+      </if>
+      <if test="shopPrice != null" >
+        shop_price = #{shopPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="supplier != null" >
+        supplier = #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="useType != null" >
+        use_type = #{useType,jdbcType=INTEGER},
+      </if>
+      <if test="seriesId != null" >
+        series_id = #{seriesId,jdbcType=INTEGER},
+      </if>
+      <if test="ppsParentId != null" >
+        pps_parent_id = #{ppsParentId,jdbcType=INTEGER},
+      </if>
+      <if test="ppsSku != null" >
+        pps_sku = #{ppsSku,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsMultiattribute != null" >
+        pps_multiattribute = #{ppsMultiattribute,jdbcType=BIT},
+      </if>
+      <if test="ppsCategoryId != null" >
+        pps_category_id = #{ppsCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="ppsCategoryName != null" >
+        pps_category_name = #{ppsCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsShoppingMallCategoryId != null" >
+        pps_shopping_mall_category_id = #{ppsShoppingMallCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="ppsShoppingMallCategoryName != null" >
+        pps_shopping_mall_category_name = #{ppsShoppingMallCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsGoodsTitle != null" >
+        pps_goods_title = #{ppsGoodsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsDescription != null" >
+        pps_description = #{ppsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsOriginalPrice != null" >
+        pps_original_price = #{ppsOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="ppsMemberPrice != null" >
+        pps_member_price = #{ppsMemberPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="ppsDiscountPrice != null" >
+        pps_discount_price = #{ppsDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="ppsPicturePath != null" >
+        pps_picture_path = #{ppsPicturePath,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsVedioPath != null" >
+        pps_vedio_path = #{ppsVedioPath,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsBrand != null" >
+        pps_brand = #{ppsBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsColorNumber != null" >
+        pps_color_number = #{ppsColorNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsColorName != null" >
+        pps_color_name = #{ppsColorName,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsSpecs != null" >
+        pps_specs = #{ppsSpecs,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsSize != null" >
+        pps_size = #{ppsSize,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsWeight != null" >
+        pps_weight = #{ppsWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="ppsUnit != null" >
+        pps_unit = #{ppsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsLogisticsDescription != null" >
+        pps_logistics_description = #{ppsLogisticsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsGuaranteeInstruction != null" >
+        pps_guarantee_instruction = #{ppsGuaranteeInstruction,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsAfterSaleInstructions != null" >
+        pps_after_sale_instructions = #{ppsAfterSaleInstructions,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="colorValue != null" >
+        color_value = #{colorValue,jdbcType=VARCHAR},
+      </if>
+      <if test="colorName != null" >
+        color_name = #{colorName,jdbcType=VARCHAR},
+      </if>
+      <if test="colorImgPath != null" >
+        color_img_path = #{colorImgPath,jdbcType=VARCHAR},
+      </if>
+      <if test="ppsDetails != null" >
+        pps_details = #{ppsDetails,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.gogirl.gogirl_order.entity.PurchaseSku" >
+    update purchase_sku
+    set sku = #{sku,jdbcType=VARCHAR},
+      picture_path = #{picturePath,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_type = #{skuType,jdbcType=INTEGER},
+      sku_model = #{skuModel,jdbcType=VARCHAR},
+      shop_price = #{shopPrice,jdbcType=DOUBLE},
+      purchase_price = #{purchasePrice,jdbcType=DOUBLE},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      use_type = #{useType,jdbcType=INTEGER},
+      series_id = #{seriesId,jdbcType=INTEGER},
+      pps_parent_id = #{ppsParentId,jdbcType=INTEGER},
+      pps_sku = #{ppsSku,jdbcType=VARCHAR},
+      pps_multiattribute = #{ppsMultiattribute,jdbcType=BIT},
+      pps_category_id = #{ppsCategoryId,jdbcType=INTEGER},
+      pps_category_name = #{ppsCategoryName,jdbcType=VARCHAR},
+      pps_shopping_mall_category_id = #{ppsShoppingMallCategoryId,jdbcType=INTEGER},
+      pps_shopping_mall_category_name = #{ppsShoppingMallCategoryName,jdbcType=VARCHAR},
+      pps_goods_title = #{ppsGoodsTitle,jdbcType=VARCHAR},
+      pps_description = #{ppsDescription,jdbcType=VARCHAR},
+      pps_original_price = #{ppsOriginalPrice,jdbcType=DECIMAL},
+      pps_member_price = #{ppsMemberPrice,jdbcType=DECIMAL},
+      pps_discount_price = #{ppsDiscountPrice,jdbcType=DECIMAL},
+      pps_picture_path = #{ppsPicturePath,jdbcType=VARCHAR},
+      pps_vedio_path = #{ppsVedioPath,jdbcType=VARCHAR},
+      pps_brand = #{ppsBrand,jdbcType=VARCHAR},
+      pps_color_number = #{ppsColorNumber,jdbcType=VARCHAR},
+      pps_color_name = #{ppsColorName,jdbcType=VARCHAR},
+      pps_specs = #{ppsSpecs,jdbcType=VARCHAR},
+      pps_size = #{ppsSize,jdbcType=VARCHAR},
+      pps_weight = #{ppsWeight,jdbcType=DOUBLE},
+      pps_unit = #{ppsUnit,jdbcType=VARCHAR},
+      pps_logistics_description = #{ppsLogisticsDescription,jdbcType=VARCHAR},
+      pps_guarantee_instruction = #{ppsGuaranteeInstruction,jdbcType=VARCHAR},
+      pps_after_sale_instructions = #{ppsAfterSaleInstructions,jdbcType=VARCHAR},
+      source = #{source,jdbcType=INTEGER},
+      color_value = #{colorValue,jdbcType=VARCHAR},
+      color_name = #{colorName,jdbcType=VARCHAR},
+      color_img_path = #{colorImgPath,jdbcType=VARCHAR},
+      pps_details = #{ppsDetails,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gogirl.gogirl_order.entity.PurchaseSku" >
+    update purchase_sku
+    set sku = #{sku,jdbcType=VARCHAR},
+      picture_path = #{picturePath,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_type = #{skuType,jdbcType=INTEGER},
+      sku_model = #{skuModel,jdbcType=VARCHAR},
+      shop_price = #{shopPrice,jdbcType=DOUBLE},
+      purchase_price = #{purchasePrice,jdbcType=DOUBLE},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      use_type = #{useType,jdbcType=INTEGER},
+      series_id = #{seriesId,jdbcType=INTEGER},
+      pps_parent_id = #{ppsParentId,jdbcType=INTEGER},
+      pps_sku = #{ppsSku,jdbcType=VARCHAR},
+      pps_multiattribute = #{ppsMultiattribute,jdbcType=BIT},
+      pps_category_id = #{ppsCategoryId,jdbcType=INTEGER},
+      pps_category_name = #{ppsCategoryName,jdbcType=VARCHAR},
+      pps_shopping_mall_category_id = #{ppsShoppingMallCategoryId,jdbcType=INTEGER},
+      pps_shopping_mall_category_name = #{ppsShoppingMallCategoryName,jdbcType=VARCHAR},
+      pps_goods_title = #{ppsGoodsTitle,jdbcType=VARCHAR},
+      pps_description = #{ppsDescription,jdbcType=VARCHAR},
+      pps_original_price = #{ppsOriginalPrice,jdbcType=DECIMAL},
+      pps_member_price = #{ppsMemberPrice,jdbcType=DECIMAL},
+      pps_discount_price = #{ppsDiscountPrice,jdbcType=DECIMAL},
+      pps_picture_path = #{ppsPicturePath,jdbcType=VARCHAR},
+      pps_vedio_path = #{ppsVedioPath,jdbcType=VARCHAR},
+      pps_brand = #{ppsBrand,jdbcType=VARCHAR},
+      pps_color_number = #{ppsColorNumber,jdbcType=VARCHAR},
+      pps_color_name = #{ppsColorName,jdbcType=VARCHAR},
+      pps_specs = #{ppsSpecs,jdbcType=VARCHAR},
+      pps_size = #{ppsSize,jdbcType=VARCHAR},
+      pps_weight = #{ppsWeight,jdbcType=DOUBLE},
+      pps_unit = #{ppsUnit,jdbcType=VARCHAR},
+      pps_logistics_description = #{ppsLogisticsDescription,jdbcType=VARCHAR},
+      pps_guarantee_instruction = #{ppsGuaranteeInstruction,jdbcType=VARCHAR},
+      pps_after_sale_instructions = #{ppsAfterSaleInstructions,jdbcType=VARCHAR},
+      source = #{source,jdbcType=INTEGER},
+      color_value = #{colorValue,jdbcType=VARCHAR},
+      color_name = #{colorName,jdbcType=VARCHAR},
+      color_img_path = #{colorImgPath,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

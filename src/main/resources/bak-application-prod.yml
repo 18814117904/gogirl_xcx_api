@@ -1,0 +1,46 @@
+wx:
+  ma:
+    appId: wxdfa614160f40492d
+    secret: cee8748c023b1b97859a047e95ebf14c
+swagger:
+   enable: false
+wechat: 
+   appid: wx7d344dc5ffd20745
+   secret: 71fbda40bff334fcce4aca284f788821
+   appid1: wx058b46db3cd0e979
+   secret1: 7f4d1707caf9abaaf0b37aa03e6674f3
+   appid2: wxdfa614160f40492d
+   secret2: cee8748c023b1b97859a047e95ebf14c
+spring:
+   datasource:
+      url: jdbc:mysql://cdb-554jnvol.gz.tencentcdb.com:10105/bailun_gogirl?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: "#7kfnymAM$Y9-Ntf"
+      driver-class-name: com.mysql.jdbc.Driver
+      hikari: 
+         read-only: false
+         connection-timeout: 60000
+         idle-timeout: 90000
+         validation-timeout: 3000
+         max-lifetime: 800000
+         login-timeout: 5
+         maximum-pool-size: 40
+         minimum-idle: 8
+         connection-test-query: "SELECT 1"
+gogirl:
+  GOGIRL: "http://127.0.0.1:8084/"
+  GOGIRLMP: "http://127.0.0.1:8088/"
+  notifyOrder: "http://begogirls.com/gogirl_xcx/pay/notifyOrder"
+  picturePath: "/usr/local/src/picture/grouppic/"
+picture-path: /usr/local/src/picture/grouppic/
+picture-prefix: http://134.175.167.230:80/picture/grouppic/
+store-url: http://127.0.0.1:8092/gogirl_xcx/
+technician-url: http://127.0.0.1:8092/gogirl_xcx/
+customer-url: http://127.0.0.1:8092/gogirl_xcx/
+scheduled_template: http://begogirls.com/gogirl_mp/wx/template/scheduledTemplateMsg
+scheduled_remind: http://begogirls.com/gogirl_mp/wx/template/scheduledRemindMsg
+to_pay: http://begogirls.com/gogirl_mp/wx/template/toBePayMsg
+ma_to_pay: http://begogirls.com/gogirl_mp/wx/ma/sendWaitForPayMsg
+evaluationMsg: http://begogirls.com/gogirl_mp/wx/template/evaluationMsg
+start-time: "10:00:00"
+end-time: "22:30:00"

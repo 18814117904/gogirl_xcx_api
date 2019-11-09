@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.dao.OrderCommentMapper">
+
+    <resultMap id="orderCommentDetail" type="com.gogirl.gogirl_order.order_commons.dto.OrderComment">
+        <result column="id" property="id" />
+        <result column="order_id" property="orderId"/>
+        <result column="order_serve_id" property="orderServeId"/>
+        <result column="user_id" property="userId"/>
+        <result column="level" property="level"/>
+        <result column="remark" property="remark"/>
+        <result column="picture_path" property="picturePath"/>
+        <result column="label_sticker" property="labelSticker"/>
+        <result column="finish_time" property="finishTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="status" property="status"/>
+        <result column="technician_id" property="technicianId"/>
+        
+        <result column="departmentName" property="departmentName"/>
+        <result column="orderNo" property="orderNo"/>
+        <association property="technicianManage" javaType="com.gogirl.gogirl_technician.technician_commons.dto.TechnicianManage">
+            <result column="tech_id" property="id"/>
+            <result column="tech_technician_no" property="technicianNo"/>
+            <result column="tech_name" property="name"/>
+            <result column="tech_picture_path" property="picturePath"/>
+            <result column="tech_openid" property="openid"/>
+        </association>
+        <association property="customer" javaType="com.gogirl.gogirl_user.entity.Customer">
+            <result column="cus_openid" property="openid"/>
+            <result column="cus_id" property="id"/>
+            <result column="cus_phone" property="phone"/>
+            <result column="cus_nickname" property="nickname"/>
+            <result column="cus_real_name" property="realName"/>
+            <result column="cus_store_record_real_name" property="storeRecordRealName"/>
+            <result column="cus_customer_source" property="customerSource"/>
+        </association>
+        <association property="orderServe" javaType="com.gogirl.gogirl_order.order_commons.dto.OrderServe">
+            <result column="orser_id" property="id"/>
+            <result column="orser_order_id" property="orderId"/>
+            <result column="orser_create_time" property="createTime"/>
+            <result column="orser_produce_name" property="produceName"/>
+            <result column="orser_serve_change_price" property="serveChangePrice"/>
+            <result column="orser_serve_price" property="servePrice"/>
+            <result column="orser_end_time" property="endTime"/>
+            <result column="orser_start_time" property="startTime"/>
+            <result column="orser_execution_status" property="executionStatus"/>
+            <result column="orser_comment_score" property="commentScore"/>
+            <association property="serve" javaType="com.gogirl.gogirl_service.entity.Serve">
+                <result column="ser_id" property="id" />
+                <result column="ser_name" property="name"/>
+                <result column="ser_type" property="type"/>
+                <result column="ser_label" property="label"/>
+                <result column="ser_shop_sort" property="shopSort"/>
+                <result column="ser_price" property="price"/>
+                <result column="ser_picture_path" property="picturePath"/>
+                <result column="ser_status" property="status"/>
+                <result column="ser_remark" property="remark"/>
+                <result column="ser_details" property="details"/>
+                <result column="ser_service_duration" property="serviceDuration"/>
+            </association>
+        </association>
+        <collection property="listOrderCommentLabel" ofType="com.gogirl.gogirl_order.order_commons.dto.OrderCommentLabel"  column="id"
+        select="queryListOrderCommentLabel"></collection>
+    </resultMap>
+    <resultMap id="OrderCommentLabelMap" type="com.gogirl.gogirl_order.order_commons.dto.OrderCommentLabel">
+        <result column="label_id" property="id"></result>
+        <result column="label_name" property="name"></result>
+	</resultMap>    
+    <sql id="orderCommentSql">
+        oc.id, oc.order_id, oc.order_serve_id, oc.user_id, oc.level, oc.remark, oc.picture_path, oc.label_sticker, oc.finish_time, oc.create_time, oc.status, oc.technician_id
+    </sql>
+    <sql id="orderServeSql">
+        orser.id orser_id, orser.order_id orser_order_id, orser.create_time orser_create_time,
+        orser.produce_name orser_produce_name, orser.serve_change_price orser_serve_change_price, orser.serve_price orser_serve_price,
+        orser.end_time orser_end_time, orser.start_time orser_start_time, orser.execution_status orser_execution_status,orser.comment_score orser_comment_score
+    </sql>
+    <sql id="serveSql">
+        ser.id ser_id, ser.name ser_name,ser.type ser_type, ser.label ser_label, ser.shop_sort ser_shop_sort, ser.price ser_price, ser.picture_path ser_picture_path, ser.status ser_status, ser.remark ser_remark, ser.details ser_details, ser.service_duration ser_service_duration
+    </sql>
+    <sql id="technicianSql">
+        tech.id tech_id, tech.technician_no tech_technician_no, tech.name tech_name
+    </sql>
+    <select id="queryListOrderCommentLabel" resultMap="OrderCommentLabelMap">
+        select
+        ocl.id label_id , ocl.name label_name
+        from
+        order_comment_label ocl
+        left join order_comment_relevance_label ocrl on ocrl.comment_label_id=ocl.id
+        where ocrl.order_comment_id = #{id}
+    </select>
+
+    <select id="listOrderCommentForListDetail" resultMap="orderCommentDetail">
+        select
+        <include refid="orderCommentSql"/>,
+        <include refid="orderServeSql"/>,
+        <include refid="serveSql"/>,
+        <include refid="technicianSql"/>
+        from
+        order_serve orser
+        left join order_comment oc on oc.order_id = orser.order_id
+        left join base_serve ser on orser.serve_id = ser.id
+        left join store_technician tech on find_in_set(tech.id,orser.technician_id)
+        where orser.order_id = #{orderId}
+        order by oc.create_time desc
+    </select>
+    <select id="listOrderServeCommentForListDetail" resultMap="orderCommentDetail">
+        select
+        <include refid="orderCommentSql"/>,
+        <include refid="orderServeSql"/>,
+        <include refid="serveSql"/>,
+        <include refid="technicianSql"/>
+        from
+        order_serve orser
+        left join order_comment oc on oc.order_id = orser.order_id
+        left join base_serve ser on orser.serve_id = ser.id
+        left join store_technician tech on find_in_set(tech.id,orser.technician_id)
+        where orser.id = #{orderServeId}
+        order by oc.create_time desc
+    </select>
+    <select id="queryMyCommentForPage" resultMap="orderCommentDetail">
+        select
+        <include refid="orderCommentSql"/>,
+        <include refid="orderServeSql"/>,
+        <include refid="serveSql"/>,
+        <include refid="technicianSql"/>
+        from
+        order_comment oc
+        left join order_serve orser on oc.order_id = orser.order_id
+        left join base_serve ser on orser.serve_id = ser.id
+        left join store_technician tech on find_in_set(tech.id,orser.technician_id)
+        where oc.technician_id = #{technicianId}
+        order by create_time desc
+    </select>
+    
+    
+    
+    
+    <select id="listOrderCommentForPage" resultMap="orderCommentDetail">
+        select
+        <include refid="orderCommentSql"/>,
+        <include refid="orderServeSql"/>,
+        <include refid="serveSql"/>,
+        <include refid="technicianSql"/>
+        from
+        order_comment oc
+        left join order_serve orser on oc.order_id = orser.order_id
+        left join base_serve ser on orser.serve_id = ser.id
+        left join store_technician tech on tech.id = orser.technician_id
+        where 1 =1
+        <if test="userId != null">
+            and oc.order_id in (select id from order_manage where (status = 3 or status = 4) and order_user = #{userId})
+        </if>
+        <if test="technicianId != null">
+        	and oc.technician_id = #{technicianId}
+        </if>
+        <if test="status != null">
+            and oc.status = #{status}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="listOrderCommentForCMS" resultMap="orderCommentDetail">
+        select
+        <include refid="orderCommentSql"/>, sm2.name as departmentName, om2.order_no orderNo,
+        cus.id cus_id, cus.openid openid, cus.phone cus_phone, cus.nickname cus_nickname, cus.real_name cus_real_name, cus.store_record_real_name cus_store_record_real_name,
+        lab.name label_name
+        from order_comment oc
+        left join order_manage om2 on oc.order_id = om2.id
+        left join store_manage sm2 on om2.department_id = sm2.id
+        left join customer cus on cus.id = om2.order_user
+        left join order_comment_label lab on find_in_set(lab.id, oc.label_sticker)
+        where oc.status = 2
+        <if test="departmentId != null">
+            and om2.department_id = #{departmentId}
+        </if>
+        order by finish_time desc
+    </select>
+
+    <select id="getOrderCommentForDetail" resultMap="orderCommentDetail">
+        select
+        <include refid="orderCommentSql"/>
+        from
+        order_comment oc
+        where order_id = #{orderId} limit 1
+    </select>
+
+    <update id="updateOrderComment" >
+        update order_comment
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="level != null">
+                level = #{level},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="picturePath != null and picturePath != ''">
+                picture_path = #{picturePath},
+            </if>
+            <if test="labelSticker != null and labelSticker != ''">
+                label_sticker = #{labelSticker},
+            </if>
+            <if test="finishTime != null">
+                finish_time = #{finishTime},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+    <insert id="insertOrderComment" parameterType="com.gogirl.gogirl_order.order_commons.dto.OrderComment">
+        insert into
+        order_comment
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="orderServeId != null">
+                order_serve_id,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+            <if test="picturePath != null and picturePath != ''">
+                picture_path,
+            </if>
+            <if test="labelSticker != null and labelSticker != ''">
+                label_sticker,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="technicianId != null">
+                technician_id,
+            </if>
+            <if test="status != null">
+                status
+            </if>
+        </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides="," >
+                <if test="orderId != null">
+                    #{orderId},
+                </if>
+                <if test="orderServeId != null">
+                    #{orderServeId},
+                </if>
+                <if test="level != null">
+                    #{level},
+                </if>
+                <if test="remark != null and remark != ''">
+                    #{remark},
+                </if>
+                <if test="picturePath != null and picturePath != ''">
+                    #{picturePath},
+                </if>
+                <if test="labelSticker != null and labelSticker != ''">
+                    #{labelSticker},
+                </if>
+                <if test="createTime != null ">
+                    #{createTime},
+                </if>
+            <if test="technicianId != null">
+                #{technicianId},
+            </if>
+                <if test="status != null">
+                    #{status}
+                </if>
+            </trim>
+ 		 <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+		  SELECT @@IDENTITY AS id
+		 </selectKey>                
+    </insert>
+</mapper>

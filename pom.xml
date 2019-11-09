@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.gogirl</groupId>
+  <artifactId>gogirl_xcx</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>gogirl_xcx Maven Webapp</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.3.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<dependencies>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.mybatis.spring.boot</groupId>
+		    <artifactId>mybatis-spring-boot-starter</artifactId>
+		    <version>1.3.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		 </dependency>
+		<dependency>
+		    <groupId>com.github.pagehelper</groupId>
+		    <artifactId>pagehelper-spring-boot-starter</artifactId>
+		    <version>1.2.5</version>
+		</dependency>
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency> 
+        <!-- -->
+        <dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20180130</version>
+		</dependency>
+
+
+
+<dependency>
+  <groupId>com.github.qcloudsms</groupId>
+  <artifactId>qcloudsms</artifactId>
+  <version>1.0.6</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+<dependency>
+    <groupId>com.thoughtworks.xstream</groupId>
+    <artifactId>xstream</artifactId>
+    <version>1.4.10</version>
+</dependency>
+<!-- yin order lombok.extern.slf4j.Slf4j;  log -->
+  <dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+  <!-- yin poi -->
+       <dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.15</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.47</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+		
+<!-- service -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20180813</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+   <!-- 微信小程序加密数据解密算法 --> 
+<dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcprov-jdk16</artifactId>
+    <version>1.46</version>
+</dependency>
+
+
+<!-- 自动生成接口文档 -->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>2.9.2</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger-ui</artifactId>
+    <version>2.9.2</version>
+</dependency>
+
+
+	<dependency>
+		<groupId>org.gavaghan</groupId>
+		<artifactId>geodesy</artifactId>
+		<version>1.1.3</version>
+	</dependency>
+
+
+<dependency>
+  <groupId>com.qiniu</groupId>
+  <artifactId>qiniu-java-sdk</artifactId>
+  <version>[7.2.0, 7.2.99]</version>
+</dependency>
+<!-- 小程序 -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
+	<!-- 数据库连接池 -->
+	<dependency>         
+		<groupId>com.alibaba</groupId>      
+		<artifactId>druid</artifactId>        
+		<version>1.1.12</version>     
+	</dependency>              
+
+ <dependency>
+     <groupId>log4j</groupId>
+     <artifactId>log4j</artifactId>
+     <version>1.2.17</version>
+ </dependency>
+ 
+ 		<dependency>
+		 <groupId>QRCode</groupId>
+		 <artifactId>QRCode</artifactId>
+		 <version>3.0</version>
+		</dependency>
+ 
+  </dependencies>
+		
+		
+  <build>
+    <finalName>gogirl_xcx</finalName>
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
+  <!---->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>2.1</version>
+    <configuration>
+        <skip>true</skip>
+    </configuration>
+</plugin>
+<plugin>
+    <groupId>org.mybatis.generator</groupId>
+    <artifactId>mybatis-generator-maven-plugin</artifactId>
+    <version>1.3.1</version>
+    <configuration>
+    </configuration>
+</plugin>
+
+	</plugins>
+     <resources>
+         <resource>
+             <directory>src/main/java</directory>
+             <includes>
+                 <include>**/*.xml</include>
+             </includes>
+         </resource>
+        <resource>
+            <directory>src/main/resources</directory>
+        </resource>
+     </resources>
+  </build>
+</project>

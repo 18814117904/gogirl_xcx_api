@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.dao.OrderCommentRelevanceLabelMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_order.entity.OrderCommentRelevanceLabel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_comment_id" property="orderCommentId" jdbcType="INTEGER" />
+    <result column="comment_label_id" property="commentLabelId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_comment_id, comment_label_id
+  </sql>
+
+  <insert id="insertList" parameterType="com.gogirl.gogirl_order.entity.OrderCommentRelevanceLabel" >
+    insert into order_comment_relevance_label (order_comment_id, comment_label_id
+      )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+        #{item.orderCommentId},
+        #{item.commentLabelId}
+      )
+    </foreach>
+  </insert>
+
+</mapper>

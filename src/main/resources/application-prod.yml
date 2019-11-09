@@ -1,0 +1,55 @@
+wx:
+  ma:
+    appId: wxdfa614160f40492d
+    secret: cee8748c023b1b97859a047e95ebf14c
+swagger:
+   enable: false
+wechat: 
+   appid: wx7d344dc5ffd20745
+   secret: 71fbda40bff334fcce4aca284f788821
+   appid1: wx058b46db3cd0e979
+   secret1: 7f4d1707caf9abaaf0b37aa03e6674f3
+   appid2: wxdfa614160f40492d
+   secret2: cee8748c023b1b97859a047e95ebf14c
+spring:
+   datasource:
+      url: jdbc:mysql://gz-cdb-c0sq6eax.sql.tencentcdb.com:60779/bailun_gogirl?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: "#7kfnymAM$Y9-Ntf"
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,log4j
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+gogirl:
+  GOGIRL: "http://127.0.0.1:8084/"
+  GOGIRLMP: "http://127.0.0.1:8088/"
+  notifyOrder: "http://begogirls.com/gogirl_xcx/pay/notifyOrder"
+  notifyCharge: "http://begogirls.com/gogirl_xcx/pay/notifyCharge"
+  notifyTimesCard: "http://begogirls.com/gogirl_xcx/timescard/notifyTimesCard"
+  picturePath: "/usr/local/src/picture/grouppic/"
+picture-path: /usr/local/src/picture/grouppic/
+picture-prefix: http://134.175.167.230:80/picture/grouppic/
+store-url: http://127.0.0.1:8092/gogirl_xcx/
+technician-url: http://127.0.0.1:8092/gogirl_xcx/
+customer-url: http://127.0.0.1:8092/gogirl_xcx/
+scheduled_template: http://begogirls.com/gogirl_mp/wx/template/scheduledTemplateMsg
+scheduled_remind: http://begogirls.com/gogirl_mp/wx/template/scheduledRemindMsg
+to_pay: http://begogirls.com/gogirl_mp/wx/template/toBePayMsg
+ma_to_pay: http://begogirls.com/gogirl_mp/wx/ma/sendWaitForPayMsg
+evaluationMsg: http://begogirls.com/gogirl_mp/wx/template/evaluationMsg
+start-time: "10:00:00"
+end-time: "22:30:00"

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_service.dao.user.UserMapper">
+
+    <sql id="baseSql">
+        id, name, password, department_id departmentId, telphone, sex, grade, integral, last_login_time lastLoginTime,user_role userRole
+    </sql>
+
+    <sql id="buSql">
+        bu.id, bu.name, bu.password, bu.department_id departmentId, bu.telphone, bu.sex, bu.grade, bu.integral, bu.last_login_time lastLoginTime, bu.user_role userRole
+    </sql>
+
+    <select id="listUserForPage" resultType="com.gogirl.gogirl_service.entity.User">
+        select
+        <include refid="buSql"/>,
+        sm.id departmentId, sm.name departmentName
+        from base_user bu
+        left join store_manage sm on sm.id = bu.department_id
+        where 1 = 1
+        <if test="id != null">
+            and bu.id = #{id}
+        </if>
+        <if test="name != null">
+            and bu.name like '%${name}%'
+        </if>
+        <if test="telphone != null ">
+            and bu.telphone = #{telphone}
+        </if>
+        <if test="sex != null">
+            and bu.sex = #{sex}
+        </if>
+        <if test="grade != null">
+            and bu.grade = #{grade}
+        </if>
+        <if test="integral != null">
+            and bu.integral = #{integral}
+        </if>
+        <if test="lastLoginTime != null">
+            and bu.last_login_time = #{lastLoginTime}
+        </if>
+    </select>
+
+    <select id="getUserForCheck" resultType="com.gogirl.gogirl_service.entity.User">
+        select
+        <include refid="baseSql"/>
+        from base_user
+        where
+        1 = 1
+        <if test="name != null">
+           and  name = #{name}
+        </if>
+        <if test="password != null">
+            and password = #{password}
+        </if>
+    </select>
+
+    <select id="getUserForDetail" resultType="com.gogirl.gogirl_service.entity.User">
+        select
+        <include refid="buSql"/>,
+        brp.permission_list permissionList
+        from base_user bu
+        left join base_role_permission brp on bu.user_role = brp.id
+        where
+        bu.id = #{id}
+    </select>
+
+    <update id="updateLoginTime">
+        update base_user set
+       last_login_time = now()
+       where
+        id = #{id}
+    </update>
+
+    <!--<insert id="synrepalce">
+        replace into serve(label)
+        values
+        <foreach collection ="list" item="reddemCode" index= "index" separator =",">
+            ( #{reddemCode.label})
+        </foreach>
+    </insert>-->
+
+    <update id="updateUser">
+        update base_user
+        <set >
+            <trim suffixOverrides=",">
+
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="telphone != null ">
+                telphone = #{telphone},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="grade != null">
+                grade = #{grade},
+            </if>
+            <if test="integral != null">
+                integral = #{integral},
+            </if>
+                <if test="departmentId != null">
+                    department_id  = #{departmentId},
+                </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime}
+            </if>
+                <if test="userRole != null and userRole != ''">
+                    user_role = #{userRole}
+                </if>
+            </trim>
+            where id = #{id}
+        </set>
+    </update>
+
+    <delete id="deleteUser">
+        delete from
+        base_user
+        where id = #{id}
+    </delete>
+
+    <insert id="insertUser">
+        insert into base_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                 id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="departmentId != null">
+                department_id,
+            </if>
+            <if test="telphone != null ">
+                telphone,
+            </if>
+            <if test="sex != null">
+                 sex,
+            </if>
+            <if test="grade != null">
+                 grade,
+            </if>
+            <if test="integral != null">
+                 integral,
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time,
+            </if>
+            <if test="userRole != null and userRole != ''">
+                user_role
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId},
+            </if>
+            <if test="telphone != null ">
+                #{telphone},
+            </if>
+            <if test="sex != null">
+                #{sex},
+            </if>
+            <if test="grade != null">
+                #{grade},
+            </if>
+            <if test="integral != null">
+                #{integral},
+            </if>
+            <if test="lastLoginTime != null">
+                #{lastLoginTime}
+            </if>
+            <if test="userRole != null and userRole != ''">
+                #{userRole}
+            </if>
+        </trim>
+    </insert>
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_xcx.dao.GogirlTokenMapper" >
+  <resultMap id="BaseResultMap" type="com.gogirl.gogirl_xcx.entity.GogirlToken" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sys_id" property="sysId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="unionid" property="unionid" jdbcType="VARCHAR" />
+    <result column="session_key" property="sessionKey" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+	<association property="customer" javaType="com.gogirl.gogirl_user.entity.Customer">
+		<id column="cid" property="id" jdbcType="INTEGER" />
+		<result column="cunionid" property="unionid" jdbcType="VARCHAR" />
+		<result column="copenid" property="openid" jdbcType="VARCHAR" />
+		<result column="copenid1" property="openid1" jdbcType="VARCHAR" />
+		<result column="cphone" property="phone" jdbcType="VARCHAR" />
+		<result column="cstore_record_real_name" property="storeRecordRealName" jdbcType="VARCHAR" />
+	</association>
+	<association property="userTechnician" javaType="com.gogirl.gogirl_technician.technician_commons.dto.UserTechnician">
+        <result property="id" column="ssaid"/>
+        <result property="technicianId" column="sttechnician_id"/>
+        <result property="openid" column="stopenid"/>
+        <result property="mobile" column="stmobile"/>
+        <result property="name" column="stname"/>
+        <result property="departmentId" column="stdepartment_id"/>
+        <result property="departmentName" column="stdepartment_name"/>
+        <result property="picturePath" column="stpicture_path"/>
+        <result property="status" column="sttech_status"/>
+        <result property="userId" column="stuser_id"/>
+    	<result property="jobs" column="jobs" jdbcType="VARCHAR" />
+	</association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    gt.id,gt.sys_id,gt.customer_id, gt.token,code, gt.create_time, gt.update_time,gt.openid,gt.unionid,gt.session_key,gt.phone,
+    c.id cid,c.unionid cunionid,c.openid copenid,c.openid1 copenid1,c.phone cphone,c.store_record_real_name cstore_record_real_name
+  </sql>
+  <sql id="Base_Column_List_T">
+gt.id,gt.sys_id,gt.customer_id, gt.token,code, gt.create_time, gt.update_time,gt.openid,gt.unionid,gt.session_key,gt.phone,
+ssa.id ssaid,st.id sttechnician_id,st.openid stopenid, st.name stname, ssa.store_id stdepartment_id,st.mobile stmobile, st.picture_path stpicture_path, st.status ststatus
+,sm.name stdepartment_name,st.user_id stuser_id
+  </sql>
+  
+  <select id="selectByToken" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from gogirl_token gt
+    left join customer c on c.id = gt.customer_id
+    where token = #{token,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByToken_t" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List_T" />,suser.jobs jobs
+    from gogirl_token gt
+    left join staff_store_authority ssa on ssa.id = gt.customer_id
+    left join store_manage sm on sm.id = ssa.store_id
+    left join store_technician st on st.user_id = ssa.user_id
+    left join store_user suser on suser.id = ssa.user_id
+    where token = #{token,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCustomerId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gogirl_token gt
+    left join customer c on c.id = gt.customer_id
+    where customer_id = #{customerId,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.gogirl.gogirl_xcx.entity.GogirlToken" >
+    insert into gogirl_token
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysId != null" >
+        sys_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="token != null" >
+        token,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="unionid != null" >
+        unionid,
+      </if>
+      <if test="sessionKey != null" >
+        session_key,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysId != null" >
+        #{sysId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="unionid != null" >
+        #{unionid,jdbcType=VARCHAR},
+      </if>
+      <if test="sessionKey != null" >
+        #{sessionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gogirl.gogirl_xcx.entity.GogirlToken" >
+    update gogirl_token
+    <set >
+      <if test="sysId != null" >
+        sys_id = #{sysId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="unionid != null" >
+        unionid = #{unionid,jdbcType=VARCHAR},
+      </if>
+      <if test="sessionKey != null" >
+        session_key = #{sessionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

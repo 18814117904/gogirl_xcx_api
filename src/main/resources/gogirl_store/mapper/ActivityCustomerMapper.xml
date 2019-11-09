@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_store.store_activity.dao.ActivityCustomerMapper">
+
+    <resultMap id="storeActivityCustomer" type="com.gogirl.gogirl_store.store_commons.dto.ActivityCustomer">
+        <result column="id" property="id"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="activity_id" property="activityId"/>
+        <result column="participation_time" property="participationTime"/>
+        <result column="collect_time" property="collectTime"/>
+        <result column="status" property="status"/>
+        <association property="customer" javaType="com.gogirl.gogirl_store.store_commons.dto.Customer">
+            <!--<id column="id" property="id" jdbcType="INTEGER" />-->
+            <result column="openid" property="openid" jdbcType="CHAR" />
+            <result column="phone" property="phone" jdbcType="CHAR" />
+            <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+            <result column="real_name" property="realName" jdbcType="VARCHAR" />
+            <result column="store_record_real_name" property="storeRecordRealName" jdbcType="VARCHAR" />
+        </association>
+    </resultMap>
+
+    <sql id="baseSql">
+        id, customer_id, activity_id, participation_time, collect_time, status
+    </sql>
+
+    <sql id="Sql">
+        ac.id, ac.customer_id, ac.activity_id, ac.participation_time, ac.collect_time, ac.status, ct.store_record_real_name, ct.real_name, ct.nickname, ct.phone
+    </sql>
+
+    <select id="listActivityCustomerForPage" resultMap="storeActivityCustomer">
+        select
+        <include refid="Sql"/>
+        from activity_customer ac
+        left join customer ct on ac.customer_id = ct.id
+        where 1 = 1
+        <if test="customerId != null">
+            and ac.customer_id = #{customerId}
+        </if>
+        <if test="participationTime != null">
+            and ac.participation_time = #{participationTime}
+        </if>
+        <if test="collectTime != null">
+            and ac.collect_time = #{collectTime}
+        </if>
+            and ac.participation_time is not null
+    </select>
+
+    <select id="getUserManageForDetail" resultMap="storeActivityCustomer">
+        select
+        <include refid="baseSql"/>
+        from activity_customer
+        where
+        id = #{id}
+    </select>
+
+    <select id="checkActivityCustomer" resultMap="storeActivityCustomer">
+        select
+        <include refid="baseSql"/>
+        from activity_customer
+        where
+        customer_id = #{customerId}
+        and activity_id = #{activityId}
+        limit 1
+    </select>
+
+    <delete id="deleteUserManageById">
+        delete from activity_customer where id = #{id}
+    </delete>
+
+    <update id="updateActivityCustomer">
+        update activity_customer
+        <set>
+            <if test="customerId != null">
+                customer_id = #{customerId},
+            </if>
+            <if test="participationTime != null">
+                participation_time = #{participationTime},
+            </if>
+            <if test="collectTime != null">
+                collect_time = #{collectTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateCustomerStatus">
+        update activity_customer
+        <set>
+            <if test="participationTime != null">
+                participation_time = #{participationTime},
+            </if>
+            <if test="collectTime != null">
+                collect_time = #{collectTime},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insertActivityCustomer" parameterType="com.gogirl.gogirl_store.store_commons.dto.ActivityCustomer">
+        insert into activity_customer
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="customerId != null">
+                customer_id,
+            </if>
+            <if test="activityId != null">
+                activity_id,
+            </if>
+            <if test="participationTime != null">
+                participation_time,
+            </if>
+            <if test="collectTime != null">
+                collect_time,
+            </if>
+            <if test="status != null">
+                status
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="customerId != null">
+                #{customerId},
+            </if>
+            <if test="activityId != null">
+                #{activityId},
+            </if>
+            <if test="participationTime != null">
+                #{participationTime},
+            </if>
+            <if test="collectTime != null">
+                #{collectTime},
+            </if>
+            <if test="status != null">
+                #{status}
+            </if>
+        </trim>
+    </insert>
+</mapper>

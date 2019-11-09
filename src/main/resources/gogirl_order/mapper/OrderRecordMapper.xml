@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gogirl.gogirl_order.order_manage.dao.OrderRecordMapper">
+
+    <sql id="baseSql">
+        id, order_serve_id orderServeId,fix_hour fixHour,is_time_out isTimeOut,link_cause linkCause,user_feedback userFeedback,technician_feedback technicianFeedback,picture_path picturePath,
+        existing_problems existingProblems, solution,is_guest_photo isGuestPhoto,after_sale_feedback afterSaleFeedback
+    </sql>
+
+    <select id="listOrderRecord" resultType="com.gogirl.gogirl_order.order_commons.dto.OrderRecord">
+        select
+        <include refid="baseSql"/>
+        from order_record
+        where 1 = 1
+        <if test="orderServeId != null">
+            and order_serve_id = #{orderServeId}
+        </if>
+        <if test="fixHour != null">
+            and fix_hour = #{fixHour}
+        </if>
+        <if test="isTimeOut != null">
+            and is_time_out = #{isTimeOut}
+        </if>
+        <if test="linkCause != null and linkCause != ''">
+            and link_cause = #{linkCause}
+        </if>
+        <if test="userFeedback != null and userFeedback != ''">
+            and user_feedback = #{userFeedback}
+        </if>
+        <if test="technicianFeedback != null and technicianFeedback != null">
+            and technician_feedback = #{technicianFeedback}
+        </if>
+        <if test="picturePath != null and picturePath != ''">
+            and picture_path like concat("%",#{picturePath},"%")
+        </if>
+        <if test="existingProblems != null and existingProblems != ''">
+            and existing_problems = #{existingProblems}
+        </if>
+        <if test="solution != null and solution != ''">
+            and solution = #{solution}
+        </if>
+        <if test="afterSaleFeedback != null and afterSaleFeedback != ''">
+            and after_sale_feedback = #{afterSaleFeedback}
+        </if>
+    </select>
+
+    <select id="listOrderRecordByOrderId" resultType="com.gogirl.gogirl_order.order_commons.dto.OrderRecord">
+        select
+        <include refid="baseSql"/>
+        from order_record
+        where 1 = 1
+        and order_serve_id in(select id from order_serve where order_id = #{orderId})
+    </select>
+
+    <delete id="deleteOrderRecord">
+        delete from order_record
+        where order_serve_id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="getOrderRecord" resultType="com.gogirl.gogirl_order.order_commons.dto.OrderRecord">
+        select
+        <include refid="baseSql"/>
+        from order_record
+        where order_serve_id = #{orderServeId}
+    </select>
+
+    <update id="updateOrderRecord">
+        update order_record
+        <trim prefix="set" suffixOverrides=",">
+            <if test="fixHour != null">
+                fix_hour = #{fixHour},
+            </if>
+            <if test="isTimeOut != null">
+                is_time_out = #{isTimeOut},
+            </if>
+            <if test="linkCause != null and linkCause != ''">
+                link_cause = #{linkCause},
+            </if>
+            <if test="userFeedback != null and userFeedback != ''">
+                user_feedback = #{userFeedback},
+            </if>
+            <if test="technicianFeedback != null and technicianFeedback != null">
+                technician_feedback = #{technicianFeedback},
+            </if>
+                picture_path = #{picturePath},
+            <if test="existingProblems != null and existingProblems != ''">
+                existing_problems = #{existingProblems},
+            </if>
+            <if test="solution != null and solution != ''">
+                solution = #{solution},
+            </if>
+            <if test="isGuestPhoto != null">
+                is_guest_photo = #{isGuestPhoto},
+            </if>
+            <if test="afterSaleFeedback != null and afterSaleFeedback != ''">
+                after_sale_feedback = #{afterSaleFeedback}
+            </if>
+        </trim>
+        where order_serve_id = #{orderServeId}
+    </update>
+
+    <insert id="insertOrderRecord" parameterType="com.gogirl.gogirl_order.order_commons.dto.OrderRecord">
+        insert into order_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderServeId != null">
+                order_serve_id,
+            </if>
+            <if test="fixHour != null">
+                fix_hour,
+            </if>
+            <if test="isTimeOut != null">
+                is_time_out,
+            </if>
+            <if test="linkCause != null and linkCause != ''">
+                link_cause,
+            </if>
+            <if test="userFeedback != null and userFeedback != ''">
+                user_feedback,
+            </if>
+            <if test="technicianFeedback != null and technicianFeedback != null">
+                technician_feedback,
+            </if>
+                picture_path,
+            <if test="existingProblems != null and existingProblems != ''">
+                existing_problems,
+            </if>
+            <if test="solution != null and solution != ''">
+                solution,
+            </if>
+            <if test="isGuestPhoto != null">
+                is_guest_photo,
+            </if>
+            <if test="afterSaleFeedback != null and afterSaleFeedback != ''">
+                after_sale_feedback
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="orderServeId != null">
+                #{orderServeId},
+            </if>
+            <if test="fixHour != null">
+                #{fixHour},
+            </if>
+            <if test="isTimeOut != null">
+                #{isTimeOut},
+            </if>
+            <if test="linkCause != null and linkCause != ''">
+                #{linkCause},
+            </if>
+            <if test="userFeedback != null and userFeedback != ''">
+                #{userFeedback},
+            </if>
+            <if test="technicianFeedback != null and technicianFeedback != null">
+                #{technicianFeedback},
+            </if>
+                #{picturePath},
+            <if test="existingProblems != null and existingProblems != ''">
+                #{existingProblems},
+            </if>
+            <if test="solution != null and solution != ''">
+                #{solution},
+            </if>
+            <if test="isGuestPhoto != null">
+                #{isGuestPhoto},
+            </if>
+            <if test="afterSaleFeedback != null and afterSaleFeedback != ''">
+                #{afterSaleFeedback}
+            </if>
+        </trim>
+    </insert>
+
+</mapper>
