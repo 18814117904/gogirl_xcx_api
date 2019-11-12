@@ -45,7 +45,6 @@
             <result column="us_id" property="id"/>
             <result column="us_name" property="name"/>
             <result column="us_no" property="no"/>
-            <result column="us_department_id" property="departmentId"/>
             <result column="us_jobs" property="jobs"/>
             <result column="us_create_time" property="createTime"/>
             <result column="us_mobile" property="mobile"/>
@@ -278,7 +277,7 @@
         cus.id cus_id,cus.openid cus_openid,cus.openid1 cus_openid1, cus.phone cus_phone, cus.nickname cus_nickname, cus.real_name cus_real_name, cus.store_record_real_name cus_store_record_real_name,cus.customer_source cus_customer_source
     </sql>
     <sql id="userManageSql">
-        us.id us_id, us.name us_name, us.no us_no, us.department_id us_department_id, us.jobs us_jobs, us.create_time us_create_time, us.mobile us_mobile
+        us.id us_id, us.name us_name, us.no us_no, us.jobs us_jobs, us.create_time us_create_time, us.mobile us_mobile
     </sql>
   <sql id="orderServeSkuSql" >
    ossku.id ossku_id,ossku.order_serve_id ossku_order_serve_id,ossku.sku_id ossku_sku_id,ossku.type ossku_type,ossku.count ossku_count
@@ -663,21 +662,7 @@ select orser.technician_id technician_id,count(ord.id) serving_count
         left join order_record orre on orser.id = orre.order_serve_id
         left join coupon_order_relevance cor on cor.order_id = ord.id and (cor.status = 1 or cor.status = 2)
         left join coupon cou on cou.id = cor.coupon_id
-        where ord.id = #{id} 
-<!--        select
-        <include refid="orderSql"/>,scm.scheduled_time, scm.arrive_time,
-        cus.id cus_id, cus.openid openid, cus.phone cus_phone, cus.nickname cus_nickname, cus.real_name cus_real_name, cus.store_record_real_name cus_store_record_real_name, sm.name as department_name,
-        us.id us_id, us.name us_name, us.no us_no, us.department_id us_department_id, us.jobs us_jobs, us.create_time us_create_time, us.mobile us_mobile, coup.discount_amount coupon_relevance_price
-        from
-        order_manage ord
-        left join customer cus on cus.id = ord.order_user or cus.phone = ord.telephone
-        left join store_manage sm on ord.department_id = sm.id
-        left join coupon_customer_relevance ccr on ord.coupon_relevance_id = ccr.id
-        left join coupon coup on coup.id = ccr.coupon_id
-        left join store_user us on us.id = ord.open_order_user
-        left join scheduled_manage scm on scm.id = ord.scheduled_id
-        where --> 
-        
+        where ord.id = #{id}
     </select>
     <select id="getOrderForOrderNo" resultMap="orderDetail">
         select

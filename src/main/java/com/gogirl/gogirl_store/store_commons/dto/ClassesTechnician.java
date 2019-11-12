@@ -21,8 +21,8 @@ public class ClassesTechnician {
     private ClassesManage classesManage;
 
     private TechnicianManage technicianManage;
-
-    private List<ScheduleServe> listScheduleServe;
+//
+//    private List<ScheduleServe> listScheduleServe;
 
     public Integer getId() {
         return id;
@@ -82,13 +82,13 @@ public class ClassesTechnician {
         this.technicianManage = technicianManage;
     }
 
-    public List<ScheduleServe> getListScheduleServe() {
-        return listScheduleServe;
-    }
-
-    public void setListScheduleServe(List<ScheduleServe> listScheduleServe) {
-        this.listScheduleServe = listScheduleServe;
-    }
+//    public List<ScheduleServe> getListScheduleServe() {
+//        return listScheduleServe;
+//    }
+//
+//    public void setListScheduleServe(List<ScheduleServe> listScheduleServe) {
+//        this.listScheduleServe = listScheduleServe;
+//    }
 
     @Override
     public String toString() {
@@ -100,7 +100,7 @@ public class ClassesTechnician {
                 ", status=" + status +
                 ", classesManage=" + classesManage +
                 ", technicianManage=" + technicianManage +
-                ", listScheduleServe=" + listScheduleServe +
+//                ", listScheduleServe=" + listScheduleServe +
                 '}';
     }
 }

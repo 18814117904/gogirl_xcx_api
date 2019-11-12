@@ -32,6 +32,7 @@
 	        <result property="score" column="tech_score"/>
 	        <result property="userId" column="tech_user_id"/>
         </association>
+        <!-- 
         <collection property="listScheduleServe" ofType="com.gogirl.gogirl_store.store_commons.dto.ScheduleServe">
             <result column="ss_id" property="id"/>
             <result column="ss_start_time" property="startTime"/>
@@ -39,7 +40,7 @@
             <result column="ss_produce_name" property="produceName"/>
             <result column="bs_name" property="serveName"/>
             <result column="bs_type" property="serveType"/>
-        </collection>
+        </collection> -->
     </resultMap>
 
     <sql id="baseSql">
@@ -105,17 +106,17 @@
         select 
         <include refid="classestechnician"/>,
         <include refid="classes"/>,
-        ss.start_time ss_start_time,ss.id ss_id, ss.end_time ss_end_time, ss.produce_name ss_produce_name,
-        bs.name bs_name, bs.type bs_type,
+<!--        ss.start_time ss_start_time,ss.id ss_id, ss.end_time ss_end_time, ss.produce_name ss_produce_name,
+        bs.name bs_name, bs.type bs_type,-->
         <include refid="technicianSql"/>
         from
         store_classes_technician ct
         left join store_classes cls on cls.id = ct.classes
         left join store_technician tech on tech.id = ct.user_id
-        left join scheduled_serve ss on ss.technician_id = ct.user_id and date_format(ss.start_time, '%Y-%m-%d') = #{days}  and ss.sch_id in (select id from scheduled_manage where `status` = 1 or `status` = 6 or `status` = 7)
-        left join base_serve bs on bs.id = ss.serve_id
+<!--        left join scheduled_serve ss on ss.technician_id = ct.user_id and date_format(ss.start_time, '%Y-%m-%d') = #{days}  and ss.sch_id in (select id from scheduled_manage where `status` = 1 or `status` = 6 or `status` = 7)
+        left join base_serve bs on bs.id = ss.serve_id-->
         where ct.days = #{days}
-        and ct.user_id in (select id from store_technician where department_id = #{departmentId} )
+        and ct.user_id in (select user_id from staff_store_authority where store_id = #{departmentId} )
     </select>
 
     <!--<select id="listClassesTechnicianByStartTime" resultType="com.gogirl.gogirl_store.store_commons.dto.ClassesTechnician">

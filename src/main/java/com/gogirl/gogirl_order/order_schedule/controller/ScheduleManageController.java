@@ -817,7 +817,7 @@ public class ScheduleManageController {
         			Iterator<ScheduleServe> iterator = listExistSch.iterator();
         			while(iterator.hasNext()){
         				ScheduleServe item = iterator.next();
-        				if(orderDetail.getScheduledId()!=null&&!item.getSchId().equals(orderDetail.getScheduledId())){//过滤当前订单的预约
+        				if(oldOrderId!=null&&orderDetail.getScheduledId()!=null&&!item.getSchId().equals(orderDetail.getScheduledId())){//过滤当前订单的预约
             				if(item.getServe()!=null&&item.getServe().getSchTypeId()!=null&&isExist.containsKey(item.getServe().getSchTypeId())){
             					Serve existServe =isExist.get(item.getServe().getSchTypeId());
             					return new JsonResult<>(false,"您已存在预约\""+existServe.getName()+"\",该服务与\""+item.getServe().getName()+"\"属于同种类型的服务,同一天只能预约一次,如需修改时间,可直接在我的订单中修改时间");

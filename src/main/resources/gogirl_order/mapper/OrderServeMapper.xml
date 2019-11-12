@@ -143,7 +143,7 @@
         orre.id orre_id, orre.order_serve_id orre_order_serve_id, orre.fix_hour orre_fix_hour, orre.is_time_out orre_is_time_out, orre.link_cause orre_link_cause, orre.user_feedback orre_user_feedback, orre.technician_feedback orre_technician_feedback, orre.picture_path orre_picture_path, orre.existing_problems orre_existing_problems, orre.solution orre_solution, orre.is_guest_photo orre_is_guest_photo, orre.after_sale_feedback orre_after_sale_feedback
     </sql>
     <sql id="userManageSql">
-        us.id us_id, us.name us_name, us.no us_no, us.department_id us_department_id, us.jobs us_jobs, us.create_time us_create_time, us.mobile us_mobile
+        us.id us_id, us.name us_name, us.no us_no, us.jobs us_jobs, us.create_time us_create_time, us.mobile us_mobile
     </sql>
   <sql id="orderServeSkuSql" >
    ossku.id ossku_id,ossku.order_serve_id ossku_order_serve_id,ossku.sku_id ossku_sku_id,ossku.type ossku_type,ossku.count ossku_count
