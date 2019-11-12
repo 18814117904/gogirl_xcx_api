@@ -136,7 +136,7 @@ public class OrderManageController {
 		
 		//插入录入的色号
 		List<OrderServeSku> list3 = orderServe.getListOrderServeSku();
-		if(list3!=null){
+		if(list3!=null&&list3.size()>0){
 			//删除已录入的色号
 			orderServeSkuMapper.deleteByOrderServeId(orderServe.getId());
 			for(OrderServeSku item3 : list3){
@@ -151,7 +151,7 @@ public class OrderManageController {
 			orderServeSkuMapper.insertList(list3);
 		}
 		List<OrderServeDescribe> list4 = orderServe.getListOrderServeDescribe();
-		if(list4!=null){
+		if(list4!=null&&list4.size()>0){
 			//删除已经录入的描述
 			orderServeDescribeRelevanceMapper.deleteByOrderServeId(orderServe.getId());
 			//插入已经录入的描述
@@ -178,10 +178,12 @@ public class OrderManageController {
 		}
 		OrderManage orderManage = orderManageService.getOrderForDetail(orderId);
 		//订单信息
-		OrderManage  orderManage1 = new OrderManage();
-		orderManage1.setId(orderId);
-		orderManage1.setRemark(remark);
-		orderManageService.updateOrderStatus(orderManage1);
+		if(remark!=null&&!remark.isEmpty()){
+			OrderManage  orderManage1 = new OrderManage();
+			orderManage1.setId(orderId);
+			orderManage1.setRemark(remark);
+			orderManageService.updateOrderStatus(orderManage1);
+		}
 		//订单录入信息
 		List<OrderServe> list = orderManage.getListOrderServer();
 		for(OrderServe itemOrderServe:list){

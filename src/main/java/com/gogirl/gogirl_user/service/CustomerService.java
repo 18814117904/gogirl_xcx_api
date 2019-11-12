@@ -82,19 +82,19 @@ public class CustomerService {
 	
     public int updateByPrimaryKeySelective(Customer record){
 		logger.info("更新用户信息record:"+record.toString());
-    	if(record.getId()==null||record.getId()==0){
+    	if(record.getId()==null||record.getId()==0){//确保id有值
     		return 0;
     	}
-    	if(record.getPhone()!=null&&!record.getPhone().isEmpty()){
+    	if(record.getPhone()!=null&&!record.getPhone().isEmpty()){//查号电话对应的用户
     		Customer qc = customerMapper.selectByPhone(record.getPhone());
-    		if(qc!=null&&!qc.getId().equals(record.getId())){
+    		if(qc!=null&&!qc.getId().equals(record.getId())){//电话用户和当前修改的用户不一致
         		logger.info("查到电话用户信息为:"+qc.toString());
-    			Customer qcustomer = customerMapper.selectByPrimaryKey(record.getId());
-    			record = setCustomerData(record,qcustomer);//先填充微信数据
-    			qc = setCustomerData(record,qc);//再填充店铺端新建数据
-    			customerMapper.deleteByPrimaryKey(record.getId());
+    			Customer qcustomer = customerMapper.selectByPrimaryKey(record.getId());//找到当前id对应的用户
+    			record = setCustomerData(record,qcustomer);//先填充微信数据到id用户
+    			qc = setCustomerData(record,qc);//再填充id用户数据到电话用户
+    			customerMapper.deleteByPrimaryKey(record.getId());//删除id用户数据
     			logger.info("保留电话用户,合并删除微信用户");
-    			setCustomerLike(record.getId(), qc.getId());
+    			setCustomerLike(record.getId(), qc.getId());//吧关联的id用户的数据,也迁移到电话用户下
     			record = qc;
     		}
     	}

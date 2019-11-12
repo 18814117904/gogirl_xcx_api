@@ -88,7 +88,7 @@ public class PhoneLoginController {
 	@ResponseBody
 	@ApiOperation(value = "小程序用户根据验证码绑定手机号码和称呼",notes="生日的格式是:yyyy-MM-dd")
 	@RequestMapping(method={RequestMethod.POST},value="/bindPhoneAndName")
-	public JsonResult bindPhoneAndCode(String token,String phone,String code,String realName,Integer customerSource,@DateTimeFormat(pattern="yyyy-MM-dd")Date birthday,String sex,HttpServletResponse response) {
+	public JsonResult bindPhoneAndCode(String token,String phone,String code,String realName,@DateTimeFormat(pattern="yyyy-MM-dd")Date birthday,String sex,HttpServletResponse response) {
 		if(code==null||code.isEmpty()){
 			return new JsonResult(false,"",null);
 		}
@@ -96,43 +96,24 @@ public class PhoneLoginController {
 		if(gogirlToken==null){
 			return new JsonResult(false,"token:"+token+".找不到token信息",null);
 		}
-//		if(gogirlToken.getCode()==null){
-//			return new JsonResult(false,"请先获取验证码",code);
-//		}
-//		if(!gogirlToken.getCode().trim().equals(code.trim())){
-//			return new JsonResult(false,"验证码不正确",null);
-//		}
-		Customer customer = gogirlToken.getCustomer();
-		Customer phoneCustomer = customerService.selectByPhone(phone);
-		if(phoneCustomer!=null){//合并手机用户
-			Customer updatecustomer = new Customer();
-			updatecustomer.setId(phoneCustomer.getId());
-			updatecustomer.setRealName(realName);
-			updatecustomer.setBirthday(birthday);
-			updatecustomer.setCustomerSource(customerSource);
-			updatecustomer.setSex(sex);;
-			if(customer.getUnionid()!=null){
-				updatecustomer.setUnionid(customer.getUnionid());
-			}
-			updatecustomer.setOpenid1(customer.getOpenid1());
-			int i = customerService.updateByPrimaryKeySelective(updatecustomer);
-			if(i>0){
-				gogirlToken.setCustomerId(updatecustomer.getId());
-				gogirlTokenService.updateByPrimaryKeySelective(gogirlToken);
-				customerService.deleteByPrimaryKey(customer.getId());
-			}
-			return new JsonResult(true, JsonResult.APP_DEFINE_SUC, phoneCustomer);
-		}else{//直接绑定号码
-			Customer updatecustomer = new Customer();
-			updatecustomer.setId(customer.getId());
-			updatecustomer.setPhone(phone);			
-			updatecustomer.setRealName(realName);
-			updatecustomer.setBirthday(birthday);
-			updatecustomer.setSex(sex);
-			customerService.updateByPrimaryKeySelective(updatecustomer);
-			customer.setPhone(phone);
-			return new JsonResult(true, JsonResult.APP_DEFINE_SUC, customer);
+		if(gogirlToken.getCode()==null){
+			return new JsonResult(false,"请先获取验证码",code);
 		}
+		if(!gogirlToken.getCode().trim().equals(code.trim())){
+			return new JsonResult(false,"验证码不正确",null);
+		}
+		Customer customer = gogirlToken.getCustomer();
+		customer.setRealName(realName);
+		customer.setBirthday(birthday);
+		customer.setSex(sex);
+		customer.setPhone(phone);
+		int id = customerService.updateByPrimaryKeySelective(customer);//返回用户id,这个电话原先就有旧用户的话,返回旧用户的id
+		if(id>0){
+			gogirlToken.setCustomerId(id);
+			customer.setId(id);
+			gogirlTokenService.updateByPrimaryKeySelective(gogirlToken);
+		}
+		return new JsonResult(true, JsonResult.APP_DEFINE_SUC, customer);
 	}
 	//美甲师小程序登录
 	@ResponseBody

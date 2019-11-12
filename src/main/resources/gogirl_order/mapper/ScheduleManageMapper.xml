@@ -79,9 +79,20 @@
             <result column="ser_service_duration" property="serviceDuration"/>
         </association>
         <association property="technicianManage" javaType="com.gogirl.gogirl_technician.technician_commons.dto.TechnicianManage">
-            <result column="tech_id" property="id"/>
-            <result column="tech_technician_no" property="technicianNo"/>
-            <result column="tech_name" property="name"/>
+        <result property="id" column="tech_id"/>
+        <result property="openid" column="tech_openid"/>
+        <result property="picturePath" column="tech_picture_path"/>
+        <result property="technicianNo" column="tech_technician_no"/>
+        <result property="name" column="tech_name"/>
+        <result property="departmentId" column="tech_department_id"/>
+        <result property="departmentName" column="tech_department_name"/>
+        <result property="createTime" column="tech_create_time"/>
+        <result property="mobile" column="tech_mobile"/>
+        <result property="userAuthority" column="tech_user_authority"/>
+        <result property="grade" column="tech_grade"/>
+        <result property="status" column="tech_status"/>
+        <result property="score" column="tech_score"/>
+        <result property="userId" column="tech_user_id"/>
         </association>
     </resultMap>
 
@@ -99,7 +110,7 @@
         ser.id ser_id, ser.name ser_name,ser.type ser_type, ser.label ser_label, ser.shop_sort ser_shop_sort, ser.price ser_price, ser.picture_path ser_picture_path, ser.status ser_status, ser.remark ser_remark, ser.details ser_details, ser.service_duration ser_service_duration
     </sql>
     <sql id="technicianSql">
-        tech.id tech_id, tech.technician_no tech_technician_no, tech.name tech_name
+        tech.id tech_id ,tech.openid tech_openid ,tech.picture_path tech_picture_path ,tech.technician_no tech_technician_no ,tech.name tech_name ,tech.department_id tech_department_id,tech.create_time tech_create_time ,tech.mobile tech_mobile ,tech.user_authority tech_user_authority ,tech.grade tech_grade ,tech.status tech_status ,tech.score tech_score ,tech.user_id tech_user_id
     </sql>
     <sql id="produceSql">
         produce.id produce_id, produce.name produce_name, produce.picture_path produce_picture_path, produce.type produce_type, produce.label produce_label,
@@ -304,6 +315,9 @@
             <trim suffixOverrides=",">
             <if test="status != null">
                 status = #{status},
+            </if>
+            <if test="activityId != null">
+                activity_id = #{activityId},
             </if>
             <if test="openbillTime != null ">
                 openbill_time = #{openbillTime}

@@ -90,6 +90,14 @@
     <include refid="TimesCardTypeSql" /> 
     from times_card_customer_relevance tccr
     left join times_card_type tct on tct.id = tccr.card_type_id
+    <where>
+      <if test="cardTypeId != null" >
+        and card_type_id=#{cardTypeId}
+      </if>
+      <if test="customerId != null" >
+        and customer_id=#{customerId}
+      </if>
+    </where>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -148,6 +156,9 @@
       <if test="refereeId != null" >
         referee_id,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -170,9 +181,12 @@
       </if>
       <if test="validEndTime != null" >
         #{validEndTime,jdbcType=TIMESTAMP},
-      </if>
+      </if>status
       <if test="refereeId != null" >
         #{refereeId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

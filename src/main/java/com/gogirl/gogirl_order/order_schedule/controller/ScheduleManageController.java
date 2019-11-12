@@ -106,6 +106,7 @@ public class ScheduleManageController {
     @ApiOperation(value = "new 1.查询可预约的时间列表", notes = "{\"departmentId\":19,\"formId\":\"the formId is a mock one\",\"token\":\"91c23f20e3\",\"scheduleDate\":\"2019-10-29\",\"listScheduleServer\":[{\"serveId\":124,\"mainServeId\":153,\"lengthTimeForEndTime\":30},{\"serveId\":153,\"lengthTimeForEndTime\":90}]}")
     @RequestMapping(method={RequestMethod.POST},value = "queryIdleTime")
     public JsonResult<?> queryIdleTime (@RequestBody ScheduleManage scheduleManage) {
+    	logger.info("查询可预约的时间列表");
     	//入参判断ScheduleManage
     	if(scheduleManage==null){return new JsonResult<>(false,"入参为空");}
     	if(scheduleManage.getToken()==null){return new JsonResult<>(false,String.format(JsonResult.PARAM_NULL,"token"));}
@@ -161,9 +162,26 @@ public class ScheduleManageController {
     	//5.遍历每个时间点,确定这些时间点是否能找到一种方案安排预约,找到1种方案后返回true
 		Calendar currentTime = Calendar.getInstance();
 		Calendar endTime = Calendar.getInstance();
+		Calendar nowTime = Calendar.getInstance();
     	currentTime.setTime(startWorkTime);//从头开始遍历
     	endTime.setTime(endWorkTime);
+    	//今天字符串
+    	SimpleDateFormat todaySdf = new SimpleDateFormat("yyyy-MM-dd");
+    	SimpleDateFormat sdfHm = new SimpleDateFormat("HH:mm");
+    	try {
+			nowTime.setTime(sdfHm.parse(sdfHm.format(new Date())));
+		} catch (ParseException e) {}
+    	String todayDayString = todaySdf.format(new Date());
     	while(currentTime.before(endTime)){//遍历每个时间点
+    		//如果是已经过去的时间,直接false不能预约
+    		if(todayDayString.equals(scheduleManage.getScheduleDate())&&currentTime.before(nowTime)){//过去的时间,直接设置不可预约
+            	Map<String, Object> maptem  = new HashMap<String, Object>();
+            	maptem.put("time", sdfHm.format(currentTime.getTime()));
+            	maptem.put("status", false);
+            	timeList.add(maptem);
+            	currentTime.add(Calendar.MINUTE, timeNode);
+            	continue;
+    		}
     		//判断该时间点是否可预约
         	Map<Integer, Calendar> hasPicTech = new HashMap<Integer, Calendar>();//初始化所以技师可选
         	Map<Integer,Set<String>> listTechIdleTimeTem = cloneListTechIdleTime(listTechIdleTime);
@@ -175,7 +193,6 @@ public class ScheduleManageController {
         		hasPicTech.put(key, temCalendar);
     		}
         	List<ScheduleServe> listScheduleServerTem = clonelistScheduleServer(listScheduleServe);
-        	SimpleDateFormat sdfHm = new SimpleDateFormat("HH:mm");
         	logger.info("--"+sdfHm.format(currentTime.getTime()));
         	List<ScheduleServe> isPicServe = new ArrayList<ScheduleServe>();
         	Boolean canSche = checkCanSche(timeNode,listTechIdleTimeTem,hasPicTech,listScheduleServerTem,isPicServe);//找出一种安排结果,返回可预约,否则不可预约
@@ -190,6 +207,7 @@ public class ScheduleManageController {
     }
     //1.0.查美甲师空闲时间点
     public HashMap<Integer,HashSet<String>> listTechIdleTime(String scheduleDate,Time startWorkTime,Time endWorkTime,Integer departmentId,int timeNode,List<ClassesTechnician> listClassesTechnician) {
+    	logger.info("查美甲师空闲时间点");
     	//4.1遍历初始化个美甲师时间点表
     	Iterator<ClassesTechnician> itClassesTechnician = listClassesTechnician.iterator();
     	HashMap<Integer,HashSet<String>> listTechIdleTime = new HashMap<Integer,HashSet<String>>();
@@ -264,14 +282,13 @@ public class ScheduleManageController {
 	}
     //1.3判断某个时间是否可预约,找到1个可行方案就返回true,默认排班结果放在isPicServe
 	private Boolean checkCanSche(int timeNode,Map<Integer, Set<String>> listTechIdleTimeTem,Map<Integer, Calendar> hasPicTech, List<ScheduleServe> noPicServe,List<ScheduleServe> isPicServe) {
-    	//遍历未安排的服务,遍历已选美甲师(服务为空跳出,美甲师为空跳出)
-//		logger.info(":checkCanSche");
+		logger.info("1.安排服务");
 		SimpleDateFormat sdfHm = new SimpleDateFormat("HH:mm");
     	Map<Integer, Calendar> newHasPicTech = new HashMap<Integer, Calendar>();//新一轮的可选技师
     	Iterator<ScheduleServe> itNoPicServe = noPicServe.iterator();
     	while(itNoPicServe.hasNext()){//遍历服务
     		ScheduleServe itemSche = itNoPicServe.next();
-//    		logger.info("::服务时长itemSche:"+itemSche.getLengthTimeForEndTime());
+    		logger.info("::服务时长itemSche:"+itemSche.getLengthTimeForEndTime());
     		int lengthTime = itemSche.getLengthTimeForEndTime();
     		Set<String> setNeed = new HashSet<String>();//该服务需要的所有时间节点
     		int tempLengthTime = 0;
@@ -283,7 +300,7 @@ public class ScheduleManageController {
     			if(!hasPicTech.containsKey(key)){
     				continue;
     			}
-//    			logger.info(":::美甲师techId:"+key);
+    			logger.info(":::美甲师techId:"+key);
     			Calendar currentTime = Calendar.getInstance();
     			currentTime.setTime(hasPicTech.get(key).getTime());
         		while(tempLengthTime<lengthTime){//生成时间节点
@@ -294,7 +311,7 @@ public class ScheduleManageController {
         		}
     			Set<String> set = listTechIdleTimeTem.get(key);
     			if(set.containsAll(setNeed)){//安排得上
-//    				logger.info("::::安排");
+    				logger.info("::::安排");
     				set.removeAll(setNeed);
     				newHasPicTech.put(key, currentTime);
     				itemSche.setTechnicianId(key);//默认分配美甲师到服务
@@ -322,6 +339,7 @@ public class ScheduleManageController {
     @ApiOperation(value = "new 2.选时间的时候就新建一个服务,状态(已删除),确定预约的时候才把状态改为已预约", notes = "{\"departmentId\":19,\"formId\":\"the formId is a mock one\",\"token\":\"91c23f20e3\",\"scheduleDate\":\"2019-10-29\",\"arriveTime\":\"2019-10-29 10:00:00\",\"listScheduleServer\":[{\"serveId\":124,\"produceId\":124,\"mainServeId\":153,\"lengthTimeForEndTime\":30},{\"serveId\":153,\"lengthTimeForEndTime\":90}]}")
     @RequestMapping(method={RequestMethod.POST},value = "addScheduleXcx")
     public JsonResult<?> addScheduleXcx (@RequestBody ScheduleManage scheduleManage) {
+    	logger.info("选时间后直接 新增预约,状态为已删除");
     	//入参判断ScheduleManage
     	if(scheduleManage==null){return new JsonResult<>(false,"入参为空");}
     	if(scheduleManage.getToken()==null){return new JsonResult<>(false,String.format(JsonResult.PARAM_NULL,"token"));}
@@ -460,7 +478,8 @@ public class ScheduleManageController {
 	    			if(item.getServeId().equals(itemMainServe.getServeId())){
 	    				item.setTechnicianId(itemMainServe.getTechnicianId());
 	    				item.setStartTime(itemMainServe.getStartTime());
-	    				item.setEndTime(itemMainServe.getEndTime());
+	    				item.setLengthTimeForEndTime(itemMainServe.getLengthTimeForEndTime());
+	    				item.setEndTime(new Date(item.getStartTime().getTime()+(long)60000*itemMainServe.getLengthTimeForEndTime()));
 	    				break;//找到了,跳出
 	    			}
 	    		}
@@ -481,6 +500,7 @@ public class ScheduleManageController {
     @ApiOperation(value = "new 3.修改默认分配的美甲师", notes = "")
     @RequestMapping(method={RequestMethod.POST},value = "modifyTech")
     public JsonResult<?> modifyTech (Integer scheduleId,Integer orderServeId,Integer technicianId){
+    	logger.info("修改且查询默认分配的美甲师");
     	//入参检查
     	if(scheduleId==null){return new JsonResult<>(false,"scheduleId为空");}
     	//找到预约
@@ -546,7 +566,8 @@ public class ScheduleManageController {
 		}
     	while(it1.hasNext()){
     		ScheduleServe item = it1.next();
-    		if(item.getIsCustomerPick()!=null&&item.getIsCustomerPick()==true){
+    		//已指定或正常预约已占用美甲师,加入已经选好的美甲师
+    		if(item.getIsCustomerPick()!=null&&item.getIsCustomerPick()==true||scheduleManage.getStatus().equals(6)||scheduleManage.getStatus().equals(7)){
     			for(ScheduleServe item2 : listScheduleServe){
     				if(item.getServeId().equals(item2.getServeId())||(item2.getMainServeId()!=null&&item2.getMainServeId().equals(item.getServeId()))){
     					item2.getMapTechnicianManage().put(item.getTechnicianManage().getId(),item.getTechnicianManage());//只放置指定的美甲师
@@ -637,7 +658,7 @@ public class ScheduleManageController {
     				itemSche.setTechnicianId(key);//默认分配美甲师到服务
     				itemSche.setStartTime(hasPicTech.get(key).getTime());//设置开始时间
     				isPicServe.add(itemSche);
-    				itNoPicServe.remove();
+//    				itNoPicServe.remove();
     		    	List<ScheduleServe> clonenoPicServe = clonelistScheduleServer(noPicServe);//克隆一个未安排的服务列表,不影响其他层级的判断
     		    	Iterator<ScheduleServe> it3 = clonenoPicServe.iterator();
     		    	while(it3.hasNext()){
@@ -686,7 +707,8 @@ public class ScheduleManageController {
 	/*4.确定预约,建订单,把已删除状态改为已预约状态,发模板消息*/
     @ApiOperation(value = "new 4.确定预约,建订单,把已删除状态改为已预约状态,发模板消息", notes = "")
     @RequestMapping(method={RequestMethod.POST},value = "comfirmSchedule")
-    public JsonResult<?> comfirmSchedule (String token,String formId,Integer oldOrderId,Integer scheduleId) {
+    public JsonResult<?> comfirmSchedule (String token,String formId,Integer oldOrderId,Integer scheduleId,Integer activityId) {
+    	logger.info("确定预约,建订单,把已删除状态改为已预约状态,发模板消息");
     	//入参判断
     	if(scheduleId==null){
     		return new JsonResult<>(false,"scheduleId为null");
@@ -795,7 +817,7 @@ public class ScheduleManageController {
         			Iterator<ScheduleServe> iterator = listExistSch.iterator();
         			while(iterator.hasNext()){
         				ScheduleServe item = iterator.next();
-        				if(!item.getSchId().equals(scheduleManage.getId())){//过滤当前订单的预约
+        				if(orderDetail.getScheduledId()!=null&&!item.getSchId().equals(orderDetail.getScheduledId())){//过滤当前订单的预约
             				if(item.getServe()!=null&&item.getServe().getSchTypeId()!=null&&isExist.containsKey(item.getServe().getSchTypeId())){
             					Serve existServe =isExist.get(item.getServe().getSchTypeId());
             					return new JsonResult<>(false,"您已存在预约\""+existServe.getName()+"\",该服务与\""+item.getServe().getName()+"\"属于同种类型的服务,同一天只能预约一次,如需修改时间,可直接在我的订单中修改时间");
@@ -808,6 +830,7 @@ public class ScheduleManageController {
     	ScheduleManage scheduleManageUpdate = new ScheduleManage();
     	scheduleManageUpdate.setId(scheduleManage.getId());
     	scheduleManageUpdate.setStatus(Constans.SCHEDULE_STATUS_WAITSERVE);
+    	scheduleManageUpdate.setActivityId(activityId);
     	if(orderDetail!=null&&orderDetail.getScheduledId()!=null){
             //把原预约设置为删除4240 2816
     		ScheduleManage scheduleManagedel = new ScheduleManage();
@@ -824,9 +847,8 @@ public class ScheduleManageController {
     			OrderManage orderManage = new OrderManage();
     			orderManage.setDelRemark("用户修改预约后自动删除订单");
     			orderManage.setId(oldOrderId);
-    			orderManage.setStatus(Constans.ORDER_STATUS_WAIT);
+    			orderManage.setStatus(Constans.ORDER_STATUS_SERVING);
     			orderManageService.updateOrderStatus(orderManage);
-    			
     		}
             String technicianName = "";
 			String url = "pages/order/orders?orderId="+orderResult.getData().toString();

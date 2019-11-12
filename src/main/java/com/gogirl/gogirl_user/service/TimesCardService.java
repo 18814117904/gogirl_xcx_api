@@ -48,8 +48,9 @@ public class TimesCardService {
 		timesCardCustomerRelevance.setCustomerId(customer.getId());
 //		timesCardCustomerRelevance.setRefereeId();//推荐人暂时不设置
 		timesCardCustomerRelevance.setUsedTimes(0);
+		timesCardCustomerRelevance.setStatus(1);
 		timesCardCustomerRelevance.setValidStartTime(new Date());
-		long validEndTime = new Date().getTime()+1234*timesCardType.getValidDays();
+		long validEndTime = new Date().getTime()+(long)86400000*timesCardType.getValidDays();
 		timesCardCustomerRelevance.setValidEndTime(new Date(validEndTime));
 		return timesCardCustomerRelevanceMapper.insertSelective(timesCardCustomerRelevance);
 	}

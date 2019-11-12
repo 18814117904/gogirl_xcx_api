@@ -110,7 +110,7 @@ public class CustomerCotroller {
 	@ApiOperation(value = "用户详情数据修改", notes = "picturePath为多张图片的地址，用逗号,分隔开\r\ntoken暂时没有用到，customerId，orderId，orderServeId必传")
 	@ResponseBody
 	@RequestMapping(method={RequestMethod.POST},value="/updateCustomerDetail")
-	public JsonResult updateCustomerDetail(Integer birthdayMonth,Integer birthdayDay,String ageGroup,String token,Integer customerId,Integer orderId,Integer orderServeId,String storeRecordRealName,String sex,Integer age,String job,String preference,String character){
+	public JsonResult updateCustomerDetail(Integer birthdayMonth,Integer birthdayDay,String ageGroup,String token,Integer customerId,Integer orderId,Integer orderServeId,String storeRecordRealName,String sex,Integer age,String job,String preference,String character,Integer customerSource){
 //		Integer orderId,String remark,String userFeedback,String picturePath
 		if(token==null){
 			return new JsonResult(false,String.format(JsonResult.PARAM_NULL,"token"),null);
@@ -129,6 +129,7 @@ public class CustomerCotroller {
 		Customer customer = new Customer();
 		customer.setId(customerId);
 		customer.setStoreRecordRealName(storeRecordRealName);
+		customer.setCustomerSource(customerSource);
 		customer.setSex(sex);
 		//用户详情信息
 		CustomerDetail customerDetail = new CustomerDetail();

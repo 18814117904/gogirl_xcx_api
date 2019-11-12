@@ -161,7 +161,7 @@ public class TimesCardController {
         			logger.error("插入次卡失败");
         		}
 	        }
-		} catch (DocumentException e) {
+		} catch (Exception e) {
 			logger.error("不可能,给钱之后订单号没有5,e:"+e.getMessage());
 		}
 		return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";

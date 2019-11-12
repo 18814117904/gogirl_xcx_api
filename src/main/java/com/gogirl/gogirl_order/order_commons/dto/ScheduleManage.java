@@ -52,6 +52,7 @@ public class ScheduleManage implements Serializable {
     private String token;
     private String formId;
     private String scheduleDate;
+    private Integer activityId;
     public Integer getId() {
         return id;
     }
@@ -66,6 +67,14 @@ public class ScheduleManage implements Serializable {
 
 	public void setOldId(Integer oldId) {
 		this.oldId = oldId;
+	}
+
+	public Integer getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(Integer activityId) {
+		this.activityId = activityId;
 	}
 
 	public String getFormId() {
